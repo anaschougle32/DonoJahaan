@@ -31,7 +31,7 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
   onBack,
   onOpenChat,
   onStartChat,
-  isActiveConnection = true,
+  isActiveConnection,
   onEndConversation,
 }) => {
   const insets = useSafeAreaInsets();
@@ -39,6 +39,11 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
   const [photoAccessGranted, setPhotoAccessGranted] = useState(false);
   const [endChatModalVisible, setEndChatModalVisible] = useState(false);
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
+
+  const isCurrentlyActive =
+    isActiveConnection !== undefined
+      ? isActiveConnection
+      : suitor.id === mockActiveSuitor.id;
 
   const isBlurred = suitor.isPhotoBlurred && !photoAccessGranted;
 
@@ -153,7 +158,7 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
 
       {/* Bottom Pinned Action Dock */}
       <View style={[styles.bottomDock, { paddingBottom: Math.max(insets.bottom, spacing.margin) }]}>
-        {isActiveConnection ? (
+        {isCurrentlyActive ? (
           <View style={styles.dualActionRow}>
             <View style={{ flex: 1 }}>
               <PrimaryButton

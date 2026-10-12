@@ -19,6 +19,7 @@ export type RootStackParamList = {
   Notifications: undefined;
   AccountSettings: undefined;
   AdvancedFilters: undefined;
+  WaliDashboard: undefined; // Family & Wali Guardian Dashboard
   SecondaryProfileWizard?: { initialBatch?: '2A' | '2B' | '2C' };
 };
 

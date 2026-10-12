@@ -22,6 +22,8 @@ import {
   StateItem,
   CityItem,
 } from '../../data/lookupData';
+import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncBasicProfileToSupabase } from '../../services/profileService';
 
 interface QuestionnaireScreenProps {
   onComplete?: () => void;
@@ -118,6 +120,32 @@ export const QuestionnaireScreen: React.FC<QuestionnaireScreenProps> = ({
       setCurrentStep(currentStep + 1);
     } else {
       // Phase 1 complete -> Profile is LIVE / ACTIVE -> Milestone Screen
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+      const locationString =
+        formData.cityName && formData.stateName
+          ? `${formData.cityName}, ${formData.stateName}`
+          : 'Mumbai, Maharashtra';
+
+      const updatedData = {
+        name: fullName || 'Umra Shakeel',
+        displayName: `${formData.firstName} ${formData.lastName ? formData.lastName[0] + '.' : ''}`,
+        gender: formData.gender,
+        dob: `${formData.dobYear}-${formData.dobMonth}-${formData.dobDay}`,
+        sect: formData.sect,
+        schoolOfThought: formData.schoolOfThought,
+        city: formData.cityName || 'Mumbai',
+        state: formData.stateName || 'Maharashtra',
+        location: locationString,
+        motherTongue: formData.motherTongue,
+      };
+
+      updateCurrentUserProfile(updatedData);
+
+      // Asynchronously persist to Supabase if authenticated / configured
+      syncBasicProfileToSupabase(updatedData).catch((err) => {
+        console.warn('Background Supabase profile sync notice:', err);
+      });
+
       onComplete?.();
     }
   };

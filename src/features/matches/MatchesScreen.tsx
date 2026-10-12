@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -17,9 +17,12 @@ import { mockCuratedMatches } from '../../mocks/matrimonialData';
 import { MatrimonialProfile } from '../../types';
 import { InputField } from '../../components/common/InputField';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
+import { getDiscoverableProfiles } from '../../services/profileService';
+import { expressMatrimonialInterest } from '../../services/interestService';
 
 interface MatchesScreenProps {
   onNavigate?: (screen: string) => void;
+  onViewProfile?: (suitor: MatrimonialProfile) => void;
   onOpenNotifications?: () => void;
   onOpenFilters?: () => void;
   onOpenChatWithSuitor?: (suitorName: string) => void;
@@ -27,6 +30,7 @@ interface MatchesScreenProps {
 
 export const MatchesScreen: React.FC<MatchesScreenProps> = ({
   onNavigate,
+  onViewProfile,
   onOpenNotifications,
   onOpenFilters,
   onOpenChatWithSuitor,
@@ -52,12 +56,35 @@ export const MatchesScreen: React.FC<MatchesScreenProps> = ({
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Fetch discoverable profiles from Supabase on mount with seamless fallback
+  useEffect(() => {
+    let isMounted = true;
+    const fetchMatches = async () => {
+      try {
+        const liveProfiles = await getDiscoverableProfiles();
+        if (isMounted && liveProfiles && liveProfiles.length > 0) {
+          setProfiles(liveProfiles);
+        }
+      } catch (err) {
+        console.warn('MatchesScreen fetch notice:', err);
+      }
+    };
+    fetchMatches();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleConnect = (suitor: MatrimonialProfile) => {
     if (activeConversationSuitor && suitor.name !== 'Ayesha M.') {
       setSelectedConnectCandidate(suitor);
       setShowOneRuleModal(true);
       return;
     }
+
+    expressMatrimonialInterest('user-me', suitor.id).catch((err) => {
+      console.warn('expressMatrimonialInterest background sync notice:', err);
+    });
 
     Alert.alert(
       'Interest Sent ✨',
@@ -209,7 +236,10 @@ export const MatchesScreen: React.FC<MatchesScreenProps> = ({
                   suitor={item}
                   cardHeight={feedViewportHeight - 8}
                   isPhotoRevealed={revealedPhotos[item.id]}
-                  onViewProfile={() => onNavigate?.('ProfileDetail')}
+                  onViewProfile={() => {
+                    if (onViewProfile) onViewProfile(item);
+                    else onNavigate?.('ProfileDetail');
+                  }}
                   onRequestPhoto={() => handleRequestPhoto(item)}
                   onConnect={() => handleConnect(item)}
                   onOpenMenu={() => {

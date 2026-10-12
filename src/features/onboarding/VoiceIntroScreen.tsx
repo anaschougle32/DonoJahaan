@@ -12,6 +12,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { colors, radii, shadows, spacing, typography } from '../../theme/tokens';
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface VoiceIntroScreenProps {
   onBack?: () => void;
@@ -290,7 +291,13 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Selfie Verification →"
           icon="arrow-forward"
-          onPress={onNext || (() => {})}
+          onPress={() => {
+            updateCurrentUserProfile({
+              hasVoiceIntro: true,
+              voiceDuration: durationSeconds,
+            });
+            onNext?.();
+          }}
         />
       </View>
     </View>

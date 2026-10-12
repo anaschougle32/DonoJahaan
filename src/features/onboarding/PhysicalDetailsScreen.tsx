@@ -13,6 +13,7 @@ import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { SelectorRow } from '../../components/common/SelectorRow';
 import { SingleSelectModal, SelectOption } from '../../components/common/SingleSelectModal';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface PhysicalDetailsScreenProps {
   onBack?: () => void;
@@ -145,7 +146,13 @@ export const PhysicalDetailsScreen: React.FC<PhysicalDetailsScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Education →"
           icon="arrow-forward"
-          onPress={onNext || (() => {})}
+          onPress={() => {
+            updateCurrentUserProfile({
+              height: heightLabel,
+              hasPhysicalDetails: true,
+            });
+            onNext?.();
+          }}
         />
       </View>
 

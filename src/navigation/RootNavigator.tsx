@@ -23,6 +23,8 @@ import { NotificationsScreen } from '../features/notifications/NotificationsScre
 import { AccountSettingsScreen } from '../features/settings/AccountSettingsScreen';
 import { AdvancedFiltersScreen } from '../features/search/AdvancedFiltersScreen';
 import { SecondaryProfileWizardScreen } from '../features/onboarding/SecondaryProfileWizardScreen';
+import { WaliDashboardScreen } from '../features/wali/WaliDashboardScreen';
+import { mockCuratedMatches, mockActiveSuitor } from '../mocks/matrimonialData';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -213,12 +215,28 @@ export const RootNavigator: React.FC = () => {
           animation: 'slide_from_bottom',
         }}
       >
+        {({ navigation, route }) => {
+          const profileId = route.params?.profileId;
+          const suitor =
+            mockCuratedMatches.find((p) => p.id === profileId) ||
+            (mockActiveSuitor.id === profileId ? mockActiveSuitor : null) ||
+            mockCuratedMatches.find((p) => p.name === route.params?.profileName) ||
+            mockActiveSuitor;
+
+          return (
+            <ProfileDetailScreen
+              suitor={suitor}
+              onBack={() => navigation.goBack()}
+              onStartChat={() => navigation.navigate('MainTabs', { screen: 'ChatTab' })}
+              onEndConversation={() => navigation.navigate('MainTabs', { screen: 'HomeTab' })}
+            />
+          );
+        }}
+      </Stack.Screen>
+
+      <Stack.Screen name="WaliDashboard">
         {({ navigation }) => (
-          <ProfileDetailScreen
-            onBack={() => navigation.goBack()}
-            onStartChat={() => navigation.navigate('MainTabs', { screen: 'ChatTab' })}
-            onEndConversation={() => navigation.navigate('MainTabs', { screen: 'HomeTab' })}
-          />
+          <WaliDashboardScreen onBack={() => navigation.goBack()} />
         )}
       </Stack.Screen>
 

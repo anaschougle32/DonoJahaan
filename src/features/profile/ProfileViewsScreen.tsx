@@ -28,7 +28,7 @@ interface ProfileViewer {
 
 const MOCK_VIEWERS: ProfileViewer[] = [
   {
-    id: 'v-1',
+    id: 'profile-ayesha-27',
     name: 'Ayesha M.',
     age: 27,
     location: 'Mumbai, Maharashtra',
@@ -40,11 +40,11 @@ const MOCK_VIEWERS: ProfileViewer[] = [
     timeGroup: 'today',
   },
   {
-    id: 'v-2',
-    name: 'Dr. Zoya K.',
+    id: 'profile-umra-26',
+    name: 'Umra S.',
     age: 26,
     location: 'Noida, Uttar Pradesh',
-    profession: 'Pediatric Resident (MBBS)',
+    profession: 'Doctor (MD)',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400',
     viewedTime: 'Viewed 5h ago',
     isVerified: true,
@@ -52,11 +52,11 @@ const MOCK_VIEWERS: ProfileViewer[] = [
     timeGroup: 'today',
   },
   {
-    id: 'v-3',
-    name: 'Fatima S.',
+    id: 'profile-fatima-25',
+    name: 'Fatima Z.',
     age: 25,
     location: 'South Delhi, Delhi NCR',
-    profession: 'Architect / Interior Designer',
+    profession: 'UI/UX Designer',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400',
     viewedTime: 'Viewed yesterday',
     isVerified: true,

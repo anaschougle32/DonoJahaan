@@ -17,6 +17,7 @@ import {
   SearchItem,
 } from '../../components/common/SearchSelectModal';
 import { EDUCATION_LOOKUP } from '../../data/lookupData';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface EducationScreenProps {
   onBack?: () => void;
@@ -102,7 +103,16 @@ export const EducationScreen: React.FC<EducationScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Career →"
           icon="arrow-forward"
-          onPress={onNext || (() => {})}
+          onPress={() => {
+            const selectedEduName =
+              educationItems.find((e) => e.id === selectedEduId)?.name || 'Degree / Qualification';
+            updateCurrentUserProfile({
+              education: `${selectedEduName}${degreeSpecialization ? ' - ' + degreeSpecialization : ''}`,
+              degree: selectedEduName,
+              hasEducationDetails: true,
+            });
+            onNext?.();
+          }}
         />
       </View>
 

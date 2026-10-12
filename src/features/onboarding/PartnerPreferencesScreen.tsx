@@ -17,6 +17,7 @@ import { SingleSelectModal, SelectOption } from '../../components/common/SingleS
 import { MultiSelectModal } from '../../components/common/MultiSelectModal';
 import { SearchSelectModal, SearchItem } from '../../components/common/SearchSelectModal';
 import { INDIAN_STATES } from '../../data/lookupData';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface PartnerPreferencesScreenProps {
   onBack?: () => void;
@@ -219,7 +220,15 @@ export const PartnerPreferencesScreen: React.FC<PartnerPreferencesScreenProps> =
         <PrimaryButton
           title="Save & Continue to Profile Photos →"
           icon="arrow-forward"
-          onPress={onApply || (() => {})}
+          onPress={() => {
+            updateCurrentUserProfile({
+              hasPartnerPreferences: true,
+              partnerMinAge: minAge,
+              partnerMaxAge: maxAge,
+              partnerSect: sectLabel,
+            });
+            onApply?.();
+          }}
         />
       </View>
 

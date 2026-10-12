@@ -1,0 +1,52 @@
+# Dono Jaha — Engineering Development Log
+
+## Session 1: Project Recovery, Audit, and Baseline Stabilization
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
+
+### Actions Completed:
+1. **Repository & Git Hygiene:**
+   - Created `.gitignore` preventing accidental check-in of `.env`, `node_modules`, `.expo/`, and build artifacts.
+   - Initialized Git, linked remote `https://github.com/anaschougle32/DonoJahaan.git`, and cleanly pushed the main branch.
+2. **Codebase Inspection:**
+   - Verified React Native 0.86, Expo 57, and TypeScript 5.3 architecture.
+   - Inspected all 13 reusable UI components, 11 onboarding screens, and 5 tab screens.
+   - Tested TypeScript compiler (`tsc --noEmit`), confirming zero type errors.
+3. **Database & Backend Verification:**
+   - Executed live connectivity test to Supabase instance (`fcqyukdvfifpdcckhkep.supabase.co`).
+   - Verified all 23 database tables exist, are queryable, and have active RLS policies.
+   - Discovered that `.env` lacked `EXPO_PUBLIC_` prefixes required by Expo for client-side environment variable injection.
+4. **Documentation:**
+   - Authored `PROJECT_AUDIT.md` capturing verified system architecture, feature status, and blockers.
+   - Authored `IMPLEMENTATION_PLAN.md` establishing P0-P4 priorities.
+   - Authored `DEVELOPMENT_LOG.md` for historical traceability.
+
+## Session 2: Navigation Hardening, State Reactivity & Supabase Integration
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
+
+### Actions Completed:
+1. **Environment & Supabase Client Normalization:**
+   - Configured `.env` with dual-format keys (`EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_ANON_KEY`).
+   - Updated `src/lib/supabase/client.ts` to inspect both `EXPO_PUBLIC_` and `NEXT_PUBLIC_` environments.
+2. **Navigation Fixes & Route Registration:**
+   - Added `WaliDashboard` to `src/navigation/types.ts` and `src/navigation/RootNavigator.tsx`.
+   - Connected "Family & Wali Hub" and "Identity Verification" navigation rows in `src/features/settings/ProfileHubScreen.tsx`.
+   - Fixed suitor dynamic lookup in `RootNavigator.tsx` and `src/features/profile/ProfileDetailScreen.tsx` so clicking any prospect loads that specific profile rather than defaulting to Ayesha M.
+   - Implemented dynamic active conversation evaluation in `ProfileDetailScreen.tsx` reflecting Dono Jaha's 1-Active-Conversation rule.
+3. **Reactive Profile State & Onboarding Form Persistence:**
+   - Added `subscribeToUserProfile()`, `updateCurrentUserProfile()`, and `useUserProfile()` in `src/data/userProfile.ts`.
+   - Connected all onboarding Phase 2 screens (`QuestionnaireScreen`, `PhysicalDetailsScreen`, `EducationScreen`, `ProfessionScreen`, `FamilyDetailsScreen`, `PartnerPreferencesScreen`, `ProfilePhotosScreen`, `VoiceIntroScreen`, `SelfieVerificationScreen`) to persist input and dynamically recalculate completion metrics.
+   - Integrated reactive hook in `HomeScreen.tsx` and `ProfileHubScreen.tsx`.
+4. **Supabase Backend Service Layer:**
+   - Built `src/services/profileService.ts` (`getMyProfile`, `syncBasicProfileToSupabase`, `getDiscoverableProfiles`).
+   - Built `src/services/chatService.ts` (`getConversationMessages`, `sendChatMessage`, `subscribeToConversationMessages`).
+   - Built `src/services/interestService.ts` (`getReceivedInterests`, `getSentInterests`, `expressMatrimonialInterest`, `respondToInterest`).
+   - Connected `ChatScreen.tsx` to `chatService` with Realtime subscription.
+   - Connected `MatchesScreen.tsx` to `getDiscoverableProfiles` and `expressMatrimonialInterest`.
+   - Connected `InterestsScreen.tsx` to `getReceivedInterests`, `getSentInterests`, and `respondToInterest`.
+   - Connected `OtpVerificationScreen.tsx` to hydrate profile via `getMyProfile()` upon verification.
+5. **Quality Assurance & Verification:**
+   - Ran TypeScript typecheck (`npm.cmd run lint` / `tsc --noEmit`), passed with 0 errors.
+   - Verified database connectivity to all 23 live tables.
+

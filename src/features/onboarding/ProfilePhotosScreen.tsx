@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { colors, radii, shadows, spacing, typography } from '../../theme/tokens';
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface ProfilePhotosScreenProps {
   onBack?: () => void;
@@ -201,7 +202,13 @@ export const ProfilePhotosScreen: React.FC<ProfilePhotosScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Voice Introduction →"
           icon="arrow-forward"
-          onPress={onNext || (() => {})}
+          onPress={() => {
+            updateCurrentUserProfile({
+              hasPhoto: true,
+              avatar: photoUri,
+            });
+            onNext?.();
+          }}
         />
       </View>
     </View>

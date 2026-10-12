@@ -14,7 +14,7 @@ import { MatrimonialProfile } from '../../types';
 import { mockActiveSuitor, mockCuratedMatches } from '../../mocks/matrimonialData';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { currentUserProfile, getProfileCompletionMetrics } from '../../data/userProfile';
+import { useUserProfile } from '../../data/userProfile';
 
 interface HomeScreenProps {
   onOpenChat?: () => void;
@@ -36,7 +36,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   curatedMatches = mockCuratedMatches,
 }) => {
   const insets = useSafeAreaInsets();
-  const metrics = getProfileCompletionMetrics(currentUserProfile);
+  const { profile, metrics } = useUserProfile();
   const handleOpenChat = onOpenChat || (() => onNavigate?.('Chat'));
   const handleViewProfile = onViewProfile || (() => onNavigate?.('ProfileDetail'));
   const handleExploreMatches = onExploreMatches || (() => onNavigate?.('Matches'));
@@ -54,7 +54,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             <View style={styles.pulsingDot} />
             <Text style={styles.intentText}>DONO JAHA MATRIMONIAL</Text>
           </View>
-          <Text style={styles.greetingTitle}>Good morning, {currentUserProfile.name.split(' ')[0]}</Text>
+          <Text style={styles.greetingTitle}>Good morning, {profile.name.split(' ')[0]}</Text>
         </View>
 
         <Pressable

@@ -23,6 +23,7 @@ import {
   PROFESSIONS_LOOKUP,
   INCOME_RANGES,
 } from '../../data/lookupData';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface ProfessionScreenProps {
   onBack?: () => void;
@@ -151,7 +152,16 @@ export const ProfessionScreen: React.FC<ProfessionScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Family Details →"
           icon="arrow-forward"
-          onPress={onNext || (() => {})}
+          onPress={() => {
+            const selectedProfName =
+              professionItems.find((p) => p.id === selectedProfId)?.name || 'Professional';
+            updateCurrentUserProfile({
+              profession: selectedProfName,
+              employer: employerName,
+              hasProfessionDetails: true,
+            });
+            onNext?.();
+          }}
         />
       </View>
 

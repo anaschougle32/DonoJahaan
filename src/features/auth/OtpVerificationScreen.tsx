@@ -15,6 +15,8 @@ import { colors, spacing, typography, radii, shadows } from '../../theme/tokens'
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client';
+import { getMyProfile } from '../../services/profileService';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface OtpVerificationScreenProps {
   phoneNumber: string;
@@ -122,6 +124,14 @@ export const OtpVerificationScreen: React.FC<OtpVerificationScreenProps> = ({
             setErrorMessage('Invalid verification code. Please check and try again.');
             setLoading(false);
             return;
+          }
+        } else if (data?.user) {
+          // Hydrate user profile from Supabase
+          try {
+            const profile = await getMyProfile();
+            updateCurrentUserProfile(profile);
+          } catch (syncErr) {
+            console.warn('Post-auth profile hydration notice:', syncErr);
           }
         }
       }

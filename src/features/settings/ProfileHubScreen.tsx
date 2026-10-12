@@ -12,7 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors, typography, spacing, radius, shadows } from '../../theme/tokens';
 
-import { currentUserProfile, getProfileCompletionMetrics } from '../../data/userProfile';
+import { useUserProfile } from '../../data/userProfile';
 
 interface ProfileHubScreenProps {
   onNavigate?: (screen: string) => void;
@@ -23,7 +23,7 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
   onNavigate,
   onSignOut,
 }) => {
-  const metrics = getProfileCompletionMetrics(currentUserProfile);
+  const { profile, metrics } = useUserProfile();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -31,7 +31,7 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
       <View style={styles.header}>
         <View>
           <Text style={styles.appTitle}>D O N O   J A H A</Text>
-          <Text style={styles.greeting}>Good morning, {currentUserProfile.name.split(' ')[0]}</Text>
+          <Text style={styles.greeting}>Good morning, {profile.name.split(' ')[0]}</Text>
         </View>
         <View style={styles.headerAvatar}>
           <Ionicons name="person" size={18} color="#FFFFFF" />
@@ -52,7 +52,7 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
             <View style={styles.avatarContainer}>
               <Image
                 source={{
-                  uri: currentUserProfile.avatar,
+                  uri: profile.avatar,
                 }}
                 style={styles.avatarImage}
               />
@@ -63,9 +63,9 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
 
             <View style={styles.profileInfo}>
               <View style={styles.nameRow}>
-                <Text style={styles.profileName}>{currentUserProfile.name.split(' ')[0]}, {currentUserProfile.age}</Text>
+                <Text style={styles.profileName}>{profile.name.split(' ')[0]}, {profile.age}</Text>
                 <View style={styles.countryBadge}>
-                  <Text style={styles.countryText}>{currentUserProfile.country === 'India' ? 'IN' : 'GLOBAL'}</Text>
+                  <Text style={styles.countryText}>{profile.country === 'India' ? 'IN' : 'GLOBAL'}</Text>
                 </View>
               </View>
 
@@ -77,7 +77,7 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
               </View>
 
               <Text style={styles.professionText} numberOfLines={1}>
-                {currentUserProfile.profession} • {currentUserProfile.city}
+                {profile.profession} • {profile.city}
               </Text>
             </View>
           </View>
@@ -192,23 +192,50 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
         <View style={styles.section}>
           <Text style={styles.sectionHeader}>TRUST & GUARDIANSHIP</Text>
           <View style={styles.menuGroup}>
-            <View style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => onNavigate?.('SelfieVerification')}
+              activeOpacity={0.7}
+            >
               <View style={styles.menuLeft}>
                 <View style={styles.menuIconContainer}>
                   <Ionicons name="shield-checkmark-outline" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.menuTextWrap}>
-                  <Text style={styles.menuTitle}>Verification</Text>
+                  <Text style={styles.menuTitle}>Identity Verification</Text>
                   <Text style={styles.menuSubtitle}>
-                    Government ID & Selfie check
+                    Confidential selfie & trust badge status
                   </Text>
                 </View>
               </View>
               <View style={styles.statusPill}>
                 <Ionicons name="checkmark-circle" size={14} color={colors.primary} />
-                <Text style={styles.statusPillText}>Verified</Text>
+                <Text style={styles.statusPillText}>
+                  {profile.isVerified ? 'Verified' : 'Pending'}
+                </Text>
               </View>
-            </View>
+            </TouchableOpacity>
+
+            <View style={styles.menuDivider} />
+
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => onNavigate?.('WaliDashboard')}
+              activeOpacity={0.7}
+            >
+              <View style={styles.menuLeft}>
+                <View style={styles.menuIconContainer}>
+                  <Ionicons name="shield-outline" size={20} color={colors.primary} />
+                </View>
+                <View style={styles.menuTextWrap}>
+                  <Text style={styles.menuTitle}>Family & Wali Hub</Text>
+                  <Text style={styles.menuSubtitle}>
+                    Chaperone oversight, permissions & guardian coordination
+                  </Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={colors.outline} />
+            </TouchableOpacity>
 
             <View style={styles.menuDivider} />
 

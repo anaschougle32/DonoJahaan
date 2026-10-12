@@ -13,6 +13,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { colors, radii, shadows, spacing } from '../../theme/tokens';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface SelfieVerificationScreenProps {
   onBack?: () => void;
@@ -67,6 +68,10 @@ export const SelfieVerificationScreen: React.FC<SelfieVerificationScreenProps> =
     setIsVerifying(true);
     setTimeout(() => {
       setIsVerifying(false);
+      updateCurrentUserProfile({
+        hasSelfieVerification: true,
+        isVerified: true,
+      });
       Alert.alert(
         'Selfie Verified ✨',
         'Your profile has been granted the Verified Member badge. This selfie remains confidential and will never appear on your public profile.'

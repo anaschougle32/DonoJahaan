@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { BottomSheetModal } from '../../components/common/BottomSheetModal';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { ChatMessage, MatrimonialProfile } from '../../types';
 import { mockActiveSuitor, mockMessages } from '../../mocks/matrimonialData';
+import { sendChatMessage, subscribeToConversationMessages } from '../../services/chatService';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { currentUserProfile } from '../../data/userProfile';
@@ -45,26 +46,45 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   const [shareContactModalVisible, setShareContactModalVisible] = useState(false);
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
 
-  const handleSend = () => {
+  // Listen to incoming Realtime messages on active conversation channel
+  useEffect(() => {
+    const unsubscribe = subscribeToConversationMessages('conv-active', (incoming) => {
+      setMessagesList((prev) => {
+        if (prev.some((m) => m.id === incoming.id)) return prev;
+        return [...prev, incoming];
+      });
+    });
+    return unsubscribe;
+  }, []);
+
+  const handleSend = async () => {
     if (!inputText.trim()) return;
-    const newMsg: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      conversationId: 'conv-active',
-      senderId: 'user-me',
-      senderName: currentUserProfile.name.split(' ')[0],
-      type: 'text',
-      content: inputText.trim(),
-      timestamp: 'Just now',
-      isSentByMe: true,
-    };
-    setMessagesList((prev) => [...prev, newMsg]);
-    onSendMessage?.(inputText.trim());
+    const content = inputText.trim();
     setInputText('');
+
+    const sent = await sendChatMessage({
+      conversationId: 'conv-active',
+      senderProfileId: 'user-me',
+      senderName: currentUserProfile.name.split(' ')[0],
+      content,
+      type: 'text',
+    });
+    setMessagesList((prev) => [...prev, sent]);
+    onSendMessage?.(content);
   };
 
-  const handleShareContactConfirmed = () => {
+  const handleShareContactConfirmed = async () => {
     setShareContactModalVisible(false);
-    onSendMessage?.(`📞 Direct Contact Shared: Mobile +91 98230 12345 (${currentUserProfile.name})`);
+    const content = `📞 Direct Contact Shared: Mobile +91 98230 12345 (${currentUserProfile.name})`;
+    const sent = await sendChatMessage({
+      conversationId: 'conv-active',
+      senderProfileId: 'user-me',
+      senderName: currentUserProfile.name.split(' ')[0],
+      content,
+      type: 'system',
+    });
+    setMessagesList((prev) => [...prev, sent]);
+    onSendMessage?.(content);
   };
 
   return (

@@ -59,11 +59,22 @@ export const TabNavigator: React.FC = () => {
           <HomeScreen
             onNavigate={(screen: string) => {
               if (screen === 'ProfileDetail') rootNavigation.navigate('ProfileDetail', {});
+              else if (screen === 'ProfileViews') rootNavigation.navigate('ProfileViews');
               else if (screen === 'Notifications') rootNavigation.navigate('Notifications');
               else if (screen === 'Questionnaire') rootNavigation.navigate('Questionnaire');
               else if (screen === 'Matches') rootNavigation.navigate('MainTabs', { screen: 'MatchesTab' });
               else if (screen === 'FamilyDetails') rootNavigation.navigate('FamilyDetails');
               else if (screen === 'PartnerPreferences') rootNavigation.navigate('PartnerPreferences');
+              else if (screen === 'PhysicalDetails') rootNavigation.navigate('PhysicalDetails');
+              else if (screen === 'EducationDetails') rootNavigation.navigate('EducationDetails');
+              else if (screen === 'ProfessionDetails') rootNavigation.navigate('ProfessionDetails');
+              else if (screen === 'ProfilePhotos') rootNavigation.navigate('ProfilePhotos');
+              else if (screen === 'VoiceIntro') rootNavigation.navigate('VoiceIntro');
+              else if (screen === 'SelfieVerification') rootNavigation.navigate('SelfieVerification');
+              else if (screen === 'Chat') rootNavigation.navigate('MainTabs', { screen: 'ChatTab' });
+            }}
+            onViewProfile={(suitor) => {
+              rootNavigation.navigate('ProfileDetail', { profileId: suitor.id, profileName: suitor.name });
             }}
           />
         )}
@@ -94,6 +105,9 @@ export const TabNavigator: React.FC = () => {
               else if (screen === 'ChatTab') rootNavigation.navigate('MainTabs', { screen: 'ChatTab' });
               else if (screen === 'ProfileTab') rootNavigation.navigate('MainTabs', { screen: 'ProfileTab' });
             }}
+            onViewProfile={(suitor) => {
+              rootNavigation.navigate('ProfileDetail', { profileId: suitor.id, profileName: suitor.name });
+            }}
             onOpenNotifications={() => rootNavigation.navigate('Notifications')}
             onOpenFilters={() => rootNavigation.navigate('AdvancedFilters')}
           />
@@ -123,6 +137,9 @@ export const TabNavigator: React.FC = () => {
             onNavigate={(screen: string) => {
               if (screen === 'ProfileDetail') rootNavigation.navigate('ProfileDetail', {});
               else if (screen === 'Chat') rootNavigation.navigate('MainTabs', { screen: 'ChatTab' });
+            }}
+            onViewProfile={(suitor) => {
+              rootNavigation.navigate('ProfileDetail', { profileId: suitor.id, profileName: suitor.name });
             }}
           />
         )}
@@ -184,6 +201,7 @@ export const TabNavigator: React.FC = () => {
               else if (screen === 'ProfilePhotos') rootNavigation.navigate('ProfilePhotos');
               else if (screen === 'VoiceIntro') rootNavigation.navigate('VoiceIntro');
               else if (screen === 'SelfieVerification') rootNavigation.navigate('SelfieVerification');
+              else if (screen === 'WaliDashboard') rootNavigation.navigate('WaliDashboard');
             }}
             onSignOut={() => rootNavigation.reset({ index: 0, routes: [{ name: 'PhoneAuth' }] })}
           />

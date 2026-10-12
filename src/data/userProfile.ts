@@ -4,6 +4,8 @@
 // Single source of truth for current logged-in user state & metrics
 // ====================================================================
 
+import { useState, useEffect, useMemo } from 'react';
+
 export interface UserProfileState {
   id: string;
   name: string;
@@ -203,3 +205,54 @@ export function getProfileCompletionMetrics(
     steps,
   };
 }
+
+type ProfileListener = (profile: UserProfileState) => void;
+const listeners = new Set<ProfileListener>();
+
+/**
+ * Subscribe to real-time profile mutations across screens.
+ */
+export function subscribeToUserProfile(listener: ProfileListener): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+/**
+ * Updates current in-memory user profile state and notifies all subscriber components.
+ */
+export function updateCurrentUserProfile(partial: Partial<UserProfileState>): UserProfileState {
+  Object.assign(currentUserProfile, partial);
+  const snapshot = { ...currentUserProfile };
+  listeners.forEach((listener) => {
+    try {
+      listener(snapshot);
+    } catch (e) {
+      console.warn('Error notifying profile listener:', e);
+    }
+  });
+  return snapshot;
+}
+
+/**
+ * Reactive React hook for accessing current profile and reactive completion metrics.
+ */
+export function useUserProfile() {
+  const [profile, setProfile] = useState<UserProfileState>({ ...currentUserProfile });
+
+  useEffect(() => {
+    return subscribeToUserProfile((updated) => {
+      setProfile(updated);
+    });
+  }, []);
+
+  const metrics = useMemo(() => getProfileCompletionMetrics(profile), [profile]);
+
+  return {
+    profile,
+    metrics,
+    updateProfile: updateCurrentUserProfile,
+  };
+}
+

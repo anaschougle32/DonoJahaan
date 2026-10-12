@@ -6,10 +6,12 @@
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL =
+  process.env.EXPO_PUBLIC_SUPABASE_URL ||
   process.env.NEXT_PUBLIC_SUPABASE_URL ||
   'https://fcqyukdvfifpdcckhkep.supabase.co';
 
 const SUPABASE_ANON_KEY =
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   'sb_publishable_aimHB8yIyDraQVdXrDDfBA_0ValbCl_';

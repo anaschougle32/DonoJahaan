@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Alert,
+  Pressable,
 } from 'react-native';
 import { colors, spacing, typography, radii, shadows } from '../../theme/tokens';
 import { SelectableChip } from '../../components/common/SelectableChip';
@@ -16,6 +17,7 @@ import {
   mockInterestsSent,
   mockCuratedMatches,
 } from '../../mocks/matrimonialData';
+import { getReceivedInterests, getSentInterests, respondToInterest } from '../../services/interestService';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -43,8 +45,35 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
   const insets = useSafeAreaInsets();
   const handleViewProfile = onViewProfile || (() => onNavigate?.('ProfileDetail'));
   const [activeTab, setActiveTab] = useState<'received' | 'sent' | 'shortlist'>('received');
+  const [receivedList, setReceivedList] = useState<MatrimonialInterest[]>(interestsReceived);
+  const [sentList, setSentList] = useState<MatrimonialInterest[]>(interestsSent);
 
-  const handleAccept = (suitor: MatrimonialProfile) => {
+  useEffect(() => {
+    let isMounted = true;
+    const fetchInterests = async () => {
+      try {
+        const [rx, sx] = await Promise.all([
+          getReceivedInterests(),
+          getSentInterests(),
+        ]);
+        if (isMounted) {
+          if (rx && rx.length > 0) setReceivedList(rx);
+          if (sx && sx.length > 0) setSentList(sx);
+        }
+      } catch (err) {
+        console.warn('InterestsScreen background fetch notice:', err);
+      }
+    };
+    fetchInterests();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleAccept = (item: MatrimonialInterest) => {
+    const suitor = item.profile;
+    if (!suitor) return;
+
     if (hasActiveConversation) {
       Alert.alert(
         'One Active Conversation Rule',
@@ -60,10 +89,24 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Accept & Start Chat',
-          onPress: () => (onAcceptInterest ? onAcceptInterest(suitor) : onNavigate?.('Chat')),
+          onPress: async () => {
+            await respondToInterest(item.id, 'accepted');
+            setReceivedList((prev) => prev.filter((i) => i.id !== item.id));
+            if (onAcceptInterest) {
+              onAcceptInterest(suitor);
+            } else {
+              onNavigate?.('Chat');
+            }
+          },
         },
       ]
     );
+  };
+
+  const handleDecline = async (item: MatrimonialInterest) => {
+    await respondToInterest(item.id, 'declined');
+    setReceivedList((prev) => prev.filter((i) => i.id !== item.id));
+    Alert.alert('Declined', 'Proposal declined respectfully.');
   };
 
   return (
@@ -71,12 +114,12 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
       {/*  Tab Header  */}
       <View style={styles.tabsRow}>
         <SelectableChip
-          label={`Received (${interestsReceived.length})`}
+          label={`Received (${receivedList.length})`}
           selected={activeTab === 'received'}
           onPress={() => setActiveTab('received')}
         />
         <SelectableChip
-          label={`Sent (${interestsSent.length})`}
+          label={`Sent (${sentList.length})`}
           selected={activeTab === 'sent'}
           onPress={() => setActiveTab('sent')}
         />
@@ -90,11 +133,15 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
       <ScrollView contentContainerStyle={styles.scrollBody}>
         {activeTab === 'received' && (
           <View style={styles.cardsList}>
-            {interestsReceived.map((item) => {
+            {receivedList.map((item) => {
               const suitor = item.profile!;
+              if (!suitor) return null;
               return (
                 <View key={item.id} style={styles.interestCard}>
-                  <View style={styles.suitorHeaderRow}>
+                  <Pressable
+                    style={styles.suitorHeaderRow}
+                    onPress={() => handleViewProfile(suitor)}
+                  >
                     <Image source={{ uri: suitor.avatar }} style={styles.avatarImg} />
                     <View style={{ flex: 1 }}>
                       <Text style={styles.suitorName}>{suitor.name}, {suitor.age}</Text>
@@ -103,7 +150,7 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
                       </Text>
                       <Text style={styles.timestampText}>{item.sentAt}</Text>
                     </View>
-                  </View>
+                  </Pressable>
 
                   {item.introductoryNote && (
                     <View style={styles.noteContainer}>
@@ -116,7 +163,7 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
                       <PrimaryButton
                         title="Accept & Connect"
                         icon="check"
-                        onPress={() => handleAccept(suitor)}
+                        onPress={() => handleAccept(item)}
                         style={styles.cardActionBtn}
                       />
                     </View>
@@ -124,7 +171,7 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
                       <PrimaryButton
                         title="Decline"
                         variant="outline"
-                        onPress={() => Alert.alert('Declined', 'Proposal declined respectfully.')}
+                        onPress={() => handleDecline(item)}
                         style={styles.cardActionBtn}
                       />
                     </View>
@@ -137,18 +184,22 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
 
         {activeTab === 'sent' && (
           <View style={styles.cardsList}>
-            {interestsSent.map((item) => {
-              const suitor = item.profile!;
+            {sentList.map((item) => {
+              const suitor = item.profile;
+              if (!suitor) return null;
               return (
                 <View key={item.id} style={styles.interestCard}>
-                  <View style={styles.suitorHeaderRow}>
+                  <Pressable
+                    style={styles.suitorHeaderRow}
+                    onPress={() => handleViewProfile(suitor)}
+                  >
                     <Image source={{ uri: suitor.avatar }} style={styles.avatarImg} />
                     <View style={{ flex: 1 }}>
                       <Text style={styles.suitorName}>{suitor.name}, {suitor.age}</Text>
                       <Text style={styles.suitorDetails}>{suitor.location}</Text>
                       <Text style={styles.statusSentText}>Status: Pending Family Review</Text>
                     </View>
-                  </View>
+                  </Pressable>
                 </View>
               );
             })}

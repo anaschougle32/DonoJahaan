@@ -21,6 +21,7 @@ import {
   INDIAN_STATES,
   PROFESSIONS_LOOKUP,
 } from '../../data/lookupData';
+import { updateCurrentUserProfile } from '../../data/userProfile';
 
 interface FamilyDetailsScreenProps {
   onBack?: () => void;
@@ -217,7 +218,14 @@ export const FamilyDetailsScreen: React.FC<FamilyDetailsScreenProps> = ({
         <PrimaryButton
           title="Save & Continue to Partner Preferences →"
           icon="arrow-forward"
-          onPress={onSaved || (() => {})}
+          onPress={() => {
+            updateCurrentUserProfile({
+              hasFamilyDetails: true,
+              familyType: selectedStructureId === 'nuclear' ? 'Nuclear' : 'Joint Family',
+              familyValues: 'Traditional & Deen-centered',
+            });
+            onSaved?.();
+          }}
         />
       </View>
 
