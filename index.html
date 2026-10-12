@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Dono Jaha — Modern Islamic Matrimony</title>
+  
+  <!-- Typography: Manrope (Headlines) & Inter (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+  <!-- Dono Jaha Unified Design System -->
+  <link rel="stylesheet" href="css/dono-jaha.css" />
+</head>
+<body>
+
+  <!-- Application Mount Root -->
+  <div id="app-root">
+    <div class="mobile-device-shell">
+      
+      <!-- Top Sticky App Bar -->
+      <header class="app-header" id="app-header">
+        <button class="header-action-btn" id="header-back-btn" onclick="window.handleHeaderBack()" aria-label="Go Back">
+          <span class="material-symbols-outlined" style="font-size: 22px;">arrow_back</span>
+        </button>
+
+        <div style="flex: 1; text-align: center; padding: 0 8px;">
+          <h1 id="header-title" style="font-size: 16px; font-weight: 700; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            Dono Jaha
+          </h1>
+        </div>
+
+        <div id="header-avatar" style="width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: var(--surface-container); display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="window.jumpToScreen('profile')">
+          <span class="material-symbols-outlined" style="color: var(--primary); font-size: 20px;">person</span>
+        </div>
+      </header>
+
+      <!-- Dynamic Screen Content Slot -->
+      <main id="main-screen-content" style="flex: 1; position: relative;">
+        <!-- Injected via app.js -->
+      </main>
+
+      <!-- Bottom Pinned Navigation Dock -->
+      <nav class="app-bottom-nav" id="app-bottom-nav">
+        <button class="nav-tab-item active" data-tab="home" aria-label="Home Dashboard">
+          <span class="material-symbols-outlined">home</span>
+          <span class="nav-tab-label">Home</span>
+        </button>
+        <button class="nav-tab-item" data-tab="discover" aria-label="Discover Suitors">
+          <span class="material-symbols-outlined">search</span>
+          <span class="nav-tab-label">Discover</span>
+        </button>
+        <button class="nav-tab-item" data-tab="interests" aria-label="Interests Hub">
+          <span class="material-symbols-outlined">favorite</span>
+          <span class="nav-tab-label">Interests</span>
+        </button>
+        <button class="nav-tab-item" data-tab="chat" aria-label="Active Matrimonial Chat">
+          <span class="material-symbols-outlined">chat_bubble</span>
+          <span class="nav-tab-label">Active Chat</span>
+        </button>
+        <button class="nav-tab-item" data-tab="profile" aria-label="My Profile">
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="nav-tab-label">Profile</span>
+        </button>
+      </nav>
+
+      <!-- Global Modal Bottom Sheet Overlay -->
+      <div class="modal-overlay" id="global-modal-overlay" onclick="if(event.target===this) window.closeAllModals()">
+        <div class="modal-sheet-content" id="modal-content-slot">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Screen Explorer & Storybook Catalog Drawer -->
+      <div class="modal-overlay" id="screen-explorer-modal" onclick="if(event.target===this) window.closeAllModals()">
+        <div class="modal-sheet-content" style="max-height: 85vh;">
+          <div class="sheet-drag-handle"></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-symbols-outlined" style="color: var(--primary);">grid_view</span>
+              <h3 style="font-size: 18px; margin: 0;">Screen Explorer & Audit Hub</h3>
+            </div>
+            <button onclick="window.closeAllModals()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted);">&times;</button>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+            Jump directly to any of the 50 designed screens to test layouts, states, and business logic:
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">1. Onboarding & Splash</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('splash'); State.splashIndex=0; renderSplashScreen();">Splash 01 (Values)</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('splash'); State.splashIndex=1; renderSplashScreen();">Splash 02 (Privacy)</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('splash'); State.splashIndex=2; renderSplashScreen();">Splash 03 (Purpose)</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">2. Authentication</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('auth_phone')">Mobile Number</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('auth_otp')">OTP Verification</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">3. Questionnaire Engine</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=0; renderQuestionnaireScreen();">Profile Created By</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=1; renderQuestionnaireScreen();">Gender & Full Name</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=2; renderQuestionnaireScreen();">Religion & Sect</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=3; renderQuestionnaireScreen();">Prayer Practice</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=4; renderQuestionnaireScreen();">Photo Modesty Upload</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('questionnaire'); State.currentQuestionStep=5; renderQuestionnaireScreen();">Voice Studio</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">4. Main Feed & Discovery</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('home')">Home Dashboard</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('discover')">Discover Feed</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('profile_detail')">Profile Detail (Ayesha 27)</button>
+                <button class="tag-chip" onclick="window.openFiltersModal()">Advanced Search Filters</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">5. One-Conversation & Chat</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('chat')">Active Chaperoned Chat</button>
+                <button class="tag-chip" onclick="window.jumpToScreen('interests')">Interests Hub</button>
+                <button class="tag-chip" onclick="window.openPhotoAccessModal('prof_fatima_002')">Photo Access Modal</button>
+                <button class="tag-chip" onclick="window.openShareContactModal()">Share Contact Modal</button>
+                <button class="tag-chip" onclick="window.openEndConversationModal()">End Conversation Modal</button>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-weight: 700; color: var(--primary); margin-bottom: 6px;">6. Wali & Settings</div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button class="tag-chip" onclick="window.jumpToScreen('profile')">Profile Hub & Settings</button>
+                <button class="tag-chip" onclick="alert('Wali Chaperone Dashboard: Linked Father can inspect chat transcripts and approve suitor requests.')">Wali Dashboard</button>
+                <button class="tag-chip" onclick="window.confirmAccountPause()">Account Snooze / Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Floating Screen Explorer Switcher Trigger Button -->
+  <button class="screen-explorer-trigger" onclick="window.toggleScreenExplorer()" aria-label="Open Screen Explorer">
+    <span class="material-symbols-outlined" style="font-size: 18px;">browse_activity</span>
+    <span>Screen Explorer (50 Screens)</span>
+  </button>
+
+  <!-- Application Logic Scripts -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

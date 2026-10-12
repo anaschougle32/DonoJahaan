@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Splash 01 - Find Someone Who Shares Your Values</title>
+<!-- Load Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Plus Jakarta Sans / Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              emerald: '#0B6B57',
+              emeraldDark: '#085343',
+              dark: '#141E1B',
+              muted: '#66706D',
+              cream: '#F4EFEA',
+              cardBg: '#FCFCFB'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '36px'
+          }
+        }
+      }
+    };
+  </script>
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #F3F1EC;
+    }
+  </style>
+<style data-purpose="custom-shadows">
+    .card-shadow {
+      box-shadow: 0 10px 35px -5px rgba(20, 30, 27, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.03);
+    }
+    .btn-press:active {
+      transform: scale(0.985);
+      transition: transform 0.1s ease-in-out;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"></head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-brand-dark">
+<!-- BEGIN: ScreenLabel -->
+<!-- Contextual label above the mock frame as shown in design screen mockups -->
+<div class="w-full max-w-[375px] mb-3 px-2 flex justify-start text-xs font-medium text-[#8F9490] tracking-normal select-none" data-purpose="screen-indicator">Splash 02</div>
+<!-- END: ScreenLabel -->
+<!-- BEGIN: MainContainer -->
+<main class="w-full max-w-[375px] h-[780px] bg-[#FCFCFA] rounded-[36px] card-shadow flex flex-col justify-between p-6 relative overflow-hidden" data-purpose="mobile-card"><div class="flex flex-col w-full h-full justify-between items-center text-center select-none">
+<!-- Top / Illustration Section -->
+<div class="w-full flex-1 flex flex-col items-center justify-center pt-2">
+<div class="relative w-[280px] h-[280px] flex items-center justify-center select-none"><div class="absolute w-60 h-60 bg-[#EBF3EF]/60 rounded-full blur-2xl"></div><div class="relative w-52 h-64 bg-white/70 backdrop-blur-md rounded-3xl p-3 shadow-lg border border-white/60 flex flex-col items-center justify-center overflow-hidden"><div class="w-full h-full rounded-2xl bg-gradient-to-b from-[#D8E6E0] to-[#EAE4DC] flex flex-col items-center justify-center relative overflow-hidden"><div class="absolute inset-0 bg-[#C8DBD3]/40 filter blur-xl"></div><div class="relative w-24 h-24 rounded-full bg-[#A8C7BB]/50 blur-sm mb-2 mt-4"></div><div class="relative w-36 h-28 rounded-t-full bg-[#96B8AB]/60 blur-md"></div><div class="absolute inset-0 bg-white/35 backdrop-blur-[6px]"></div><div class="relative z-20 w-16 h-16 rounded-full bg-[#0B6B57] shadow-lg flex items-center justify-center border-2 border-white/80"><span class="material-symbols-outlined text-white text-[28px]">lock</span></div><div class="absolute top-3 right-3 z-20 w-7 h-7 rounded-full bg-[#F5EEDD] flex items-center justify-center shadow-sm border border-[#E8DEC7]"><span class="material-symbols-outlined text-[#8A723D] text-[16px]">verified_user</span></div></div></div></div>
+</div>
+<!-- Middle / Content Copy Area -->
+<div class="w-full flex flex-col items-center px-2 mt-4 mb-8"><h1 class="text-[28px] font-bold text-[#17201D] tracking-tight mb-2 text-center leading-[36px]">Privacy Comes First</h1><p class="text-[15px] text-[#68736F] leading-[23px] text-center max-w-[270px]">Control who can see your photos and personal information.</p></div>
+<!-- Bottom Interactive Area -->
+<div class="w-full flex flex-col items-center space-y-6 pb-2"><div aria-label="Onboarding Progress" class="flex items-center justify-center space-x-2" role="tablist"><span aria-label="Step 1 of 3" class="w-[6px] h-[6px] rounded-full bg-[#CED7D2] transition-all duration-300"></span><span aria-label="Step 2 of 3 (Active)" class="w-[24px] h-[6px] rounded-full bg-[#0B6B57] transition-all duration-300"></span><span aria-label="Step 3 of 3" class="w-[6px] h-[6px] rounded-full bg-[#CED7D2] transition-all duration-300"></span></div><button class="btn-press w-full h-[52px] bg-[#0B6B57] hover:bg-[#075044] active:bg-[#075044] text-white font-semibold text-[15px] rounded-[14px] shadow-sm flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#0B6B57]/20" type="button">Continue</button></div>
+</div>
+<script>
+  // Add subtle tactile tap interaction for the primary button
+  const continueBtn = document.querySelector('.btn-press');
+  if (continueBtn) {
+    continueBtn.addEventListener('click', () => {
+      continueBtn.classList.add('opacity-90');
+      setTimeout(() => {
+        continueBtn.classList.remove('opacity-90');
+      }, 150);
+    });
+  }
+</script></main>
+<!-- END: MainContainer -->
+
+
+</body></html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Splash 01 - Find Someone Who Shares Your Values</title>
+<!-- Load Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Plus Jakarta Sans / Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              emerald: '#0B6B57',
+              emeraldDark: '#085343',
+              dark: '#141E1B',
+              muted: '#66706D',
+              cream: '#F4EFEA',
+              cardBg: '#FCFCFB'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif']
+          },
+          borderRadius: {
+            '4xl': '36px'
+          }
+        }
+      }
+    };
+  </script>
+<style data-purpose="base-typography">
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #F3F1EC;
+    }
+  </style>
+<style data-purpose="custom-shadows">
+    .card-shadow {
+      box-shadow: 0 10px 35px -5px rgba(20, 30, 27, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.03);
+    }
+    .btn-press:active {
+      transform: scale(0.985);
+      transition: transform 0.1s ease-in-out;
+    }
+  </style>
+<meta content="web_standard" name="shell-type"></head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-brand-dark">
+<!-- BEGIN: ScreenLabel -->
+<!-- Contextual label above the mock frame as shown in design screen mockups -->
+<div class="w-full max-w-[375px] mb-3 px-2 flex justify-start text-xs font-medium text-[#8F9490] tracking-normal select-none" data-purpose="screen-indicator">Splash 03</div>
+<!-- END: ScreenLabel -->
+<!-- BEGIN: MainContainer -->
+<main class="w-full max-w-[375px] h-[780px] bg-[#FCFCFA] rounded-[36px] card-shadow flex flex-col justify-between relative overflow-hidden" data-purpose="mobile-card"><div class="flex flex-col w-full h-full justify-between items-center select-none bg-[#FCFCFA] pt-[120px] pb-[24px] px-0">
+  <!-- Center Content: Illustration + Typography -->
+  <div class="w-full flex flex-col items-center flex-grow justify-start">
+    <!-- Hero Visual: 280x280 vector illustration -->
+    <div class="relative w-[280px] h-[280px] flex items-center justify-center"><!-- Ambient Soft Glow -->
+      <div class="absolute w-56 h-56 rounded-full bg-[#EDE5F8]/60 filter blur-2xl"></div>
+      <svg class="relative w-[280px] h-[280px]" fill="none" viewBox="0 0 280 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient cx="0" cy="0" gradientTransform="translate(140 140) rotate(90) scale(130)" gradientUnits="userSpaceOnUse" id="halo-glow-3" r="1">
+            <stop stop-color="#F1ECF9" stop-opacity="0.9"></stop>
+            <stop stop-color="#FCFCFA" stop-opacity="0"></stop>
+          </radialGradient>
+          <filter filterUnits="userSpaceOnUse" height="128%" id="card-soft-shadow-3" width="124%" x="-8%" y="-8%">
+            <feDropShadow dx="0" dy="8" flood-color="#1D1A26" flood-opacity="0.06" stdDeviation="12"></feDropShadow>
+          </filter>
+          <linearGradient id="primary-bar-grad-3" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#4A2E7A"></stop>
+            <stop offset="100%" stop-color="#684A9B"></stop>
+          </linearGradient>
+          <linearGradient id="gold-wali-grad-3" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#FAF6FE"></stop>
+            <stop offset="100%" stop-color="#F1ECF9"></stop>
+          </linearGradient>
+        </defs>
+        <!-- Subtle Background Halo -->
+        <circle cx="140" cy="140" fill="url(#halo-glow-3)" r="126"></circle>
+        <circle cx="140" cy="140" r="110" stroke="#E9E2F3" stroke-dasharray="4 6" stroke-width="1"></circle>
+        <!-- Profile Card 1 (Left / Neutral Groom) -->
+        <g filter="url(#card-soft-shadow-3)" transform="rotate(-6 95 125)">
+          <rect fill="#F7F4F0" height="146" rx="20" width="118" x="36" y="52"></rect>
+          <rect height="145" rx="19.5" stroke="#EAE5DE" stroke-opacity="0.8" width="117" x="36.5" y="52.5"></rect>
+          <circle cx="95" cy="100" fill="#E8E2D9" r="26"></circle>
+          <path d="M73 99C73 86.8497 82.8497 77 95 77C107.15 77 117 86.8497 117 99C117 101.5 116.5 104 115.5 106.5C110 102 102 99.5 95 99.5C87 99.5 78.5 102.5 73.5 107C73.1 104.5 73 101.8 73 99Z" fill="#786F66"></path>
+          <path d="M54 162C54 140.461 71.4609 123 93 123H97C118.539 123 136 140.461 136 162V170C136 171.105 135.105 172 134 172H56C54.8954 172 54 171.105 54 170V162Z" fill="#DBD3C7"></path>
+          <rect fill="#E3DDD3" height="8" rx="4" width="86" x="52" y="179"></rect>
+        </g>
+        <!-- Profile Card 2 (Right / Lavender Bride) -->
+        <g filter="url(#card-soft-shadow-3)" transform="rotate(5 180 135)">
+          <rect fill="#FFFFFF" height="152" rx="20" width="122" x="122" y="58"></rect>
+          <rect height="151" rx="19.5" stroke="#E7DFF1" stroke-opacity="0.9" width="121" x="122.5" y="58.5"></rect>
+          <circle cx="183" cy="106" fill="#F1ECF9" r="27"></circle>
+          <path d="M161 106C161 93.8497 170.85 84 183 84C195.15 84 205 93.8497 205 106C205 115.5 199.5 123 191 127L194 172C194 173.1 193.1 174 192 174H174C172.9 174 172 173.1 172 172L175 127C166.5 123 161 115.5 161 106Z" fill="#533783"></path>
+          <ellipse cx="183" cy="107" fill="#F8EADB" rx="13" ry="16"></ellipse>
+          <path d="M140 166C140 148.5 155 133 173.5 133H192.5C211 133 226 148.5 226 166V176C226 177.1 225.1 178 224 178H142C140.9 178 140 177.1 140 176V166Z" fill="#BCA6E5"></path>
+          <rect fill="#E5DAF6" height="8" rx="4" width="86" x="140" y="186"></rect>
+        </g>
+        <!-- Audio Waveform Player Graphic (#4A2E7A Voice Intro) -->
+        <g filter="url(#card-soft-shadow-3)">
+          <rect fill="#FFFFFF" height="46" rx="23" width="196" x="42" y="174"></rect>
+          <rect height="45" rx="22.5" stroke="#E9E2F3" stroke-opacity="0.9" width="195" x="42.5" y="174.5"></rect>
+          <circle cx="65" cy="197" fill="#4A2E7A" r="14"></circle>
+          <polygon fill="#FFFFFF" points="62,191 71,197 62,203"></polygon>
+          <rect fill="url(#primary-bar-grad-3)" height="8" rx="1.5" width="3" x="88" y="193"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="16" rx="1.5" width="3" x="94" y="189"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="26" rx="1.5" width="3" x="100" y="184"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="14" rx="1.5" width="3" x="106" y="190"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="22" rx="1.5" width="3" x="112" y="186"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="32" rx="1.5" width="3" x="118" y="181"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="20" rx="1.5" width="3" x="124" y="187"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="28" rx="1.5" width="3" x="130" y="183"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="16" rx="1.5" width="3" x="136" y="189"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="24" rx="1.5" width="3" x="142" y="185"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="10" rx="1.5" width="3" x="148" y="192"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="18" rx="1.5" width="3" x="154" y="188"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="28" rx="1.5" width="3" x="160" y="183"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="12" rx="1.5" width="3" x="166" y="191"></rect>
+          <rect fill="url(#primary-bar-grad-3)" height="6" rx="1.5" width="3" x="172" y="194"></rect>
+          <rect fill="#F1ECF9" height="18" rx="9" width="44" x="183" y="188"></rect>
+          <text fill="#4A2E7A" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" text-anchor="middle" x="205" y="201">0:45</text>
+        </g>
+        <!-- Wali / Family Involvement Shield Badge with Deep Violet Shield -->
+        <g filter="url(#card-soft-shadow-3)">
+          <rect fill="url(#gold-wali-grad-3)" height="28" rx="14" width="56" x="188" y="60"></rect>
+          <rect height="27" rx="13.5" stroke="#E7DFF1" stroke-opacity="0.9" width="55" x="188.5" y="60.5"></rect>
+          <path d="M198 69.5C198 69.5 202 68.5 204 67C206 68.5 210 69.5 210 69.5C210 74 207 78.5 204 80C201 78.5 198 74 198 69.5Z" fill="#4A2E7A"></path>
+          <path d="M201.8 73.6L203.3 75.1L206.5 71.8" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2"></path>
+          <text fill="#4A2E7A" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" text-anchor="middle" x="223" y="78">Wali</text>
+        </g>
+        <circle cx="50" cy="74" fill="#E5DAF6" r="3.5"></circle>
+        <circle cx="236" cy="180" fill="#EADBC0" r="2.5"></circle>
+        <path d="M244 116L246 122L252 124L246 126L244 132L242 126L236 124L242 122Z" fill="#F0DFC0" opacity="0.9"></path>
+      </svg></div>
+    <!-- Header Typography: Manrope, 28px, Bold 700, #17201D, mt-40px -->
+    <h1 class="text-center font-bold tracking-tight text-[28px] leading-[34px] text-[#17201D] mt-[40px]" style="font-family: 'Manrope', 'Plus Jakarta Sans', sans-serif;">
+      Meet With Purpose
+    </h1>
+    <!-- Subtext Typography: Manrope, 15px, Regular 400, #68736F, Line-height 1.5, px-[24px], mt-[16px] -->
+    <p class="text-center font-normal text-[15px] leading-[1.5] text-[#68736F] px-[24px] mt-[16px] max-w-[340px]" style="font-family: 'Manrope', 'Plus Jakarta Sans', sans-serif;">
+      Connect respectfully, involve family when you choose, and take one meaningful conversation at a time.
+    </p>
+  </div>
+
+  <!-- Bottom Interactive Section: Pagination Dots + Primary Button -->
+  <div class="w-full flex flex-col items-center">
+    <!-- Pagination Dots: 40px above primary button (mb-[40px]), Dot 1 & 2 inactive circle 8x8 #E4E9E6, Dot 3 active pill 24x8 radius 999px #0B6B57 -->
+    <div aria-label="Pagination" class="flex items-center justify-center space-x-2 mb-[40px]"><span class="w-[8px] h-[8px] rounded-full bg-[#E7DFF1] transition-all duration-300"></span>
+      <span class="w-[8px] h-[8px] rounded-full bg-[#E7DFF1] transition-all duration-300"></span>
+      <span class="w-[24px] h-[8px] rounded-[999px] bg-[#4A2E7A] transition-all duration-300"></span></div>
+    <!-- Primary Button: Height 52px, Width 100% with 20px padding (px-5), #0B6B57, Text #FFFFFF, Font 15px SemiBold 600, rounded-[14px] -->
+    <div class="w-full px-5">
+      <button class="w-full h-[52px] rounded-[14px] bg-[#4A2E7A] text-[#FFFFFF] text-[15px] font-semibold flex items-center justify-center shadow-sm hover:bg-[#3B2462] active:scale-[0.985] transition-all cursor-pointer select-none" style="font-family: Manrope, &quot;Plus Jakarta Sans&quot;, sans-serif;" type="button">
+        Get Started
+      </button>
+    </div>
+  </div>
+</div></main>
+<!-- END: MainContainer -->
+
+
+
+
+</body></html>

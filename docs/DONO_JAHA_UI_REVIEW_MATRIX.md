@@ -1,0 +1,982 @@
+# DONO JAHA — VISUAL UI REVIEW MATRIX
+**Generated:** October 6, 2026  
+**Purpose:** Screen-by-Screen Visual Architecture, Interaction, State, and Inconsistency Audit  
+
+---
+
+### 1. SCREEN: Logo Splash
+- **FILE:** `src/features/auth/LogoSplashScreen.tsx`
+- **ROUTE:** `LogoSplash`
+- **VISUAL STRUCTURE:**
+  - **Header:** Bismillah calligraphic emblem in soft gold
+  - **Content:** Central Dono Jaha gold crescent crest, Quranic marriage verse (Surah Ar-Rum 30:21) with English translation
+  - **Cards:** Verse card with subtle gold border
+  - **Buttons:** Primary Rich Purple "Begin Journey", secondary "Log In", text link "Explore without Account"
+  - **Navigation:** Root stack initial route
+  - **Footer/bottom nav:** None
+- **INTERACTIONS:**
+  - **Tap:** "Begin Journey" $\rightarrow$ `Splash`; "Log In" $\rightarrow$ `PhoneAuth`; "Explore" $\rightarrow$ `MatchesTab`
+  - **Swipe:** None
+  - **Scroll:** None
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** None
+- **STATES:**
+  - **Default:** Rendered static brand greeting
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** None
+  - **Completed:** None
+- **SAFE AREA:**
+  - **Top:** Raw `<View>` without top inset handling
+  - **Bottom:** Fixed bottom padding (32px)
+- **VISUAL CONCERNS:**
+  - **Typography:** Uses custom Manrope/Inter; letterSpacing is 2 on title
+  - **Spacing:** Adequate vertical breathing room on standard 19.5:9 devices
+  - **Alignment:** Centered
+  - **Radius:** Card radius is 16px (`radii.card`)
+  - **Shadows:** Standard `shadows.card`
+  - **Colors:** Palette matches Rich Purple (`#6A3794`) and Gold (`#D4AF37`)
+  - **Icons:** Ionicons "moon", "sparkles"
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Functional
+  - **State:** Static
+  - **Data:** Hardcoded verse
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 2. SCREEN: Splash Onboarding Carousel
+- **FILE:** `src/features/auth/SplashScreen.tsx`
+- **ROUTE:** `Splash`
+- **VISUAL STRUCTURE:**
+  - **Header:** Top skip button ("Skip")
+  - **Content:** 3 animated slides with dedicated vector illustrations (`FamilyIllustration`, `ShieldIllustration`, `WaliIllustration`), heading, body description, and Quranic motto pill
+  - **Cards:** None
+  - **Buttons:** Next arrow circle / "Begin Account Creation" pill
+  - **Navigation:** Slide index stepper (0, 1, 2)
+  - **Footer/bottom nav:** Pagination dots and slide counter ("1 of 3")
+- **INTERACTIONS:**
+  - **Tap:** "Next", "Skip", pagination dots, "Get Started"
+  - **Swipe:** Touch-based drag not implemented; advances on tap
+  - **Scroll:** None
+  - **Search:** None
+  - **Select:** Active dot
+  - **Submit:** Advances to `PhoneAuth`
+- **STATES:**
+  - **Default:** Slide 0 (Sacred Marriage)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Slide 0, 1, or 2 active
+  - **Completed:** Final slide shows "Begin Account Creation" CTA
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView`
+  - **Bottom:** Handled by `SafeAreaView`
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent Manrope headlines
+  - **Spacing:** Balanced
+  - **Alignment:** Center aligned
+  - **Radius:** Circular pagination dots
+  - **Shadows:** Subtle button shadow
+  - **Colors:** Deep purple and lavender
+  - **Icons:** Custom SVG vector illustrations
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Functional
+  - **State:** Managed by `useState`
+  - **Data:** Static slide copy
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 3. SCREEN: Phone Authentication
+- **FILE:** `src/features/auth/PhoneAuthScreen.tsx`
+- **ROUTE:** `PhoneAuth`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, Chaperone Welcome badge
+  - **Content:** Phone entry prompt, Country selector button, Phone TextInput, Quick Demo Number chip (`98230 12345`)
+  - **Cards:** Chaperone advisory card
+  - **Buttons:** `PrimaryButton` ("Send Verification Code")
+  - **Navigation:** Stack
+  - **Footer/bottom nav:** Security disclaimer
+- **INTERACTIONS:**
+  - **Tap:** Country code modal trigger, quick demo chip, submit button
+  - **Swipe:** None
+  - **Scroll:** ScrollView for keyboard avoidance
+  - **Search:** In country modal
+  - **Select:** Country code selection
+  - **Submit:** Sends OTP request
+- **STATES:**
+  - **Default:** Empty phone field
+  - **Loading:** `isSubmitting` spinner state
+  - **Error:** Alert on invalid number length (< 10 digits)
+  - **Empty:** Initial state
+  - **Selected:** Country code active
+  - **Completed:** Advances to `OtpVerification`
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** Keyboard-aware padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px horizontal margin
+  - **Alignment:** Left-aligned inputs
+  - **Radius:** 14px on input and button
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** MaterialIcons "phone", "verified-user"
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Passes phone param
+  - **State:** Local state
+  - **Data:** Supabase auth client ready
+  - **Validation:** Basic length check
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 4. SCREEN: OTP Verification
+- **FILE:** `src/features/auth/OtpVerificationScreen.tsx`
+- **ROUTE:** `OtpVerification`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Verification" title
+  - **Content:** Sent phone number display, 6 individual PIN input boxes, resend countdown timer (`0:45`)
+  - **Cards:** None
+  - **Buttons:** `PrimaryButton` ("Verify & Continue"), "Change Number" link, "Resend Code" link
+  - **Navigation:** Stack
+  - **Footer/bottom nav:** Privacy reassurance
+- **INTERACTIONS:**
+  - **Tap:** Digits input, "Verify & Continue", "Resend Code"
+  - **Swipe:** None
+  - **Scroll:** None
+  - **Search:** None
+  - **Select:** Auto-focuses next input box upon typing
+  - **Submit:** Validates 6 digits
+- **STATES:**
+  - **Default:** 6 empty digit boxes
+  - **Loading:** Verifying spinner
+  - **Error:** Alert on incomplete code
+  - **Empty:** Initial state
+  - **Selected:** Focused digit box has purple border
+  - **Completed:** Auto-advances when 6th digit entered
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** Standard padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Monospace numeric font in PIN boxes
+  - **Spacing:** 8px gap between PIN boxes
+  - **Alignment:** Centered digits
+  - **Radius:** 12px on PIN boxes
+  - **Shadows:** Subtle
+  - **Colors:** Compliant
+  - **Icons:** Keypad icon
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Advances to `Questionnaire`
+  - **State:** Array of 6 strings
+  - **Data:** Mocked or Supabase OTP
+  - **Validation:** 6-digit check
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 5. SCREEN: Questionnaire (Phase 1 Essential Setup)
+- **FILE:** `src/features/onboarding/QuestionnaireScreen.tsx`
+- **ROUTE:** `Questionnaire`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, step progress bar, step counter ("1 of 6"), Phase 1 badge
+  - **Content:** 6 step questionnaires (Creator/Gender, Name/Email, DOB/Age, Religion/Sect, Searchable Location, Marital/Language)
+  - **Cards:** `SelectionCard`, Selection dropdown card, Live activation callout
+  - **Buttons:** Bottom sticky "Continue" / "Save & Make Profile Live 🎉"
+  - **Navigation:** Step increment/decrement
+  - **Footer/bottom nav:** Bottom sticky dock
+- **INTERACTIONS:**
+  - **Tap:** Selection card, gender box, chips, open state search modal, open city search modal
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** Typeahead search inside State Modal and City Modal
+  - **Select:** Chips and modal list items
+  - **Submit:** Completes Phase 1 $\rightarrow$ `ProfileSetupComplete`
+- **STATES:**
+  - **Default:** Step 0
+  - **Loading:** None
+  - **Error:** Basic validation
+  - **Empty:** Initial fields
+  - **Selected:** Active chips with purple background
+  - **Completed:** Step 6 button says "Save & Make Profile Live 🎉"
+- **SAFE AREA:**
+  - **Top:** `useSafeAreaInsets() (Math.max(insets.top, 14))`
+  - **Bottom:** `useSafeAreaInsets() (Math.max(insets.bottom, 16))`
+- **VISUAL CONCERNS:**
+  - **Typography:** Heading 22px, body 14px
+  - **Spacing:** 20px screen margin
+  - **Alignment:** Clean left hierarchy
+  - **Radius:** 14px on chips and pickers
+  - **Shadows:** Clean card shadows
+  - **Colors:** Compliant Dono Jaha brand palette
+  - **Icons:** Ionicons, MaterialIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Advances to milestone
+  - **State:** Normalized form state with `stateId` and `cityId`
+  - **Data:** Integrated with [lookupData.ts](file:///c:/Users/choug/OneDrive/Desktop/DonoJaha/src/data/lookupData.ts)
+  - **Validation:** Age calculation from DOB
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 6. SCREEN: Profile Setup Complete (Phase 1 Milestone)
+- **FILE:** `src/features/onboarding/ProfileSetupCompleteScreen.tsx`
+- **ROUTE:** `ProfileSetupComplete`
+- **VISUAL STRUCTURE:**
+  - **Header:** Celebratory halo checkmark emblem
+  - **Content:** "BISMILLAH • PROFILE ACTIVE", "Your profile is live! 🎉", "Profile 55% complete" card with progress rail, Phase 2 preview checklist
+  - **Cards:** 55% completion card, Trust & privacy verification pill
+  - **Buttons:** Primary "Continue to Complete Profile →", secondary link "Explore Matches for now"
+  - **Navigation:** Milestone interstitial
+  - **Footer/bottom nav:** Dual action buttons
+- **INTERACTIONS:**
+  - **Tap:** "Continue to Complete Profile" $\rightarrow$ `SecondaryProfileWizard`; "Explore Matches" $\rightarrow$ `MatchesTab`
+  - **Swipe:** None
+  - **Scroll:** None
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Navigates to Phase 2
+- **STATES:**
+  - **Default:** 55% live celebration layout
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** None
+  - **Completed:** Milestone reached
+- **SAFE AREA:**
+  - **Top:** `useSafeAreaInsets() (Math.max(insets.top, 24))`
+  - **Bottom:** `useSafeAreaInsets() (Math.max(insets.bottom, 24))`
+- **VISUAL CONCERNS:**
+  - **Typography:** Headline 26px, subtitle 15px
+  - **Spacing:** 24px screen margin
+  - **Alignment:** Centered celebratory stack
+  - **Radius:** 20px card radius
+  - **Shadows:** Subtle ambient glow
+  - **Colors:** Purple, white, emerald "Phase 1 Done" badge
+  - **Icons:** Ionicons, MaterialIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Correctly branches between Phase 2 and Matches
+  - **State:** Static milestone
+  - **Data:** None
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 7. SCREEN: Secondary Profile Wizard (Phase 2 Batches)
+- **FILE:** `src/features/onboarding/SecondaryProfileWizardScreen.tsx`
+- **ROUTE:** `SecondaryProfileWizard`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, phase title label, progress rail, percent badge (75%, 90%, 100%)
+  - **Content:**
+    - Batch 2A: Height stepper, Education selector, Profession selector
+    - Batch 2B: Income tiers, Family location, Living with family, Financial status, Preferred education, Preferred profession
+    - Batch 2C: Profile photo upload, Haya modesty veil switch, Voice intro player, Dedicated Selfie Verification card
+  - **Cards:** Photo card, Voice card, Selfie verification card, Milestone summary boxes
+  - **Buttons:** Primary Button ("Save & Continue..."), Search picker buttons
+  - **Navigation:** Batch stepping (2A $\rightarrow$ 2B $\rightarrow$ 2C)
+  - **Footer/bottom nav:** Sticky bottom dock
+- **INTERACTIONS:**
+  - **Tap:** Height +/-, open Education Modal, open Profession Modal, select income chips, toggle modesty switch, play voice, tap "Take Verification Selfie", continue
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** Search Education modal, Search Profession modal with category filter tabs
+  - **Select:** Chips, list items, `[ Open to All ]` buttons
+  - **Submit:** Completes Batch 2C $\rightarrow$ `MatchesTab`
+- **STATES:**
+  - **Default:** Batch 2A active (75%)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** Initial values
+  - **Selected:** Active chips and modal selections
+  - **Completed:** Batch 2C completion
+- **SAFE AREA:**
+  - **Top:** `useSafeAreaInsets() (Math.max(insets.top, 14))`
+  - **Bottom:** `useSafeAreaInsets() (Math.max(insets.bottom, 16))`
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px padding
+  - **Alignment:** Clean
+  - **Radius:** 14px on selectors, 18px on cards
+  - **Shadows:** Consistent
+  - **Colors:** Fully aligned with Dono Jaha palette
+  - **Icons:** MaterialIcons, Ionicons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Links cleanly to `SelfieVerification` and `MatchesTab`
+  - **State:** Local state updating structured IDs
+  - **Data:** Integrated with master lookup datasets
+  - **Validation:** Stepper min/max bounds (54" - 84")
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 8. SCREEN: Selfie Verification
+- **FILE:** `src/features/onboarding/SelfieVerificationScreen.tsx`
+- **ROUTE:** `SelfieVerification`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Verify Your Profile" title, "Skip" link
+  - **Content:** Shield emblem, title, explanation, camera viewfinder box with front-camera capture placeholder / photo preview, Confidentiality Card ("Separate from Profile Photo")
+  - **Cards:** Confidentiality Card with lock icon
+  - **Buttons:** `PrimaryButton` ("Take Selfie" / "Submit Verification Selfie"), "Retake Selfie" link
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Sticky bottom actions
+- **INTERACTIONS:**
+  - **Tap:** "Take Selfie", "Retake Selfie", "Submit Verification Selfie", "Skip"
+  - **Swipe:** None
+  - **Scroll:** None
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Simulates verification and returns to caller
+- **STATES:**
+  - **Default:** Uncaptured state (viewfinder with camera icon)
+  - **Loading:** `isVerifying` state (1200ms verification simulation)
+  - **Error:** Permission alert if camera denied
+  - **Empty:** Viewfinder empty
+  - **Selected:** Captured image displayed with green verified checkmark
+  - **Completed:** Verified alert and callback
+- **SAFE AREA:**
+  - **Top:** `useSafeAreaInsets() (Math.max(insets.top, 12))`
+  - **Bottom:** Handled by sticky bottom dock
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** Balanced
+  - **Alignment:** Centered viewfinder stack
+  - **Radius:** 20px on viewfinder
+  - **Shadows:** Standard
+  - **Colors:** Deep purple, warm white, green checkmark
+  - **Icons:** MaterialIcons "verified-user", Ionicons "camera", "lock-closed"
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Returns via `navigation.goBack()`
+  - **State:** Managed by `selfieUri`
+  - **Data:** Front-camera capture via `expo-image-picker`
+  - **Validation:** Camera permission requested properly
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 9. SCREEN: Family Details (Legacy Direct Screen)
+- **FILE:** `src/features/onboarding/FamilyDetailsScreen.tsx`
+- **ROUTE:** `FamilyDetails`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Add Family Details" title
+  - **Content:** Family explanation subtitle, Family location input, Yes/No toggle for living with family, Financial status chips (`Elite`, `High`, `Middle`, `Aspiring`), Family type chips (`Nuclear`, `Joint`), Father's occupation input, Mother's occupation input
+  - **Cards:** None
+  - **Buttons:** `PrimaryButton` ("Save Family Details")
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Scrollable padding
+- **INTERACTIONS:**
+  - **Tap:** Yes/No buttons, financial status chips, family type chips, Save button
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** Chips and toggles
+  - **Submit:** Saves and advances to `PartnerPreferences`
+- **STATES:**
+  - **Default:** Pre-filled default values (Lucknow, High, Nuclear)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Active chips with purple background
+  - **Completed:** Save alert
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** ScrollView padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** Standard spacing tokens
+  - **Alignment:** Left-aligned form
+  - **Radius:** 14px on Yes/No buttons, 14px on inputs
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** Ionicons, MaterialIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Registered in `RootNavigator`
+  - **State:** Local state
+  - **Data:** Isolated form data
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 10. SCREEN: Partner Preferences (Legacy Direct Screen)
+- **FILE:** `src/features/onboarding/PartnerPreferencesScreen.tsx`
+- **ROUTE:** `PartnerPreferences`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Partner Preferences" title
+  - **Content:** Age range stepper, Marital status multi-select chips, Annual income selector chips, Profession search bar + chips, Profile managed by chips
+  - **Cards:** None
+  - **Buttons:** `PrimaryButton` ("Apply & Find Compatible Matches")
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Scrollable padding
+- **INTERACTIONS:**
+  - **Tap:** Age +/- steppers, marital status chips, income chips, profession chips, managed by chips, Apply button
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** Instant typeahead filter for professions
+  - **Select:** Multi-select chips
+  - **Submit:** Saves and replaces with `MainTabs` / `MatchesTab`
+- **STATES:**
+  - **Default:** Standard preferences
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Active chips highlighted
+  - **Completed:** Apply alert
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** ScrollView padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** Standard
+  - **Alignment:** Left-aligned
+  - **Radius:** 14px on inputs and chips
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** Ionicons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Registered in `RootNavigator`
+  - **State:** Local state
+  - **Data:** Filtered array
+  - **Validation:** Age min/max bounds
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 11. SCREEN: Home Dashboard (Tab 1)
+- **FILE:** `src/features/home/HomeScreen.tsx`
+- **ROUTE:** `HomeTab` in `MainTabs`
+- **VISUAL STRUCTURE:**
+  - **Header:** Greeter row ("Good morning, Anas"), notification bell with unread indicator
+  - **Content:**
+    - Profile completion progress banner (65%)
+    - **Active Matrimonial Conversation Hero Card** (Single suitor focus, Wali Monitored badge, "Chat with Ayesha", "View Profile")
+    - Curated Proposals horizontal carousel
+    - Daily Marriage Hadith card (Bukhari reference)
+    - Prayer Times widget (Fajr, Dhuhr, Asr, Maghrib, Isha)
+  - **Cards:** Hero active chat card, Hadith card, Prayer card, Proposal cards
+  - **Buttons:** "Open Chaperoned Chat", "Complete Profile", "Explore Daily Matches"
+  - **Navigation:** Tab screen
+  - **Footer/bottom nav:** Main Bottom Tab Navigator
+- **INTERACTIONS:**
+  - **Tap:** Notification bell, active chat card, proposal carousel cards, complete profile link
+  - **Swipe:** Horizontal scroll on curated proposals
+  - **Scroll:** Vertical ScrollView
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** None
+- **STATES:**
+  - **Default:** Active conversation visible (Ayesha M.)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** Fallback state when `activeSuitor` is undefined
+  - **Selected:** None
+  - **Completed:** None
+- **SAFE AREA:**
+  - **Top:** ⚠️ **Raw `<ScrollView>` without top inset padding!** Content touches status bar on Android
+  - **Bottom:** Handled by Bottom Tab Bar
+- **VISUAL CONCERNS:**
+  - **Typography:** Header greeting doesn't match ProfileHub name (Anas vs Ahmed)
+  - **Spacing:** 20px padding
+  - **Alignment:** Consistent
+  - **Radius:** Some cards hardcode `borderRadius: 20` and `16`
+  - **Shadows:** Card shadows
+  - **Colors:** Royal purple, lavender, emerald dot
+  - **Icons:** MaterialIcons
+  - **Component consistency:** Minor radius inconsistency
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Deep navigation links to chat, profile detail, notifications
+  - **State:** Driven by mock data props
+  - **Data:** `mockActiveSuitor`, `mockCuratedMatches`
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 12. SCREEN: Matches Feed (Full-Screen Vertical Snap - Tab 2)
+- **FILE:** `src/features/matches/MatchesScreen.tsx` & `src/components/matches/MatchProfileCard.tsx`
+- **ROUTE:** `MatchesTab` in `MainTabs`
+- **VISUAL STRUCTURE:**
+  - **Header:** Menu icon, "Matches" title, notification bell with badge (3)
+  - **Content:** Subheader filter pills (Funnel, Search, New 178, Daily 20), full-screen vertical paged feed
+  - **Cards:** `MatchProfileCard` sized to exact measured content viewport (`feedViewportHeight`)
+    - Veiled/Blurred photo for female with "Request Photo Reveal" button
+    - Clear photo for male
+    - **Voice introduction pill immediately below image** (Waveforms, duration, play/pause)
+    - Profile specs (Name, Age, Height, Sect, Profession, Location, Online/Wali tags, Bio)
+    - Action dock: "Like this Profile?" / "Connect Now" checkmark circle
+  - **Modals:**
+    - One Active Conversation Rule Modal (Handshake icon, current chat notice, prompt)
+    - Photo Reveal Request Modal
+    - Instant Search Modal
+  - **Buttons:** Filter pills, Unlock photo button, Connect button, Voice play button
+  - **Navigation:** Tab screen
+  - **Footer/bottom nav:** Main Bottom Tab Navigator
+- **INTERACTIONS:**
+  - **Tap:** Filter pills, open search modal, open filter modal, play voice, request photo, connect button
+  - **Swipe:** Vertical swipe snaps directly from Profile A to Profile B (one profile per viewport)
+  - **Scroll:** Snapped FlatList
+  - **Search:** Search suitors by name, sect, location in search modal
+  - **Select:** Filter pills
+  - **Submit:** Connect action triggers One Rule modal or success alert
+- **STATES:**
+  - **Default:** Snapped suitor feed
+  - **Loading:** Initial viewport measurement layout
+  - **Error:** None
+  - **Empty:** Filter returns empty list
+  - **Selected:** Active filter pill
+  - **Completed:** Photo revealed state (simulated per suitor ID)
+- **SAFE AREA:**
+  - **Top:** `useSafeAreaInsets() (Math.max(insets.top, 10))`
+  - **Bottom:** Handled by Bottom Tab Bar
+- **VISUAL CONCERNS:**
+  - **Typography:** Heading 20px, card names 18px
+  - **Spacing:** Dynamic vertical fitting
+  - **Alignment:** Clean card dock
+  - **Radius:** 22px on profile card
+  - **Shadows:** Standard card shadow
+  - **Colors:** Fully compliant brand palette
+  - **Icons:** Ionicons, MaterialIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Correctly measured viewport prevents half-card overlap
+  - **State:** Local state for revealed photos, filters, and rule modal
+  - **Data:** Driven by `mockCuratedMatches`
+  - **Validation:** Connect checks active conversation
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 13. SCREEN: Discover Grid (Stitch Legacy Screen)
+- **FILE:** `src/features/discovery/DiscoverScreen.tsx`
+- **ROUTE:** *Unconnected / Unrouted*
+- **VISUAL STRUCTURE:**
+  - **Header:** Search bar, Filter button
+  - **Content:** Vertical card list with `ModestyPhotoCurtain`, suitor details, and Express Interest buttons
+  - **Cards:** Suitor cards
+  - **Modals:** `BottomSheetModal` for filters, `BottomSheetModal` for photo requests
+  - **Buttons:** Filter trigger, Photo reveal trigger, Send Interest
+  - **Navigation:** None registered in root navigator
+  - **Footer/bottom nav:** None
+- **INTERACTIONS:**
+  - **Tap:** Search, Filter button, Request Photo, Express Interest
+  - **Swipe:** Bottom sheet pull
+  - **Scroll:** ScrollView
+  - **Search:** Search input
+  - **Select:** Filter chips
+  - **Submit:** Sends interest alert
+- **STATES:**
+  - **Default:** Card list
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** No search results
+  - **Selected:** Filter bottom sheet visible
+  - **Completed:** Photo access granted state
+- **SAFE AREA:**
+  - **Top:** ⚠️ **Raw `<View>` without top inset handling!**
+  - **Bottom:** Raw padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Uses older tokens
+  - **Spacing:** 16px
+  - **Alignment:** Left-aligned
+  - **Radius:** Standard
+  - **Shadows:** Standard
+  - **Colors:** Uses older emerald tint in some borders
+  - **Icons:** MaterialIcons
+  - **Component consistency:** Predecessor to `MatchesScreen`
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** **UNROUTED in `RootNavigator` and `TabNavigator`**
+  - **State:** Isolated component state
+  - **Data:** `mockCuratedMatches`
+  - **Validation:** One Active Conversation check
+- **STATUS:** `[READY FOR UI REVIEW — UNROUTED ARTIFACT]`
+
+---
+
+### 14. SCREEN: Interests & Requests (Tab 3)
+- **FILE:** `src/features/interests/InterestsScreen.tsx`
+- **ROUTE:** `InterestsTab` in `MainTabs`
+- **VISUAL STRUCTURE:**
+  - **Header:** 3-chip filter switch (`Received (2)`, `Sent (1)`, `Shortlisted (4)`)
+  - **Content:** List of incoming matrimonial interest cards with suitor photo, age, sect, location, proposal note, and action buttons
+  - **Cards:** Interest card with avatar, proposal note, and accept CTA
+  - **Buttons:** "Accept & Open Chat", "Shortlist", Tab chips
+  - **Navigation:** Tab screen
+  - **Footer/bottom nav:** Main Bottom Tab Navigator
+- **INTERACTIONS:**
+  - **Tap:** Toggle tabs, tap suitor to open ProfileDetail, tap "Accept Proposal"
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** Active chip
+  - **Submit:** Accepts interest $\rightarrow$ triggers One Active Conversation alert or chat
+- **STATES:**
+  - **Default:** Received tab active
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** Empty tab state (no items in list)
+  - **Selected:** Tab chip selected
+  - **Completed:** Interest accepted
+- **SAFE AREA:**
+  - **Top:** ⚠️ **Raw `<View>` without top inset handling!** Tabs touch status bar
+  - **Bottom:** Handled by Bottom Tab Bar
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 16px margin
+  - **Alignment:** Clean
+  - **Radius:** 16px card radius
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** MaterialIcons, Ionicons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Deep navigation to profile detail and chat
+  - **State:** Local tab state
+  - **Data:** Driven by `mockInterestsReceived`, `mockInterestsSent`
+  - **Validation:** One active conversation enforcement
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 15. SCREEN: Chaperoned Chat (Tab 4)
+- **FILE:** `src/features/chat/ChatScreen.tsx`
+- **ROUTE:** `ChatTab` in `MainTabs`
+- **VISUAL STRUCTURE:**
+  - **Header:** `TopBar` with candidate name (Ayesha M.) and menu icon
+  - **Content:**
+    - Chaperone warning banner ("Dignified & Chaperoned Chat • Active Wali")
+    - Chat message list (text messages, system timestamps, read receipts)
+    - **Voice message player card with play/pause and progress bar**
+  - **Composer:** TextInput dock with contact share trigger and send button
+  - **Modals:** **Share Direct Contact Bottom Sheet Modal** (Father/chaperone phone number share)
+  - **Buttons:** Send button, Contact share icon, Play voice note, Confirm share contact
+  - **Navigation:** Tab screen
+  - **Footer/bottom nav:** Main Bottom Tab Navigator
+- **INTERACTIONS:**
+  - **Tap:** Type text, tap send, tap play voice note, open contact share modal, confirm share
+  - **Swipe:** Bottom sheet pull
+  - **Scroll:** Message ScrollView
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Appends message to conversation
+- **STATES:**
+  - **Default:** Pre-loaded conversation history
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** Disabled send button when input is empty
+  - **Selected:** Contact modal open
+  - **Completed:** New message appended
+- **SAFE AREA:**
+  - **Top:** ⚠️ **`KeyboardAvoidingView` without top inset on TopBar!**
+  - **Bottom:** Handled by Bottom Tab Bar
+- **VISUAL CONCERNS:**
+  - **Typography:** Bubble text 14px, timestamp 10px
+  - **Spacing:** Message spacing 10px
+  - **Alignment:** Left (suitor) vs Right (user)
+  - **Radius:** 16px message bubbles with tailed corners
+  - **Shadows:** Subtle
+  - **Colors:** Deep purple sent bubble, surface received bubble; ⚠️ `shieldIconCircle` uses old emerald color `'rgba(11, 107, 87, 0.1)'`
+  - **Icons:** MaterialIcons "send", "contact-phone", "done-all"
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Deep navigation from Home and Interests
+  - **State:** Managed by `useState` message array
+  - **Data:** `mockMessages`
+  - **Validation:** Trims empty messages
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 16. SCREEN: My Profile Hub (Tab 5)
+- **FILE:** `src/features/settings/ProfileHubScreen.tsx`
+- **ROUTE:** `ProfileTab` in `MainTabs`
+- **VISUAL STRUCTURE:**
+  - **Header:** "D O N O   J A H A" header, user avatar icon, greeting ("Good morning, Anas")
+  - **Content:**
+    - Profile summary card with avatar image, verified badge, and country tag
+    - Profile completion micro-banner ("Profile 65% complete • Add family details")
+    - Grouped menu sections (Preferences & Journey, Trust & Family, Account & Privacy)
+  - **Cards:** Profile summary card, milestone banner, grouped menu boxes
+  - **Buttons:** Menu navigation rows, Sign Out button
+  - **Navigation:** Tab screen
+  - **Footer/bottom nav:** Main Bottom Tab Navigator
+- **INTERACTIONS:**
+  - **Tap:** Profile card $\rightarrow$ `ProfileDetail`; Milestone $\rightarrow$ `FamilyDetails`; Menu rows $\rightarrow$ sub-screens; Sign Out
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Sign out
+- **STATES:**
+  - **Default:** Hub overview
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** None
+  - **Completed:** None
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** Handled by Bottom Tab Bar
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px padding
+  - **Alignment:** Left-aligned menu rows
+  - **Radius:** 16px on menu containers
+  - **Shadows:** Standard
+  - **Colors:** Purple, lavender, white
+  - **Icons:** Ionicons, MaterialCommunityIcons
+  - **Component consistency:** ⚠️ **Visual Contradiction:** Profile card says "Ahmed, 28 • Profile 100% Complete", but banner right below says "Profile 65% complete • Add family details"!
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Connects to all secondary and settings screens
+  - **State:** Static
+  - **Data:** Mocked user profile
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 17. SCREEN: Profile Detail Modal
+- **FILE:** `src/features/profile/ProfileDetailScreen.tsx`
+- **ROUTE:** `ProfileDetail`
+- **VISUAL STRUCTURE:**
+  - **Header:** `TopBar` with candidate name
+  - **Content:**
+    - Top hero photo with `ModestyPhotoCurtain`
+    - Name, age, verified badge, location, sect badge
+    - Voice Introduction card with prompt and listen button
+    - About Me bio card
+    - **Deen & Islamic Practice Grid** (Salah, Quran, Fasting, Diet, Attire)
+    - **Career & Education Matrix** (Degree, Field, University, Income)
+    - **Family & Living Arrangement Card**
+    - Bottom Action Dock with "Chat" and "Respectfully End Conversation" button
+  - **Modals:** **Respectful Halal Exit Bottom Sheet Modal** (Select reason, confirm termination)
+  - **Buttons:** Play voice, Request photo reveal, Chat button, End conversation button
+  - **Navigation:** Stack modal with slide_from_bottom animation
+  - **Footer/bottom nav:** Sticky bottom action dock
+- **INTERACTIONS:**
+  - **Tap:** Request photo unlock, play voice intro, tap chat, open halal exit modal, select exit reason, confirm exit
+  - **Swipe:** Bottom sheet pull
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** Halal exit reason chips
+  - **Submit:** Concludes active connection
+- **STATES:**
+  - **Default:** Veiled photo state
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Photo unveiled state, Voice playing state, Halal exit modal open
+  - **Completed:** Connection terminated
+- **SAFE AREA:**
+  - **Top:** ⚠️ **Raw `<View>` without top inset on TopBar!**
+  - **Bottom:** Handled by bottom action dock
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 16px padding
+  - **Alignment:** Clean grid
+  - **Radius:** 16px cards
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** MaterialIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Functional back and chat navigation
+  - **State:** Managed by `useState`
+  - **Data:** Driven by `mockActiveSuitor`
+  - **Validation:** Requires exit reason before concluding
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 18. SCREEN: Wali Chaperone Dashboard
+- **FILE:** `src/features/wali/WaliDashboardScreen.tsx`
+- **ROUTE:** `WaliDashboard`
+- **VISUAL STRUCTURE:**
+  - **Header:** `TopBar` ("Family & Wali Hub")
+  - **Content:** Linked Wali card (Tariq Khan, Father, Confirmed & Active pill), Governance permissions breakdown (Chat review, Suitor photo approval, Father-to-father coordination), Invite co-Wali button
+  - **Cards:** Ward card, Permissions settings group
+  - **Buttons:** `PrimaryButton` ("Invite Elder / Mother as Co-Wali")
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Scrollable padding
+- **INTERACTIONS:**
+  - **Tap:** TopBar back arrow, Invite co-Wali button
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Generates invite link
+- **STATES:**
+  - **Default:** Active chaperone overview
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** None
+  - **Completed:** Invite alert
+- **SAFE AREA:**
+  - **Top:** ⚠️ **Raw `<View>` without top inset on TopBar!**
+  - **Bottom:** ScrollView padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px margin
+  - **Alignment:** Left-aligned
+  - **Radius:** 16px cards
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** MaterialIcons "security", "check-circle", "add"
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Returns via `onBack`
+  - **State:** Static
+  - **Data:** Hardcoded guardian data
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 19. SCREEN: Advanced Filters Modal
+- **FILE:** `src/features/search/AdvancedFiltersScreen.tsx`
+- **ROUTE:** `AdvancedFilters`
+- **VISUAL STRUCTURE:**
+  - **Header:** Close "X" icon, "Preference Filters" title, "Reset" button, avatar icon
+  - **Content:** Barakah banner ("Intentional Compatibility"), Location selector, Distance badge, Salah habit multi-select chips, Feature toggle switches (Voice intro, Modesty blur only, Halal diet, Non-drinker)
+  - **Cards:** Barakah banner
+  - **Buttons:** Reset button, `PrimaryButton` ("Apply Filters")
+  - **Navigation:** Stack modal
+  - **Footer/bottom nav:** Sticky bottom button
+- **INTERACTIONS:**
+  - **Tap:** Close, Reset, Location selector, Salah chips, Switches, Apply button
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** In location picker
+  - **Select:** Salah chips, switches
+  - **Submit:** Returns to Matches
+- **STATES:**
+  - **Default:** Active filters
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Toggle switches on/off, chips selected
+  - **Completed:** Apply filters
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top', 'bottom']}`
+  - **Bottom:** Handled by `SafeAreaView`
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px padding
+  - **Alignment:** Clean
+  - **Radius:** 16px on sections
+  - **Shadows:** Standard
+  - **Colors:** Compliant
+  - **Icons:** Ionicons, MaterialCommunityIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Modal presentation
+  - **State:** Managed by `useState`
+  - **Data:** Local filter values
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 20. SCREEN: Notifications & Quiet Hours
+- **FILE:** `src/features/notifications/NotificationsScreen.tsx`
+- **ROUTE:** `Notifications`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Notifications" title, avatar icon
+  - **Content:** Inbox subheader with "Mark all read" button, "TODAY" section header with "1 New" badge, Accepted interest notification card with blurred thumbnail, Wali Activity card, **Prayer Time Quiet Hours Banner**
+  - **Cards:** Notification cards, Quiet hours banner
+  - **Buttons:** "Mark all read", "Open Chat" action button
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Scrollable padding
+- **INTERACTIONS:**
+  - **Tap:** Back arrow, Mark all read, Notification card, Open chat button
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** None
+  - **Submit:** Navigates to `ChatTab`
+- **STATES:**
+  - **Default:** Unread notifications present (1 New badge)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** None
+  - **Completed:** All read state (badges clear, text disabled)
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top']}`
+  - **Bottom:** ScrollView padding
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px margin
+  - **Alignment:** Clean
+  - **Radius:** 16px cards
+  - **Shadows:** Standard
+  - **Colors:** Deep purple unread border, gold quiet hours icon
+  - **Icons:** Ionicons, MaterialCommunityIcons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Deep navigation to chat
+  - **State:** Managed by `allRead` state
+  - **Data:** Static notification list
+  - **Validation:** None
+- **STATUS:** `[READY FOR UI REVIEW]`
+
+---
+
+### 21. SCREEN: Account & Privacy Settings
+- **FILE:** `src/features/settings/AccountSettingsScreen.tsx`
+- **ROUTE:** `AccountSettings`
+- **VISUAL STRUCTURE:**
+  - **Header:** Back arrow, "Account Settings" title, avatar icon
+  - **Content:** Pause Profile section with toggle switch and status banner, Delete Account section with danger button, Data Export section with "Request Data Archive" button
+  - **Cards:** Setting sections
+  - **Modals:** **Account Deletion Confirmation Modal** (Bilingual warning, reason, Confirm / Cancel)
+  - **Buttons:** Toggle switch, Request Data, Delete Account, Modal Confirm/Cancel
+  - **Navigation:** Stack screen
+  - **Footer/bottom nav:** Scrollable padding
+- **INTERACTIONS:**
+  - **Tap:** Back arrow, Pause switch, Request data button, Delete account button, Modal actions
+  - **Swipe:** None
+  - **Scroll:** ScrollView
+  - **Search:** None
+  - **Select:** Toggle switch
+  - **Submit:** Triggers data request alert or account deletion alert
+- **STATES:**
+  - **Default:** Profile paused by default (`isPaused = true`)
+  - **Loading:** None
+  - **Error:** None
+  - **Empty:** None
+  - **Selected:** Delete modal open
+  - **Completed:** Deletion confirmed $\rightarrow$ exits to `LogoSplash`
+- **SAFE AREA:**
+  - **Top:** Handled by `SafeAreaView edges={['top', 'bottom']}`
+  - **Bottom:** Handled by `SafeAreaView`
+- **VISUAL CONCERNS:**
+  - **Typography:** Consistent
+  - **Spacing:** 20px margin
+  - **Alignment:** Clean
+  - **Radius:** 16px cards
+  - **Shadows:** Standard
+  - **Colors:** Danger red for delete action, purple for pause switch
+  - **Icons:** Ionicons
+  - **Component consistency:** High
+- **FUNCTIONAL CONCERNS:**
+  - **Navigation:** Exits to `LogoSplash` on deletion
+  - **State:** Managed by `useState`
+  - **Data:** None
+  - **Validation:** Double confirmation on account deletion
+- **STATUS:** `[READY FOR UI REVIEW]`

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Manrope:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary": "#735b23", "surface-variant": "#dbe5e0", "primary-container": "#0b6b57", "primary-fixed-dim": "#85d6bd", "inverse-primary": "#85d6bd", "surface-container-high": "#e0eae5", "surface-container-lowest": "#ffffff", "background": "#f2fcf6", "surface-tint": "#0b6b57", "on-tertiary-fixed-variant": "#3e4946", "on-primary-fixed-variant": "#005141", "on-secondary-fixed-variant": "#59440c", "error": "#ba1a1a", "secondary-container": "#fddc96", "primary": "#005141", "secondary-fixed-dim": "#e2c380", "on-surface-variant": "#3f4945", "tertiary": "#3e4947", "on-secondary-container": "#785f26", "primary-fixed": "#a1f2d9", "surface-container": "#e6f0eb", "surface-bright": "#f2fcf6", "on-tertiary-fixed": "#131e1b", "tertiary-container": "#56615e", "on-error": "#ffffff", "on-primary-container": "#97e8cf", "inverse-on-surface": "#e9f3ee", "surface-container-low": "#ecf6f1", "on-tertiary": "#ffffff", "on-primary-fixed": "#002019", "inverse-surface": "#29322f", "surface": "#f2fcf6", "outline-variant": "bec9c3", "on-tertiary-container": "#cfdbd8", "on-primary": "#ffffff", "tertiary-fixed": "#d9e5e1", "on-secondary": "#ffffff", "on-surface": "#141d1a", "secondary-fixed": "#ffdf9c", "outline": "#6f7975", "on-background": "#141d1a", "on-error-container": "#93000a", "error-container": "#ffdad6", "tertiary-fixed-dim": "#bdc9c5", "on-secondary-fixed": "#251a00", "surface-dim": "#d2dcd7", "surface-container-highest": "#dbe5e0" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-tablet": "2rem", "space-lg": "1.5rem", "margin": "1.25rem", "space-md": "1rem", "gutter-mobile": "0.75rem", "space-xl": "2rem", "space-sm": "0.5rem", "gutter": "1rem", "space-xs": "0.25rem", "margin-desktop": "3rem" }, fontFamily: { "headline-md": ["Manrope"], "headline-sm": ["Manrope"], "display-lg": ["Manrope"], "caption": ["Inter"], "label-lg": ["Inter"], "body-sm": ["Inter"], "body-lg": ["Inter"], "label-sm": ["Inter"], "headline-lg": ["Manrope"], "label-md": ["Inter"], "display-lg-mobile": ["Manrope"], "body-md": ["Inter"] }, fontSize: { "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }], "headline-sm": ["18px", { lineHeight: "26px", fontWeight: "600" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "caption": ["11px", { lineHeight: "14px", fontWeight: "500" }], "label-lg": ["16px", { lineHeight: "22px", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "headline-lg": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "label-md": ["14px", { lineHeight: "20px", fontWeight: "600" }], "display-lg-mobile": ["30px", { lineHeight: "38px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-lg text-body-lg text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-margin flex items-center justify-between"><button aria-label="Go Back" class="w-11 h-11 -ml-space-xs flex items-center justify-center text-on-surface rounded-full transition-colors hover:bg-surface-variant/40" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-label-lg text-label-lg text-on-surface text-center flex-1 truncate px-space-xs">Preview Profile</h1><div class="flex items-center justify-end w-11 h-11 -mr-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-14 bg-surface pb-safe min-h-screen"><div class="flex flex-col w-full">
+<!-- View Toggle (Segmented Control) -->
+<div class="px-margin pt-space-sm pb-space-xs">
+<div class="bg-surface-container-highest p-1 rounded-xl flex items-center shadow-inner">
+<button class="flex-1 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm transition-all flex items-center justify-center gap-1.5" id="tab-public" onclick="switchView('public')">
+<span class="material-symbols-outlined text-[18px] text-primary">visibility_off</span>
+<span>Public View</span>
+</button>
+<button class="flex-1 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md transition-all flex items-center justify-center gap-1.5 hover:text-on-surface" id="tab-match" onclick="switchView('match')">
+<span class="material-symbols-outlined text-[18px]">favorite</span>
+<span>Match View</span>
+</button>
+</div>
+</div>
+<!-- Privacy Explanation Banner -->
+<div class="px-margin mb-space-md">
+<div class="bg-surface-container-low rounded-xl px-3.5 py-3 flex items-start gap-2.5 transition-colors" id="privacy-banner">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">verified_user</span>
+<p class="font-body-md text-body-md text-primary font-medium leading-snug" id="privacy-banner-text">
+        This is exactly how prospective matches see your profile before you mutually accept their interest.
+      </p>
+</div>
+</div>
+<!-- Preview Card Container -->
+<div class="px-margin mb-space-lg">
+<div class="bg-surface-container-lowest rounded-[20px] shadow-sm overflow-hidden flex flex-col transition-all">
+<!-- Media Hero Section with Guarded Blur -->
+<div class="relative w-full h-[248px] overflow-hidden bg-surface-container-high flex items-center justify-center">
+<!-- Profile Image with Dynamic Blur Filter -->
+<img class="w-full h-full object-cover scale-110 blur-[14px] transition-all duration-500 ease-out" data-alt="A dignified Muslim woman wearing an elegant warm beige silk headscarf and embroidered off-white traditional kurti, smiling gently in a soft-lit English rose garden with stone architecture, captured in luminous editorial portrait photography, calm peaceful aura." id="preview-portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqGQcJOTQySGdHj_-Z-5h9NSoAeHZ0emdjD80lQr2t4hlCj66qWrY0UCGIm-Cofiu6bFiE0m7vyz2G5MtnJWsh4Jmf1OU6LYuC-8ThGQyrs_ZAqyjWv8NDP6IGEpVQqYWle0crges6OntUOIPz8M-kv0To_366s6B3bXFYEeQzTm8HgPsvYzefadiT0HnVXBir8VKOND68lNb_Ys6oBv9ohHK3gycZEad6YdBDRktv5g2j4hhUqyH6"/>
+<!-- Public View Guard Overlay -->
+<div class="absolute inset-0 bg-inverse-surface/30 backdrop-blur-[3px] flex flex-col items-center justify-center transition-opacity duration-300" id="privacy-overlay">
+<div class="w-13 h-13 p-3 rounded-full bg-inverse-surface/75 text-surface-container-lowest flex items-center justify-center shadow-md mb-2">
+<span class="material-symbols-outlined text-[26px]">lock</span>
+</div>
+<span class="font-label-sm text-label-sm px-3 py-1 rounded-full bg-surface-container-lowest/95 text-on-surface shadow-sm">
+            Photo Protected
+          </span>
+<div class="absolute bottom-3 left-3 bg-inverse-surface/70 text-surface-container-lowest text-[11px] font-label-sm px-2.5 py-1 rounded-md backdrop-blur-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+<span>Visible upon mutual interest</span>
+</div>
+</div>
+<!-- Verified Chaperone (Wali) Badge - Matrimonial Authenticity -->
+<div class="absolute top-3 right-3 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<span>Wali Monitored</span>
+</div>
+</div>
+<!-- Information Anatomy Section -->
+<div class="p-space-lg flex flex-col">
+<!-- Identity Header -->
+<div class="flex items-baseline justify-between mb-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Zainab, 27</h2>
+<span class="font-label-sm text-label-sm text-primary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>ID Verified</span>
+</span>
+</div>
+<!-- Location -->
+<div class="flex items-center gap-1 text-on-surface-variant mb-space-md">
+<span class="material-symbols-outlined text-[17px]">location_on</span>
+<span class="font-body-md text-body-md">Mumbai, Maharashtra</span>
+</div>
+<!-- Demographic & Faith Value Chips -->
+<div class="flex flex-wrap gap-2 mb-space-md">
+<span class="px-3 py-1 rounded-lg bg-surface-container-low text-primary font-label-md text-label-md">Software Engineer</span>
+<span class="px-3 py-1 rounded-lg bg-surface-container-low text-primary font-label-md text-label-md">Hanafi</span>
+<span class="px-3 py-1 rounded-lg bg-surface-container-low text-primary font-label-md text-label-md">Urdu &amp; English</span>
+<span class="px-3 py-1 rounded-lg bg-surface-container-low text-primary font-label-md text-label-md">Prays 5x Daily</span>
+</div>
+<!-- Matrimonial Respect Badges -->
+<div class="flex items-center gap-2 mb-space-md">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">mic</span>
+<span>Voice prompt (0:34)</span>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">family_restroom</span>
+<span>Family Involved</span>
+</div>
+</div>
+<!-- Bio Abstract snippet -->
+<div class="bg-surface-container-low p-3.5 rounded-xl mb-space-md">
+<p class="font-body-md text-body-md text-on-surface-variant italic leading-relaxed">
+            "Looking for an intentional, kind partner who values deen, continuous personal growth, and close family bonds..."
+          </p>
+</div>
+<!-- Contact Privacy Shield Module -->
+<div class="pt-space-md bg-surface-container-lowest flex flex-col gap-2.5">
+<div class="flex items-center justify-between pb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">
+              Protected Contact Details
+            </span>
+<span class="text-caption font-caption text-primary flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+              Wali Protocol Active
+            </span>
+</div>
+<!-- Phone Number Row -->
+<div class="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">phone</span>
+<span class="font-label-md text-label-md text-on-surface">Phone Number</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm" id="badge-phone">
+<span>Hidden</span>
+<span class="material-symbols-outlined text-[14px]">lock</span>
+</div>
+</div>
+<!-- Email Row -->
+<div class="flex items-center justify-between py-2 px-3 rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">mail</span>
+<span class="font-label-md text-label-md text-on-surface">Email Address</span>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm" id="badge-email">
+<span>Hidden</span>
+<span class="material-symbols-outlined text-[14px]">lock</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Reassurance Micro-banner -->
+<div class="px-margin mb-space-lg flex items-center justify-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-primary">security</span>
+<span class="font-body-sm text-body-sm">Your privacy preferences are fully encrypted &amp; enforced</span>
+</div>
+<!-- Action Sheet Area -->
+<div class="px-margin pb-space-lg flex flex-col gap-3">
+<button class="w-full h-[52px] rounded-[14px] bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm flex items-center justify-center gap-2 hover:bg-surface-container-low active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Edit Privacy Settings</span>
+</button>
+</div>
+</div>
+<script>
+  function switchView(mode) {
+    const tabPublic = document.getElementById('tab-public');
+    const tabMatch = document.getElementById('tab-match');
+    const portrait = document.getElementById('preview-portrait');
+    const overlay = document.getElementById('privacy-overlay');
+    const bannerText = document.getElementById('privacy-banner-text');
+    const badgePhone = document.getElementById('badge-phone');
+    const badgeEmail = document.getElementById('badge-email');
+
+    if (mode === 'public') {
+      tabPublic.className = "flex-1 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm transition-all flex items-center justify-center gap-1.5";
+      tabMatch.className = "flex-1 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md transition-all flex items-center justify-center gap-1.5 hover:text-on-surface";
+      
+      portrait.classList.add('blur-[14px]', 'scale-110');
+      portrait.classList.remove('blur-none', 'scale-100');
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100');
+
+      bannerText.textContent = "This is exactly how prospective matches see your profile before you mutually accept their interest.";
+      
+      badgePhone.innerHTML = `<span>Hidden</span><span class="material-symbols-outlined text-[14px]">lock</span>`;
+      badgePhone.className = "flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm";
+      
+      badgeEmail.innerHTML = `<span>Hidden</span><span class="material-symbols-outlined text-[14px]">lock</span>`;
+      badgeEmail.className = "flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm";
+    } else {
+      tabMatch.className = "flex-1 py-2 rounded-lg bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm transition-all flex items-center justify-center gap-1.5";
+      tabPublic.className = "flex-1 py-2 rounded-lg text-on-surface-variant font-label-md text-label-md transition-all flex items-center justify-center gap-1.5 hover:text-on-surface";
+      
+      portrait.classList.remove('blur-[14px]', 'scale-110');
+      portrait.classList.add('blur-none', 'scale-100');
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      overlay.classList.remove('opacity-100');
+
+      bannerText.textContent = "Previewing accepted match view: Once you both connect, your photo and curated contact details become visible.";
+
+      badgePhone.innerHTML = `<span>Shared with Wali</span><span class="material-symbols-outlined text-[14px]">verified</span>`;
+      badgePhone.className = "flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm";
+
+      badgeEmail.innerHTML = `<span>Shared with Wali</span><span class="material-symbols-outlined text-[14px]">verified</span>`;
+      badgeEmail.className = "flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm";
+    }
+  }
+</script></main></body></html>

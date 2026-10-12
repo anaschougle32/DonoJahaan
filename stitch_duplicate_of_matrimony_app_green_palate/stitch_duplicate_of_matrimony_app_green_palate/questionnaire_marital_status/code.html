@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-on-surface": "#e9f3ee", "surface-bright": "#f2fcf6", "tertiary-container": "#cca72f", "surface-variant": "#dbe5e0", "on-tertiary": "#ffffff", "inverse-primary": "#85d6bd", "error": "#ba1a1a", "secondary-fixed-dim": "#7fd8ab", "surface-tint": "#0b6b57", "surface-dim": "#d2dcd7", "on-tertiary-container": "#4e3d00", "surface-container": "#e6f0eb", "primary-container": "#0b6b57", "outline-variant": "#bec9c3", "on-surface": "#141d1a", "surface-container-lowest": "#ffffff", "surface-container-high": "#e0eae5", "on-tertiary-fixed": "#241a00", "on-error-container": "#93000a", "on-primary": "#ffffff", "inverse-surface": "#29322f", "surface-container-low": "#ecf6f1", "secondary-fixed": "#9bf5c6", "on-secondary-fixed-variant": "#005235", "secondary-container": "#98f2c3", "on-primary-container": "#97e8cf", "tertiary": "#735c00", "on-primary-fixed-variant": "#005141", "background": "#f2fcf6", "on-secondary-container": "#02714c", "error-container": "#ffdad6", "on-primary-fixed": "#002019", "on-secondary": "#ffffff", "outline": "#6f7975", "primary-fixed-dim": "#85d6bd", "on-surface-variant": "#3f4945", "on-background": "#141d1a", "on-tertiary-fixed-variant": "#574500", "primary": "#005141", "tertiary-fixed": "#ffe088", "on-secondary-fixed": "#002113", "tertiary-fixed-dim": "#e9c349", "surface": "#f2fcf6", "on-error": "#ffffff", "secondary": "#006c48", "surface-container-highest": "#dbe5e0", "primary-fixed": "#a1f2d9" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "space-xs": "0.25rem", "gutter-desktop": "1.5rem", "margin-tablet": "2rem", "space-md": "1rem", "space-lg": "1.5rem", "gutter": "1rem", "margin": "1rem", "margin-desktop": "3rem", "space-sm": "0.5rem" }, "fontFamily": { "headline-xl-mobile": ["Manrope"], "label-lg": ["Manrope"], "headline-lg": ["Manrope"], "body-md": ["Manrope"], "headline-md": ["Manrope"], "body-lg": ["Manrope"], "headline-xl": ["Manrope"], "headline-lg-mobile": ["Manrope"], "body-sm": ["Manrope"], "headline-sm": ["Manrope"], "label-md": ["Manrope"], "label-sm": ["Manrope"] }, "fontSize": { "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "label-lg": ["15px", { "lineHeight": "20px", "fontWeight": "600" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen" style="background-color: #FCFCFA;"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-5 flex items-center justify-between gap-4"><button aria-label="Go back" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-[#17201D] hover:text-[#0B6B57] transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><div class="flex-1 flex items-center gap-3"><div class="flex-1 h-1.5 bg-[#E4E9E6] rounded-full overflow-hidden"><div class="h-full bg-[#0B6B57] rounded-full transition-all duration-300" style="width: 11.11%;"></div></div><span class="text-[12px] font-semibold text-[#68736F] shrink-0 font-['Manrope']">2 of 18</span></div><div class="w-4"></div></div></header><main class="flex-1 flex flex-col w-full pt-14 pb-32 bg-surface px-margin"><div class="flex flex-col w-full">
+<!-- Dynamic Top Bar Progress Sync -->
+<script>
+    (function() {
+      // Sync top shell progress indicators to Step 4 of 18 (22.2%)
+      const progressTrack = document.querySelector('header .bg-\\[\\#0B6B57\\]');
+      if (progressTrack) {
+        progressTrack.style.width = '22.22%';
+      }
+      const progressText = document.querySelector('header span.text-\\[12px\\]');
+      if (progressText) {
+        progressText.textContent = '4 of 18';
+      }
+    })();
+  </script>
+<!-- Section Header -->
+<div class="pt-6 sm:pt-8 px-5">
+<div class="flex items-center gap-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Account Setup</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary/40"></span>
+<span class="font-label-sm text-label-sm text-outline">Personal Background</span>
+</div>
+</div>
+<!-- Main Question & Context -->
+<div class="mt-2 px-5">
+<h1 class="font-headline-xl-mobile text-headline-xl-mobile text-on-surface">
+      What is your marital status?
+    </h1>
+<p class="mt-1.5 font-body-md text-body-md text-on-surface-variant">
+      This helps us present your profile respectfully according to your preferences and circumstances.
+    </p>
+</div>
+<!-- Reassuring Dignity Banner (Heritage Accent) -->
+<div class="mx-5 mt-4 p-3.5 rounded-xl bg-surface-container-low shadow-sm flex items-start gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center shrink-0 text-on-secondary-container mt-0.5">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-md text-label-md text-on-surface">Private &amp; Dignified</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Your status is handled with utmost privacy and solemnity throughout matches.</p>
+</div>
+</div>
+<!-- Options List (Single Select Cards) -->
+<div aria-label="Marital Status Selection" class="mt-6 px-5 flex flex-col gap-3" id="marital-options" role="radiogroup">
+<!-- Option 1: Never Married (Default Active) -->
+<button aria-checked="true" class="status-option w-full h-16 px-5 rounded-2xl flex items-center justify-between transition-all duration-200 text-left bg-surface-container text-primary shadow-sm" data-value="never_married" role="radio" type="button">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-surface-container-lowest flex items-center justify-center text-primary shadow-sm shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm truncate text-primary">Never Married</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">First time seeking partnership</span>
+</div>
+</div>
+<div class="indicator w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-sm transition-transform scale-100">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+</button>
+<!-- Option 2: Divorced -->
+<button aria-checked="false" class="status-option w-full h-16 px-5 rounded-2xl flex items-center justify-between transition-all duration-200 text-left bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low" data-value="divorced" role="radio" type="button">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">restart_alt</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg text-body-lg font-medium text-on-surface truncate">Divorced</span>
+<span class="font-label-sm text-label-sm text-outline">Completed legal &amp; religious divorce</span>
+</div>
+</div>
+<div class="indicator w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-transform scale-90">
+<span class="material-symbols-outlined text-[16px] text-transparent">check</span>
+</div>
+</button>
+<!-- Option 3: Widowed -->
+<button aria-checked="false" class="status-option w-full h-16 px-5 rounded-2xl flex items-center justify-between transition-all duration-200 text-left bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low" data-value="widowed" role="radio" type="button">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">spa</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg text-body-lg font-medium text-on-surface truncate">Widowed</span>
+<span class="font-label-sm text-label-sm text-outline">Honoring past, open to new chapter</span>
+</div>
+</div>
+<div class="indicator w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-transform scale-90">
+<span class="material-symbols-outlined text-[16px] text-transparent">check</span>
+</div>
+</button>
+<!-- Option 4: Awaiting Divorce -->
+<button aria-checked="false" class="status-option w-full h-16 px-5 rounded-2xl flex items-center justify-between transition-all duration-200 text-left bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low" data-value="awaiting_divorce" role="radio" type="button">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">hourglass_top</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg text-body-lg font-medium text-on-surface truncate">Awaiting Divorce</span>
+<span class="font-label-sm text-label-sm text-outline">Proceedings in progress</span>
+</div>
+</div>
+<div class="indicator w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-transform scale-90">
+<span class="material-symbols-outlined text-[16px] text-transparent">check</span>
+</div>
+</button>
+<!-- Option 5: Annulled -->
+<button aria-checked="false" class="status-option w-full h-16 px-5 rounded-2xl flex items-center justify-between transition-all duration-200 text-left bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low" data-value="annulled" role="radio" type="button">
+<div class="flex items-center gap-3.5 min-w-0">
+<div class="w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">contract_delete</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-lg text-body-lg font-medium text-on-surface truncate">Annulled</span>
+<span class="font-label-sm text-label-sm text-outline">Legally/religiously dissolved early</span>
+</div>
+</div>
+<div class="indicator w-6 h-6 rounded-full bg-surface-variant flex items-center justify-center shrink-0 transition-transform scale-90">
+<span class="material-symbols-outlined text-[16px] text-transparent">check</span>
+</div>
+</button>
+</div>
+<!-- Warm Guiding Helper Note -->
+<div class="mt-6 mx-5 p-4 rounded-2xl bg-surface-container-low flex items-center gap-3">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed shrink-0">
+<span class="material-symbols-outlined text-[15px]">lightbulb</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+      Honesty in marital background builds a foundation of barakah, mutual respect, and clarity.
+    </span>
+</div>
+<!-- Interactive Selection Handler -->
+<script>
+    (function() {
+      const container = document.getElementById('marital-options');
+      if (!container) return;
+
+      const buttons = container.querySelectorAll('.status-option');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.setAttribute('aria-checked', 'false');
+            b.classList.remove('bg-surface-container', 'text-primary');
+            b.classList.add('bg-surface-container-lowest', 'text-on-surface');
+
+            const labelEl = b.querySelector('.truncate');
+            if (labelEl) {
+              labelEl.classList.remove('font-headline-sm', 'text-headline-sm', 'text-primary');
+              labelEl.classList.add('font-body-lg', 'text-body-lg', 'font-medium', 'text-on-surface');
+            }
+
+            const iconContainer = b.querySelector('.w-9.h-9');
+            if (iconContainer) {
+              iconContainer.classList.remove('bg-surface-container-lowest', 'text-primary');
+              iconContainer.classList.add('bg-surface-container-low', 'text-outline');
+            }
+
+            const iconGlyph = b.querySelector('.w-9.h-9 span');
+            if (iconGlyph) {
+              iconGlyph.style.fontVariationSettings = "'FILL' 0";
+            }
+
+            const ind = b.querySelector('.indicator');
+            if (ind) {
+              ind.classList.remove('bg-primary', 'text-on-primary', 'scale-100');
+              ind.classList.add('bg-surface-variant', 'scale-90');
+              const checkIcon = ind.querySelector('span');
+              if (checkIcon) {
+                checkIcon.classList.add('text-transparent');
+              }
+            }
+          });
+
+          // Activate clicked item
+          btn.setAttribute('aria-checked', 'true');
+          btn.classList.remove('bg-surface-container-lowest', 'text-on-surface');
+          btn.classList.add('bg-surface-container', 'text-primary');
+
+          const labelEl = btn.querySelector('.truncate');
+          if (labelEl) {
+            labelEl.classList.remove('font-body-lg', 'text-body-lg', 'font-medium', 'text-on-surface');
+            labelEl.classList.add('font-headline-sm', 'text-headline-sm', 'text-primary');
+          }
+
+          const iconContainer = btn.querySelector('.w-9.h-9');
+          if (iconContainer) {
+            iconContainer.classList.remove('bg-surface-container-low', 'text-outline');
+            iconContainer.classList.add('bg-surface-container-lowest', 'text-primary');
+          }
+
+          const iconGlyph = btn.querySelector('.w-9.h-9 span');
+          if (iconGlyph) {
+            iconGlyph.style.fontVariationSettings = "'FILL' 1";
+          }
+
+          const ind = btn.querySelector('.indicator');
+          if (ind) {
+            ind.classList.remove('bg-surface-variant', 'scale-90');
+            ind.classList.add('bg-primary', 'text-on-primary', 'scale-100');
+            const checkIcon = ind.querySelector('span');
+            if (checkIcon) {
+              checkIcon.classList.remove('text-transparent');
+            }
+          }
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" style="background: linear-gradient(180deg, rgba(252,252,250,0) 0%, rgba(252,252,250,0.95) 25%, #FCFCFA 100%);"><div class="p-[20px] pb-[24px] flex items-center justify-center max-w-md mx-auto w-full"><button class="w-full h-[52px] rounded-[14px] bg-[#0B6B57] text-white font-['Manrope'] font-semibold text-[16px] flex items-center justify-center gap-2 hover:bg-[#085545] active:scale-[0.99] transition-all shadow-[0_2px_8px_rgba(11,107,87,0.2)]" type="button"><span>Continue</span><span class="material-symbols-outlined text-[20px]">arrow_forward</span></button></div></footer></body></html>

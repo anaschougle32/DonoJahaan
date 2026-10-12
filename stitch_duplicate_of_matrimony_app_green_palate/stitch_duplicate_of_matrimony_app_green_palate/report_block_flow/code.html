@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "secondary-fixed-dim": "#e2c380", "secondary-container": "#fddc96", "error": "#ba1a1a", "on-secondary-fixed": "#251a00", "error-container": "#ffdad6", "on-tertiary-fixed": "#131e1b", "outline-variant": "#bec9c3", "outline": "#6f7975", "secondary": "#735b23", "surface-tint": "#0b6b57", "on-secondary": "#ffffff", "surface-variant": "#dbe5e0", "on-secondary-fixed-variant": "#59440c", "primary-container": "#0b6b57", "tertiary-fixed": "#d9e5e1", "background": "#f2fcf6", "on-tertiary-fixed-variant": "#3e4946", "secondary-fixed": "#ffdf9c", "tertiary-fixed-dim": "#bdc9c5", "primary-fixed-dim": "#85d6bd", "tertiary": "#3e4947", "surface-container-high": "#e0eae5", "on-tertiary": "#ffffff", "on-primary-container": "#97e8cf", "primary": "#005141", "on-secondary-container": "#785f26", "on-primary-fixed": "#002019", "surface-container-low": "#ecf6f1", "surface": "#f2fcf6", "on-background": "#141d1a", "on-error": "#ffffff", "tertiary-container": "#56615e", "surface-bright": "#f2fcf6", "on-surface": "#141d1a", "primary-fixed": "#a1f2d9", "surface-dim": "#d2dcd7", "surface-container-highest": "#dbe5e0", "surface-container-lowest": "#ffffff", "on-primary": "#ffffff", "on-primary-fixed-variant": "#005141", "surface-container": "#e6f0eb", "inverse-primary": "#85d6bd", "on-surface-variant": "#3f4945", "inverse-surface": "#29322f", "on-error-container": "#93000a", "inverse-on-surface": "#e9f3ee", "on-tertiary-container": "#cfdbd8" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-desktop": "3rem", "space-sm": "0.5rem", "space-xs": "0.25rem", "space-xl": "2rem", "margin": "1.25rem", "gutter-mobile": "0.75rem", "gutter": "1rem", "margin-tablet": "2rem", "space-md": "1rem", "space-lg": "1.5rem" }, fontFamily: { "body-md": ["Inter"], "label-md": ["Inter"], "display-lg-mobile": ["Manrope"], "display-lg": ["Manrope"], "headline-md": ["Manrope"], "label-sm": ["Inter"], "label-lg": ["Inter"], "headline-sm": ["Manrope"], "body-lg": ["Inter"], "caption": ["Inter"], "body-sm": ["Inter"], "headline-lg": ["Manrope"] }, fontSize: { "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }], "label-md": ["14px", { lineHeight: "20px", fontWeight: "600" }], "display-lg-mobile": ["30px", { lineHeight: "38px", letterSpacing: "-0.015em", fontWeight: "700" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }], "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "label-lg": ["16px", { lineHeight: "22px", fontWeight: "600" }], "headline-sm": ["18px", { lineHeight: "26px", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "caption": ["11px", { lineHeight: "14px", fontWeight: "500" }], "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }], "headline-lg": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen antialiased"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin flex items-center justify-between"><h1 class="font-headline-sm text-headline-sm text-on-surface tracking-normal">Report &amp; Block Reason</h1><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><button aria-label="Close modal" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">close</span></button></div></div></header><main class="flex flex-col relative w-full px-margin pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full pb-safe">
+<div class="flex flex-col pt-space-lg">
+<div class="flex items-center gap-space-md p-space-md rounded-[14px] bg-surface-container-low shadow-sm">
+<div class="relative w-12 h-12 rounded-full overflow-hidden shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of a young Muslim woman wearing a soft olive green headscarf with gentle lighting, warm skin tone, dignified serene expression, soft neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpzmpASJksy4LIR2Dj32WOtbYJ8noTWUQnOqb-nLZuoIQ6ON7gAkSYiulkUN-tbpSWHyB8p_vNGGKtziIMDZWa3Qn5tgXqrpZheP9cTQQNwQqpY3cLQkyWZsCczks6JysbrqzGd-GX1ytjob7VEJbuW9XNEn5AP-s2CFE3bZv3_D3Dk7omB3NnG-n7nB6D1_CDmH-CPGlP9DuaF_KPGb40By2spJ73F5-tXVk8Qtf2p0n1Gw6P009Y"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate">Ayesha, 26</span>
+<span class="font-caption text-caption text-outline">London, UK • Verified Profile</span>
+</div>
+<div class="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-high text-outline">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+</div>
+<div class="mt-space-lg flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface">Report Ayesha</h2>
+<p class="font-body-md text-body-md text-outline mt-space-xs leading-relaxed">
+        Your report is anonymous. If you are in immediate danger, please contact local authorities.
+      </p>
+</div>
+<div class="mt-space-xl flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Why are you reporting this profile?</span>
+<div class="flex flex-col mt-space-sm rounded-[14px] bg-surface-container-lowest shadow-sm overflow-hidden" id="reasonGroup">
+<label class="flex items-center justify-between px-space-md h-14 bg-surface-container-lowest hover:bg-surface-container-low/50 cursor-pointer transition-colors" onclick="selectReason(this)">
+<span class="font-body-md text-body-md text-on-surface font-medium select-none">Inappropriate behavior or messages</span>
+<div class="radio-indicator w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
+<div class="radio-dot w-2 h-2 rounded-full bg-on-primary"></div>
+</div>
+<input checked="" class="hidden" name="report_reason" type="radio" value="inappropriate"/>
+</label>
+<div class="h-[1px] bg-surface-container mx-space-md"></div>
+<label class="flex items-center justify-between px-space-md h-14 bg-surface-container-lowest hover:bg-surface-container-low/50 cursor-pointer transition-colors" onclick="selectReason(this)">
+<span class="font-body-md text-body-md text-on-surface select-none">Fake profile or scam</span>
+<div class="radio-indicator w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<div class="radio-dot w-2 h-2 rounded-full bg-transparent"></div>
+</div>
+<input class="hidden" name="report_reason" type="radio" value="scam"/>
+</label>
+<div class="h-[1px] bg-surface-container mx-space-md"></div>
+<label class="flex items-center justify-between px-space-md h-14 bg-surface-container-lowest hover:bg-surface-container-low/50 cursor-pointer transition-colors" onclick="selectReason(this)">
+<span class="font-body-md text-body-md text-on-surface select-none">Asking for money</span>
+<div class="radio-indicator w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<div class="radio-dot w-2 h-2 rounded-full bg-transparent"></div>
+</div>
+<input class="hidden" name="report_reason" type="radio" value="money"/>
+</label>
+<div class="h-[1px] bg-surface-container mx-space-md"></div>
+<label class="flex items-center justify-between px-space-md h-14 bg-surface-container-lowest hover:bg-surface-container-low/50 cursor-pointer transition-colors" onclick="selectReason(this)">
+<span class="font-body-md text-body-md text-on-surface select-none">Underage user</span>
+<div class="radio-indicator w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center shrink-0">
+<div class="radio-dot w-2 h-2 rounded-full bg-transparent"></div>
+</div>
+<input class="hidden" name="report_reason" type="radio" value="underage"/>
+</label>
+</div>
+</div>
+<div class="mt-space-lg flex flex-col">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-space-xs" for="reportDetails">Additional Details (Optional)</label>
+<div class="relative bg-surface-container-lowest rounded-[14px] shadow-sm overflow-hidden p-space-md">
+<textarea class="w-full h-24 bg-transparent outline-none resize-none font-body-md text-body-md text-on-surface placeholder:text-outline/70" id="reportDetails" maxlength="400" placeholder="Provide additional details to help us understand the situation (optional)." rows="4"></textarea>
+<div class="flex items-center justify-between mt-space-xs text-outline font-caption text-caption">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+            Confidential review
+          </span>
+<span id="charCount">0/400</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg bg-surface-container-lowest p-space-md rounded-[14px] shadow-sm flex items-start gap-space-md cursor-pointer select-none" id="blockOption" onclick="toggleBlock()">
+<div class="w-6 h-6 rounded-[6px] bg-primary text-on-primary flex items-center justify-center shrink-0 transition-colors mt-0.5 shadow-sm" id="blockCheckbox">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Also block Ayesha</span>
+<p class="font-body-sm text-body-sm text-outline mt-0.5 leading-relaxed">
+          You will no longer see each other's profiles, photos, or messages. Any family wali connection will also be peacefully removed.
+        </p>
+</div>
+<input checked="" class="hidden" id="blockInput" type="checkbox"/>
+</div>
+<div class="mt-space-xl flex flex-col gap-space-sm pt-space-md">
+<button class="w-full h-[52px] rounded-[14px] bg-error text-on-error font-label-lg text-label-lg flex items-center justify-center gap-space-xs shadow-md active:opacity-90 transition-all" id="submitBtn" onclick="handleSubmit()">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+<span>Submit Report</span>
+</button>
+<button class="w-full h-[44px] rounded-[14px] bg-transparent text-outline font-label-md text-label-md flex items-center justify-center transition-colors hover:text-on-surface" onclick="history.back()">
+        Cancel and return
+      </button>
+</div>
+</div>
+<div class="fixed bottom-6 left-5 right-5 z-50 transform translate-y-32 opacity-0 transition-all duration-300 pointer-events-none" id="toastSuccess">
+<div class="bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-[14px] shadow-xl flex items-center gap-space-md">
+<span class="material-symbols-outlined text-primary-fixed-dim text-[22px]">check_circle</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md">Report Submitted</span>
+<span class="font-body-sm text-body-sm text-inverse-on-surface/80">Thank you for keeping our community safe.</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function selectReason(selectedLabel) {
+    const group = document.getElementById('reasonGroup');
+    const labels = group.querySelectorAll('label');
+    labels.forEach(lbl => {
+      const radio = lbl.querySelector('input[type="radio"]');
+      const indicator = lbl.querySelector('.radio-indicator');
+      const dot = lbl.querySelector('.radio-dot');
+      const text = lbl.querySelector('span');
+
+      radio.checked = false;
+      indicator.className = 'radio-indicator w-5 h-5 rounded-full bg-surface-container-high flex items-center justify-center shrink-0';
+      dot.className = 'radio-dot w-2 h-2 rounded-full bg-transparent';
+      text.classList.remove('font-medium');
+      text.classList.add('font-normal');
+    });
+
+    const activeRadio = selectedLabel.querySelector('input[type="radio"]');
+    const activeIndicator = selectedLabel.querySelector('.radio-indicator');
+    const activeDot = selectedLabel.querySelector('.radio-dot');
+    const activeText = selectedLabel.querySelector('span');
+
+    activeRadio.checked = true;
+    activeIndicator.className = 'radio-indicator w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0';
+    activeDot.className = 'radio-dot w-2 h-2 rounded-full bg-on-primary';
+    activeText.classList.remove('font-normal');
+    activeText.classList.add('font-medium');
+  }
+
+  function toggleBlock() {
+    const input = document.getElementById('blockInput');
+    const checkbox = document.getElementById('blockCheckbox');
+    input.checked = !input.checked;
+
+    if (input.checked) {
+      checkbox.className = 'w-6 h-6 rounded-[6px] bg-primary text-on-primary flex items-center justify-center shrink-0 transition-colors mt-0.5 shadow-sm';
+      checkbox.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span>';
+    } else {
+      checkbox.className = 'w-6 h-6 rounded-[6px] bg-surface-container-high text-transparent flex items-center justify-center shrink-0 transition-colors mt-0.5';
+      checkbox.innerHTML = '';
+    }
+  }
+
+  const textarea = document.getElementById('reportDetails');
+  const counter = document.getElementById('charCount');
+  if (textarea && counter) {
+    textarea.addEventListener('input', (e) => {
+      counter.textContent = `${e.target.value.length}/400`;
+    });
+  }
+
+  function handleSubmit() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.classList.add('opacity-75');
+    btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Submitting...</span>';
+
+    setTimeout(() => {
+      const toast = document.getElementById('toastSuccess');
+      toast.classList.remove('translate-y-32', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        if (window.history.length > 1) {
+          window.history.back();
+        }
+      }, 1400);
+    }, 600);
+  }
+</script></main></body></html>

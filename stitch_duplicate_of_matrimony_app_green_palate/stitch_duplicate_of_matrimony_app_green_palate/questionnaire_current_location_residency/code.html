@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "background": "#f2fcf6", "on-tertiary-container": "#4e3d00", "surface-container-highest": "#dbe5e0", "on-tertiary-fixed-variant": "#574500", "on-surface-variant": "#3f4945", "on-secondary": "#ffffff", "surface-container-high": "#e0eae5", "tertiary-fixed": "#ffe088", "error": "#ba1a1a", "secondary-container": "#98f2c3", "primary-fixed-dim": "#85d6bd", "on-error": "#ffffff", "surface-container-low": "#ecf6f1", "secondary-fixed-dim": "#7fd8ab", "inverse-primary": "#85d6bd", "inverse-surface": "#29322f", "on-tertiary": "#ffffff", "outline": "#6f7975", "on-error-container": "#93000a", "surface-container": "#e6f0eb", "on-primary-container": "#97e8cf", "surface": "#f2fcf6", "on-primary": "#ffffff", "tertiary": "#735c00", "tertiary-container": "#cca72f", "surface-variant": "#dbe5e0", "primary-container": "#0b6b57", "primary": "#005141", "on-primary-fixed-variant": "#005141", "surface-container-lowest": "#ffffff", "surface-tint": "#0b6b57", "inverse-on-surface": "#e9f3ee", "on-secondary-fixed-variant": "#005235", "on-secondary-container": "#02714c", "secondary": "#006c48", "surface-dim": "#d2dcd7", "on-background": "#141d1a", "tertiary-fixed-dim": "#e9c349", "primary-fixed": "a1f2d9", "on-primary-fixed": "#002019", "error-container": "#ffdad6", "on-surface": "#141d1a", "on-secondary-fixed": "#002113", "secondary-fixed": "#9bf5c6", "surface-bright": "#f2fcf6", "outline-variant": "#bec9c3", "on-tertiary-fixed": "#241a00" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "1rem", "space-sm": "0.5rem", "margin": "1rem", "gutter-desktop": "1.5rem", "space-xl": "2rem", "margin-desktop": "3rem", "space-xs": "0.25rem", "space-md": "1rem", "margin-tablet": "2rem", "space-lg": "1.5rem" }, fontFamily: { "headline-md": ["Manrope"], "headline-lg-mobile": ["Manrope"], "body-lg": ["Manrope"], "headline-xl-mobile": ["Manrope"], "headline-lg": ["Manrope"], "label-md": ["Manrope"], "headline-xl": ["Manrope"], "label-sm": ["Manrope"], "label-lg": ["Manrope"], "headline-sm": ["Manrope"], "body-md": ["Manrope"], "body-sm": ["Manrope"] }, fontSize: { "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }], "headline-lg-mobile": ["22px", { "lineHeight": "28px", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }], "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "600" }], "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "label-lg": ["15px", { "lineHeight": "20px", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container active:bg-surface-container-high transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><div class="flex-1 px-space-sm text-center"><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Education Career Questionnaire</h1></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div><div class="w-full h-1 bg-surface-container-high"><div class="h-full bg-primary-container rounded-full w-2/3"></div></div></header><main class="flex flex-col relative w-full pt-16 bg-surface flex-1"><div class="flex flex-col w-full pb-32">
+<!-- Progress Header Indicator -->
+<div class="px-margin pt-4 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase font-semibold">Step 10 of 18</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">55% Complete</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500 ease-out" style="width: 55.5%"></div>
+</div>
+</div>
+<!-- Section Caption & Main Heading -->
+<div class="px-margin mt-6 flex flex-col">
+<div class="flex items-center gap-1.5 mb-1.5">
+<span class="material-symbols-outlined text-primary text-[16px]">distance</span>
+<p class="font-label-sm text-label-sm text-outline font-bold tracking-widest uppercase">Location &amp; Residency</p>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">Where do you currently live?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5">
+      Helps discover compatible matches within your city, preferred relocation radius, or shared cultural heritage.
+    </p>
+</div>
+<!-- Location Input Block -->
+<div class="px-margin mt-7 flex flex-col">
+<div class="flex items-center justify-between mb-3">
+<label class="font-label-md text-label-md text-on-surface font-bold">Current Country, State &amp; City</label>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px] text-primary">verified_user</span>
+        Confidential
+      </span>
+</div>
+<!-- Combined Stacked Form Group -->
+<div class="flex flex-col shadow-sm rounded-xl overflow-hidden bg-surface-container-lowest">
+<!-- 1. Country Selection -->
+<button class="w-full h-14 px-4 flex items-center justify-between bg-surface-container-lowest hover:bg-surface-container-low active:bg-surface-container transition-colors text-left focus:outline-none" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">public</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-outline leading-tight">Country</span>
+<span class="font-body-lg text-body-lg text-on-surface font-semibold truncate leading-tight">India</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0">expand_more</span>
+</button>
+<!-- Divider line created via tone shift -->
+<div class="w-full h-[1px] bg-surface-container"></div>
+<!-- 2. State Selection -->
+<button class="w-full h-14 px-4 flex items-center justify-between bg-surface-container-lowest hover:bg-surface-container-low active:bg-surface-container transition-colors text-left focus:outline-none" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">map</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-outline leading-tight">State / Province</span>
+<span class="font-body-lg text-body-lg text-on-surface font-semibold truncate leading-tight">Maharashtra</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0">expand_more</span>
+</button>
+<!-- Divider line created via tone shift -->
+<div class="w-full h-[1px] bg-surface-container"></div>
+<!-- 3. City Selection -->
+<button class="w-full h-14 px-4 flex items-center justify-between bg-surface-container-lowest hover:bg-surface-container-low active:bg-surface-container transition-colors text-left focus:outline-none" type="button">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[18px]">location_city</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-outline leading-tight">City</span>
+<span class="font-body-lg text-body-lg text-on-surface font-semibold truncate leading-tight">Mumbai</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Visual Regional Accent Tile -->
+<div class="px-margin mt-4">
+<div class="relative w-full h-24 rounded-xl overflow-hidden shadow-sm flex items-end p-3">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Serene aerial view of Mumbai coastline and skyline bathed in warm golden twilight with calm water, soft emerald reflections, and modern architecture symbolizing home and tranquility." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDOfrzJOgfUzb2gMzGL7udqxCnmerfqxfTcIF1o5OdEGp81DeIjoIroRz0rywNq71_jsQ3ViXCenCey7wOCukk9SUvrm_daB99WpACqXk0IT0yhhCixwb4dT0rX1MB9hC5ID1lMJgTWNsG7yVn0vPFJMgTwu2UOPXMvOfkqF_MM85dqhZ_cQ1E9uiQceTbfWAC2x4PA5MU8zhUOhhEIVqi9LZlfHID4uMdq0zmhw_UNvNZfiggiW1-4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-inverse-surface/30 to-transparent"></div>
+<div class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]">pin_drop</span>
+<span class="font-label-md text-label-md text-on-secondary font-semibold drop-shadow-sm">Mumbai, Maharashtra • Recognized Regional Hub</span>
+</div>
+</div>
+</div>
+<!-- Residency Status 2x2 Grid -->
+<div class="px-margin mt-7 flex flex-col">
+<div class="flex items-center justify-between mb-3">
+<label class="font-label-md text-label-md text-on-surface font-bold">Residency Status</label>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Select one</span>
+</div>
+<div class="grid grid-cols-2 gap-3" id="residency-grid">
+<!-- Card 1: Citizen (Selected State) -->
+<button class="residency-btn relative h-14 rounded-xl px-3 flex items-center justify-center text-center bg-secondary-container text-on-secondary-container shadow-sm transition-all duration-200" data-val="citizen" onclick="selectResidency(this)" type="button">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-primary">check_circle</span>
+<span class="font-label-md text-label-md font-bold truncate pl-5">Citizen</span>
+</button>
+<!-- Card 2: Permanent Resident (Unselected) -->
+<button class="residency-btn relative h-14 rounded-xl px-3 flex items-center justify-center text-center bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low transition-all duration-200" data-val="pr" onclick="selectResidency(this)" type="button">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-outline hidden">check_circle</span>
+<span class="font-label-md text-label-md font-semibold truncate">Permanent Resident</span>
+</button>
+<!-- Card 3: Work Permit (Unselected) -->
+<button class="residency-btn relative h-14 rounded-xl px-3 flex items-center justify-center text-center bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low transition-all duration-200" data-val="work" onclick="selectResidency(this)" type="button">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-outline hidden">check_circle</span>
+<span class="font-label-md text-label-md font-semibold truncate">Work Permit</span>
+</button>
+<!-- Card 4: Student Visa (Unselected) -->
+<button class="residency-btn relative h-14 rounded-xl px-3 flex items-center justify-center text-center bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low transition-all duration-200" data-val="student" onclick="selectResidency(this)" type="button">
+<span class="material-symbols-outlined absolute left-3 text-[18px] text-outline hidden">check_circle</span>
+<span class="font-label-md text-label-md font-semibold truncate">Student Visa</span>
+</button>
+</div>
+</div>
+<!-- Privacy & Relocation Trust Reassurance -->
+<div class="px-margin mt-6">
+<div class="w-full rounded-xl bg-surface-container-low p-4 flex items-start gap-3 shadow-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container/60 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div class="flex flex-col min-w-0">
+<p class="font-label-md text-label-md text-on-surface font-semibold">Modest &amp; Private by Design</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+          Your street address is never made public. Only your verified city, state, and country appear on your prospective matrimonial profile.
+        </p>
+</div>
+</div>
+</div>
+<!-- Pinned Action Bar at bottom with backdrop blur -->
+<div class="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md px-margin py-4 pb-safe shadow-[0_-4px_16px_rgba(20,29,26,0.04)]">
+<div class="max-w-md mx-auto flex flex-col gap-2">
+<button class="w-full h-13 py-3.5 px-6 rounded-xl bg-primary hover:bg-primary-container active:scale-[0.99] text-on-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-md transition-all" type="button">
+<span>Save &amp; Continue</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<div class="flex items-center justify-center gap-1.5 pt-0.5">
+<span class="material-symbols-outlined text-outline text-[14px]">lock</span>
+<span class="font-label-sm text-label-sm text-outline">Encrypted &amp; Stored Securely</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function selectResidency(btn) {
+    const buttons = document.querySelectorAll('.residency-btn');
+    buttons.forEach((el) => {
+      el.classList.remove('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+      el.classList.add('bg-surface-container-lowest', 'text-on-surface', 'font-semibold');
+      const icon = el.querySelector('.material-symbols-outlined');
+      const text = el.querySelector('span:not(.material-symbols-outlined)');
+      if (icon) {
+        icon.classList.add('hidden');
+      }
+      if (text) {
+        text.classList.remove('pl-5');
+      }
+    });
+
+    btn.classList.remove('bg-surface-container-lowest', 'text-on-surface', 'font-semibold');
+    btn.classList.add('bg-secondary-container', 'text-on-secondary-container', 'font-bold');
+    const activeIcon = btn.querySelector('.material-symbols-outlined');
+    const activeText = btn.querySelector('span:not(.material-symbols-outlined)');
+    if (activeIcon) {
+      activeIcon.classList.remove('hidden');
+    }
+    if (activeText) {
+      activeText.classList.add('pl-5');
+    }
+  }
+</script></main></body></html>

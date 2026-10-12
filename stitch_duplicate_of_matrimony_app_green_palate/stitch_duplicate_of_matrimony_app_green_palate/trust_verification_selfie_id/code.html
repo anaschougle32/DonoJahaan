@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary": "#005141", "on-secondary": "#ffffff", "secondary-fixed": "#ffdf9c", "on-primary-fixed-variant": "#005141", "surface-variant": "dbe5e0", "secondary-container": "#fddc96", "outline-variant": "#bec9c3", "surface-dim": "#d2dcd7", "primary-fixed-dim": "#85d6bd", "primary-fixed": "#a1f2d9", "surface-container-low": "#ecf6f1", "on-primary": "#ffffff", "error": "#ba1a1a", "on-tertiary-fixed-variant": "#3e4946", "on-error": "#ffffff", "surface-container-highest": "#dbe5e0", "surface-tint": "#0b6b57", "on-tertiary": "#ffffff", "inverse-surface": "#29322f", "surface": "#f2fcf6", "on-surface": "#141d1a", "inverse-on-surface": "#e9f3ee", "on-tertiary-fixed": "#131e1b", "on-primary-container": "#97e8cf", "on-tertiary-container": "#cfdbd8", "on-background": "#141d1a", "on-error-container": "#93000a", "on-secondary-fixed": "#251a00", "primary-container": "#0b6b57", "secondary-fixed-dim": "#e2c380", "tertiary": "#3e4947", "surface-container": "#e6f0eb", "on-secondary-fixed-variant": "#59440c", "surface-container-lowest": "#ffffff", "background": "#f2fcf6", "secondary": "#735b23", "tertiary-fixed": "#d9e5e1", "on-secondary-container": "#785f26", "on-surface-variant": "#3f4945", "error-container": "#ffdad6", "surface-bright": "#f2fcf6", "outline": "#6f7975", "surface-container-high": "#e0eae5", "tertiary-fixed-dim": "#bdc9c5", "on-primary-fixed": "#002019", "tertiary-container": "#56615e", "inverse-primary": "#85d6bd" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-lg": "1.5rem", "margin": "1.25rem", "space-xl": "2rem", "gutter-mobile": "0.75rem", "gutter": "1rem", "space-xs": "0.25rem", "margin-tablet": "2rem", "space-md": "1rem", "margin-desktop": "3rem" }, fontFamily: { "headline-lg": ["Manrope"], "caption": ["Inter"], "headline-sm": ["Manrope"], "headline-md": ["Manrope"], "body-md": ["Inter"], "body-sm": ["Inter"], "display-lg": ["Manrope"], "label-sm": ["Inter"], "display-lg-mobile": ["Manrope"], "body-lg": ["Inter"], "label-lg": ["Inter"], "label-md": ["Inter"] }, fontSize: { "headline-lg": ["26px", { lineHeight: "34px", letterSpacing: "-0.01em", fontWeight: "700" }], "caption": ["11px", { lineHeight: "14px", fontWeight: "500" }], "headline-sm": ["18px", { lineHeight: "26px", fontWeight: "600" }], "headline-md": ["22px", { lineHeight: "30px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }], "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "600" }], "display-lg-mobile": ["30px", { lineHeight: "38px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "label-lg": ["16px", { lineHeight: "22px", fontWeight: "600" }], "label-md": ["14px", { lineHeight: "20px", fontWeight: "600" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface truncate px-space-xs flex-1 text-center">Phone Authentication</h1><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="flex flex-col relative w-full pt-16 bg-surface flex-1 px-margin pb-safe"><div class="flex flex-col w-full pb-6">
+<!-- Progress Milestone Indicator -->
+<div class="flex items-center justify-between gap-1.5 pt-3 pb-2">
+<div class="h-1 rounded-full bg-primary flex-1"></div>
+<div class="h-1 rounded-full bg-primary flex-1"></div>
+<div class="h-1 rounded-full bg-primary flex-1"></div>
+<div class="h-1 rounded-full bg-surface-container-highest flex-1"></div>
+</div>
+<!-- Header Section -->
+<section class="mt-4 flex flex-col">
+<div class="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-full bg-surface-container-low text-primary mb-2">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-label-sm tracking-wide uppercase">Safety First</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+      Verify your profile
+    </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+      We keep our community safe by ensuring everyone is who they say they are. Your selfie will not be shown on your profile.
+    </p>
+</section>
+<!-- Camera Viewport Card -->
+<div class="mt-6 w-full relative rounded-[20px] overflow-hidden bg-[#080D0B] shadow-xl flex items-center justify-center aspect-[3/4] max-h-[410px]">
+<!-- Ambient Camera Background Simulation with authentic camera stream feel -->
+<div class="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-screen scale-105 transition-transform duration-700" data-alt="Monochrome ambient silhouette portrait of a person framed gently in a dimly lit photographic studio, neutral composition, high contrast studio lighting with soft bokeh background and subtle digital scan lines." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2zDKgig37y5NV-pqIq-M1aRL1hKCTljAotQUscB3QdO0KKoGzrQmvL9rkxCpSf-UuPZ8jpluQ3dieaGOW-0E9goInYXfEz7Pe2V2Vapq6VPCUqfKxmt1bplZCWg_ZZNh-2cxYsrsUlI2T7f-t2kA1dwJ5G9FCOqBYr0ot9KJz4Ofd-gYCtxy2X30v90onbPtb95LsM96kYWXCG3XsPQW-7T2a7i3KPLchqOKOYBAE67DZrKdVcJ1p')">
+</div>
+<!-- Viewfinder UI Elements (Top Controls) -->
+<div class="absolute top-4 inset-x-4 flex items-center justify-between z-20">
+<button aria-label="Toggle camera flash" class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white active:scale-95 transition-all" id="flashToggleBtn" type="button">
+<span class="material-symbols-outlined text-[20px]" id="flashIcon">flash_off</span>
+</button>
+<!-- Live Face Detection Status Tag -->
+<div class="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md flex items-center gap-1.5 border-0">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-white font-medium">Ready</span>
+</div>
+<button aria-label="Flip camera view" class="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white active:scale-95 transition-all" id="cameraFlipBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">flip_camera_ios</span>
+</button>
+</div>
+<!-- Center Face Guide Oval Overlay with SVG Crosshairs -->
+<div class="relative w-[210px] h-[270px] flex items-center justify-center pointer-events-none z-10">
+<svg class="absolute inset-0 w-full h-full" fill="none" viewbox="0 0 210 270" xmlns="http://www.w3.org/2000/svg">
+<!-- Face Ellipse Guide -->
+<ellipse class="transition-colors duration-300" cx="105" cy="135" id="guideOval" rx="98" ry="128" stroke="rgba(255, 255, 255, 0.75)" stroke-dasharray="8 6" stroke-width="2"></ellipse>
+<!-- Alignment Tick Marks -->
+<path d="M105 4V14" stroke="rgba(255, 255, 255, 0.85)" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M105 256V266" stroke="rgba(255, 255, 255, 0.85)" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M4 135H14" stroke="rgba(255, 255, 255, 0.85)" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M196 135H206" stroke="rgba(255, 255, 255, 0.85)" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+<!-- Center Focal Point Icon -->
+<div class="flex flex-col items-center justify-center opacity-30">
+<span class="material-symbols-outlined text-white text-[44px]">face</span>
+</div>
+</div>
+<!-- Animated Scan Beam Simulation -->
+<div class="absolute inset-x-8 h-20 bg-gradient-to-b from-primary-fixed/20 to-transparent pointer-events-none rounded-full blur-md -translate-y-12 animate-pulse"></div>
+<!-- Floating Instruction Overlay Pill -->
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
+<div class="bg-black/65 backdrop-blur-md px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined text-primary-fixed text-[18px]">center_focus_strong</span>
+<span class="font-label-sm text-label-sm text-white whitespace-nowrap font-medium tracking-wide">
+          Position your face in the oval
+        </span>
+</div>
+</div>
+</div>
+<!-- Trust, Privacy & Integrity Indicators -->
+<div class="mt-4 flex flex-col items-center">
+<div class="flex items-center justify-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[15px] text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-caption text-caption text-on-surface-variant">Data encrypted and securely processed</span>
+</div>
+<!-- Educational Micro-Card: Why this matters -->
+<div class="w-full mt-5 p-3.5 rounded-xl bg-surface-container-low flex items-start gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container text-[20px]">shield_with_heart</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h4 class="font-headline-sm text-[14px] leading-tight text-on-surface">Private &amp; Respectful Verification</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+          Matches will only see your curated photos. Selfies are used strictly by our moderation team to prevent impersonation and fraud.
+        </p>
+</div>
+</div>
+</div>
+<!-- Sticky / Bottom Action Section -->
+<div class="mt-6 flex flex-col gap-3">
+<button class="w-full h-[52px] bg-primary-container text-on-primary rounded-[14px] font-label-lg text-label-lg flex items-center justify-center gap-2.5 shadow-md active:bg-primary transition-all duration-150" id="takeSelfieBtn" type="button">
+<span class="material-symbols-outlined text-[22px]">photo_camera</span>
+<span>Take Selfie</span>
+</button>
+<button class="w-full py-2.5 text-center font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center gap-1.5" id="helperGuideBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>Need help or having camera issues?</span>
+</button>
+</div>
+</div>
+<script>
+  (function () {
+    const flashBtn = document.getElementById('flashToggleBtn');
+    const flashIcon = document.getElementById('flashIcon');
+    const guideOval = document.getElementById('guideOval');
+    const takeSelfieBtn = document.getElementById('takeSelfieBtn');
+    const cameraFlipBtn = document.getElementById('cameraFlipBtn');
+
+    let flashActive = false;
+
+    if (flashBtn && flashIcon) {
+      flashBtn.addEventListener('click', function () {
+        flashActive = !flashActive;
+        flashIcon.textContent = flashActive ? 'flash_on' : 'flash_off';
+        flashBtn.classList.toggle('bg-primary-container', flashActive);
+        flashBtn.classList.toggle('text-on-primary', flashActive);
+      });
+    }
+
+    if (cameraFlipBtn) {
+      cameraFlipBtn.addEventListener('click', function () {
+        cameraFlipBtn.classList.add('rotate-180');
+        setTimeout(() => {
+          cameraFlipBtn.classList.remove('rotate-180');
+        }, 300);
+      });
+    }
+
+    if (takeSelfieBtn && guideOval) {
+      takeSelfieBtn.addEventListener('click', function () {
+        // Subtle micro-feedback click state
+        guideOval.setAttribute('stroke', '#A1F2D9');
+        takeSelfieBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Verifying Face Geometry...</span>
+        `;
+        takeSelfieBtn.disabled = true;
+
+        setTimeout(function () {
+          takeSelfieBtn.innerHTML = `
+            <span class="material-symbols-outlined text-[22px]">check_circle</span>
+            <span>Selfie Captured</span>
+          `;
+          takeSelfieBtn.classList.remove('bg-primary-container');
+          takeSelfieBtn.classList.add('bg-primary');
+        }, 1400);
+      });
+    }
+  })();
+</script></main></body></html>

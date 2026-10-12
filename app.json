@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Dono Jaha",
+    "slug": "dono-jaha",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FCFCFA"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.donojaha.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FCFCFA"
+      },
+      "package": "com.donojaha.app"
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow Dono Jaha to access your microphone for recording your authentic voice introduction and voice notes."
+        }
+      ]
+    ]
+  }
+}

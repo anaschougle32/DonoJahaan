@@ -1,0 +1,44 @@
+{
+  "name": "dono-jaha",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@expo-google-fonts/inter": "^0.2.3",
+    "@expo-google-fonts/manrope": "^0.2.3",
+    "@expo/metro-runtime": "~57.0.16",
+    "@expo/vector-icons": "^15.0.2",
+    "@react-navigation/bottom-tabs": "^7.2.0",
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/native-stack": "^7.2.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "expo": "^57.0.26",
+    "expo-av": "~15.0.2",
+    "expo-blur": "~57.0.3",
+    "expo-camera": "~57.0.6",
+    "expo-font": "~57.0.4",
+    "expo-image-picker": "~57.0.20",
+    "expo-linear-gradient": "~57.0.2",
+    "expo-status-bar": "~57.0.1",
+    "memoize-one": "^6.0.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-svg": "^15.15.5",
+    "react-native-web": "^0.21.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@types/react": "^19.0.0",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
