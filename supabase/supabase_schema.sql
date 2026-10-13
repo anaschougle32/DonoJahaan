@@ -628,3 +628,542 @@ WITH CHECK (
     viewer_id IN (SELECT id FROM profiles WHERE account_id = auth.uid())
 );
 
+-- ====================================================================
+-- 16. MASTER ROW LEVEL SECURITY (RLS) POLICIES
+-- ====================================================================
+
+-- 1. Enable RLS on all tables
+ALTER TABLE user_accounts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_basic ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_physical ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_religion ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_education ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_career ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_location ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_family ENABLE ROW LEVEL SECURITY;
+ALTER TABLE family_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profile_marriage_expectations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE photos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE photo_access_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE voice_introductions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE partner_preferences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE partner_preference_weights ENABLE ROW LEVEL SECURITY;
+ALTER TABLE interests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE shortlists ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE conversation_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE wali_relationships ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+
+-- Helper function: get profile IDs belonging to current auth user
+CREATE OR REPLACE FUNCTION auth_user_profile_ids()
+RETURNS SETOF UUID AS $$
+    SELECT p.id
+    FROM profiles p
+    JOIN user_accounts u ON p.account_id = u.id
+    WHERE u.id = auth.uid();
+$$ LANGUAGE sql STABLE SECURITY DEFINER;
+
+-- Helper function: check if profile belongs to current auth user
+CREATE OR REPLACE FUNCTION is_profile_owner(p_profile_id UUID)
+RETURNS BOOLEAN AS $$
+    SELECT EXISTS (
+        SELECT 1
+        FROM profiles p
+        JOIN user_accounts u ON p.account_id = u.id
+        WHERE p.id = p_profile_id AND u.id = auth.uid()
+    );
+$$ LANGUAGE sql STABLE SECURITY DEFINER;
+
+-- User Accounts Policies
+CREATE POLICY rls_user_accounts_select ON user_accounts
+    FOR SELECT TO authenticated
+    USING (id = auth.uid());
+
+CREATE POLICY rls_user_accounts_insert ON user_accounts
+    FOR INSERT TO authenticated
+    WITH CHECK (id = auth.uid());
+
+CREATE POLICY rls_user_accounts_update ON user_accounts
+    FOR UPDATE TO authenticated
+    USING (id = auth.uid());
+
+-- Profiles Policies
+CREATE POLICY rls_profiles_select ON profiles
+    FOR SELECT TO authenticated
+    USING (
+        account_id = auth.uid()
+        OR (status = 'approved' AND is_discoverable = TRUE)
+        OR is_discoverable = TRUE
+    );
+
+CREATE POLICY rls_profiles_insert ON profiles
+    FOR INSERT TO authenticated
+    WITH CHECK (account_id = auth.uid());
+
+CREATE POLICY rls_profiles_update ON profiles
+    FOR UPDATE TO authenticated
+    USING (account_id = auth.uid());
+
+-- Profile Detail Modules (Read for discoverable suitors, write for owner)
+CREATE POLICY rls_profile_basic_select ON profile_basic
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_basic.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_basic_modify ON profile_basic
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_physical_select ON profile_physical
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_physical.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_physical_modify ON profile_physical
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_religion_select ON profile_religion
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_religion.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_religion_modify ON profile_religion
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_education_select ON profile_education
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_education.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_education_modify ON profile_education
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_career_select ON profile_career
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_career.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_career_modify ON profile_career
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_location_select ON profile_location
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_location.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_location_modify ON profile_location
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_family_select ON profile_family
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_family.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_family_modify ON profile_family
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_family_members_select ON family_members
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = family_members.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_family_members_modify ON family_members
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_profile_marriage_expectations_select ON profile_marriage_expectations
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_marriage_expectations.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_profile_marriage_expectations_modify ON profile_marriage_expectations
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+-- Photos & Photo Access Requests
+CREATE POLICY rls_photos_select ON photos
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR privacy_status IN ('visible', 'blurred')
+        OR (
+            privacy_status = 'request_required'
+            AND EXISTS (
+                SELECT 1 FROM photo_access_requests
+                WHERE owner_profile_id = photos.profile_id
+                  AND requester_profile_id IN (SELECT auth_user_profile_ids())
+                  AND status = 'approved'
+            )
+        )
+    );
+
+CREATE POLICY rls_photos_modify ON photos
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_photo_req_select ON photo_access_requests
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(owner_profile_id)
+        OR requester_profile_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_photo_req_insert ON photo_access_requests
+    FOR INSERT TO authenticated
+    WITH CHECK (requester_profile_id IN (SELECT auth_user_profile_ids()));
+
+CREATE POLICY rls_photo_req_update ON photo_access_requests
+    FOR UPDATE TO authenticated
+    USING (is_profile_owner(owner_profile_id));
+
+-- Voice Introductions
+CREATE POLICY rls_voice_select ON voice_introductions
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR privacy_status = 'public'
+        OR (
+            privacy_status = 'match_only'
+            AND EXISTS (
+                SELECT 1 FROM conversations
+                WHERE status = 'active'
+                  AND (
+                    (profile_1_id = voice_introductions.profile_id AND profile_2_id IN (SELECT auth_user_profile_ids()))
+                    OR (profile_2_id = voice_introductions.profile_id AND profile_1_id IN (SELECT auth_user_profile_ids()))
+                  )
+            )
+        )
+    );
+
+CREATE POLICY rls_voice_modify ON voice_introductions
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+-- Partner Preferences
+CREATE POLICY rls_partner_preferences_select ON partner_preferences
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(profile_id)
+        OR EXISTS (SELECT 1 FROM profiles WHERE id = partner_preferences.profile_id AND is_discoverable = TRUE)
+    );
+
+CREATE POLICY rls_partner_preferences_modify ON partner_preferences
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+CREATE POLICY rls_partner_preference_weights_all ON partner_preference_weights
+    FOR ALL TO authenticated
+    USING (is_profile_owner(profile_id))
+    WITH CHECK (is_profile_owner(profile_id));
+
+-- Interests & Shortlists
+CREATE POLICY rls_interests_select ON interests
+    FOR SELECT TO authenticated
+    USING (
+        sender_profile_id IN (SELECT auth_user_profile_ids())
+        OR receiver_profile_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_interests_insert ON interests
+    FOR INSERT TO authenticated
+    WITH CHECK (sender_profile_id IN (SELECT auth_user_profile_ids()));
+
+CREATE POLICY rls_interests_update ON interests
+    FOR UPDATE TO authenticated
+    USING (
+        sender_profile_id IN (SELECT auth_user_profile_ids())
+        OR receiver_profile_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_shortlists_all ON shortlists
+    FOR ALL TO authenticated
+    USING (profile_id IN (SELECT auth_user_profile_ids()))
+    WITH CHECK (profile_id IN (SELECT auth_user_profile_ids()));
+
+-- Conversations & Messages (Chaperoned Active Conversations)
+CREATE POLICY rls_conversations_select ON conversations
+    FOR SELECT TO authenticated
+    USING (
+        profile_1_id IN (SELECT auth_user_profile_ids())
+        OR profile_2_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_conversations_insert ON conversations
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        profile_1_id IN (SELECT auth_user_profile_ids())
+        OR profile_2_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_conversations_update ON conversations
+    FOR UPDATE TO authenticated
+    USING (
+        profile_1_id IN (SELECT auth_user_profile_ids())
+        OR profile_2_id IN (SELECT auth_user_profile_ids())
+    );
+
+CREATE POLICY rls_conversation_members_select ON conversation_members
+    FOR SELECT TO authenticated
+    USING (profile_id IN (SELECT auth_user_profile_ids()));
+
+CREATE POLICY rls_messages_select ON messages
+    FOR SELECT TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM conversations c
+            WHERE c.id = messages.conversation_id
+              AND (
+                c.profile_1_id IN (SELECT auth_user_profile_ids())
+                OR c.profile_2_id IN (SELECT auth_user_profile_ids())
+              )
+        )
+    );
+
+CREATE POLICY rls_messages_insert ON messages
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        sender_profile_id IN (SELECT auth_user_profile_ids())
+        AND EXISTS (
+            SELECT 1 FROM conversations c
+            WHERE c.id = messages.conversation_id
+              AND c.status = 'active'
+              AND (
+                c.profile_1_id = messages.sender_profile_id
+                OR c.profile_2_id = messages.sender_profile_id
+              )
+        )
+    );
+
+-- Wali Relationships
+CREATE POLICY rls_wali_select ON wali_relationships
+    FOR SELECT TO authenticated
+    USING (
+        is_profile_owner(ward_profile_id)
+        OR wali_account_id = auth.uid()
+    );
+
+CREATE POLICY rls_wali_modify ON wali_relationships
+    FOR ALL TO authenticated
+    USING (is_profile_owner(ward_profile_id))
+    WITH CHECK (is_profile_owner(ward_profile_id));
+
+-- Notifications
+CREATE POLICY rls_notifications_select ON notifications
+    FOR SELECT TO authenticated
+    USING (profile_id IN (SELECT auth_user_profile_ids()));
+
+CREATE POLICY rls_notifications_update ON notifications
+    FOR UPDATE TO authenticated
+    USING (profile_id IN (SELECT auth_user_profile_ids()));
+
+-- ====================================================================
+-- 17. SUPABASE STORAGE BUCKETS CREATION & STORAGE POLICIES
+-- ====================================================================
+
+-- 1. Create storage buckets idempotently
+INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+VALUES 
+    (
+        'profile-public',
+        'profile-public',
+        TRUE,
+        10485760, -- 10 MB limit (Publicly visible portraits)
+        ARRAY['image/jpeg', 'image/png', 'image/webp']
+    ),
+    (
+        'profile-blurred',
+        'profile-blurred',
+        TRUE,
+        10485760, -- 10 MB limit (Haya modesty veil / blurred previews)
+        ARRAY['image/jpeg', 'image/png', 'image/webp']
+    ),
+    (
+        'profile-private',
+        'profile-private',
+        FALSE,
+        10485760, -- 10 MB limit (Private suitor photos & confidential verification selfies)
+        ARRAY['image/jpeg', 'image/png', 'image/webp']
+    ),
+    (
+        'voice-introductions',
+        'voice-introductions',
+        FALSE,
+        20971520, -- 20 MB limit (Audio introductions 30s-120s)
+        ARRAY['audio/m4a', 'audio/mp4', 'audio/aac', 'audio/mpeg', 'audio/x-m4a', 'audio/wav']
+    )
+ON CONFLICT (id) DO UPDATE SET
+    public = EXCLUDED.public,
+    file_size_limit = EXCLUDED.file_size_limit,
+    allowed_mime_types = EXCLUDED.allowed_mime_types;
+
+-- 2. Drop existing conflicting storage policies if re-running
+DROP POLICY IF EXISTS "Public profile photos readable" ON storage.objects;
+DROP POLICY IF EXISTS "Users can upload public photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update own public photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete own public photos" ON storage.objects;
+
+DROP POLICY IF EXISTS "Blurred profile photos readable" ON storage.objects;
+DROP POLICY IF EXISTS "Users can upload blurred photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update own blurred photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete own blurred photos" ON storage.objects;
+
+DROP POLICY IF EXISTS "Users can upload private photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can read own private photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update own private photos" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete own private photos" ON storage.objects;
+
+DROP POLICY IF EXISTS "Users can upload voice intro" ON storage.objects;
+DROP POLICY IF EXISTS "Users can read own voice intro" ON storage.objects;
+DROP POLICY IF EXISTS "Users can update own voice intro" ON storage.objects;
+DROP POLICY IF EXISTS "Users can delete own voice intro" ON storage.objects;
+
+-- 3. Bucket: profile-public (Publicly visible profile photos)
+CREATE POLICY "Public profile photos readable" ON storage.objects
+    FOR SELECT TO public
+    USING (bucket_id = 'profile-public');
+
+CREATE POLICY "Users can upload public photos" ON storage.objects
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        bucket_id = 'profile-public'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can update own public photos" ON storage.objects
+    FOR UPDATE TO authenticated
+    USING (
+        bucket_id = 'profile-public'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can delete own public photos" ON storage.objects
+    FOR DELETE TO authenticated
+    USING (
+        bucket_id = 'profile-public'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+-- 4. Bucket: profile-blurred (Haya veil / blurred previews)
+CREATE POLICY "Blurred profile photos readable" ON storage.objects
+    FOR SELECT TO public
+    USING (bucket_id = 'profile-blurred');
+
+CREATE POLICY "Users can upload blurred photos" ON storage.objects
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        bucket_id = 'profile-blurred'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can update own blurred photos" ON storage.objects
+    FOR UPDATE TO authenticated
+    USING (
+        bucket_id = 'profile-blurred'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can delete own blurred photos" ON storage.objects
+    FOR DELETE TO authenticated
+    USING (
+        bucket_id = 'profile-blurred'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+-- 5. Bucket: profile-private (Private photos, request-only photos, and confidential verification selfies)
+CREATE POLICY "Users can upload private photos" ON storage.objects
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        bucket_id = 'profile-private'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can read own private photos" ON storage.objects
+    FOR SELECT TO authenticated
+    USING (
+        bucket_id = 'profile-private'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can update own private photos" ON storage.objects
+    FOR UPDATE TO authenticated
+    USING (
+        bucket_id = 'profile-private'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can delete own private photos" ON storage.objects
+    FOR DELETE TO authenticated
+    USING (
+        bucket_id = 'profile-private'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+-- 6. Bucket: voice-introductions (Private audio recordings)
+CREATE POLICY "Users can upload voice intro" ON storage.objects
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        bucket_id = 'voice-introductions'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can read own voice intro" ON storage.objects
+    FOR SELECT TO authenticated
+    USING (
+        bucket_id = 'voice-introductions'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can update own voice intro" ON storage.objects
+    FOR UPDATE TO authenticated
+    USING (
+        bucket_id = 'voice-introductions'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+CREATE POLICY "Users can delete own voice intro" ON storage.objects
+    FOR DELETE TO authenticated
+    USING (
+        bucket_id = 'voice-introductions'
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
+
+
