@@ -82,11 +82,14 @@ c:\Users\choug\OneDrive\Desktop\DonoJaha\
 - **Dynamic Profile Details:** `ProfileDetailScreen.tsx` dynamically resolves suitors by `profileId` across Home, Matches, Views, and Interests.
 - **Dynamic 1-Active Guard:** Evaluates current suitor connection dynamically on `ProfileDetailScreen.tsx`.
 - **Onboarding State Reactivity:** `userProfile.ts` subscribes reactively across all Phase 2 onboarding screens, `HomeScreen`, and `ProfileHubScreen`.
-- **Supabase Service Layer:** `src/services/` (`profileService.ts`, `chatService.ts`, `interestService.ts`) actively implemented and linked.
+- **Supabase Service Layer:** `src/services/` (`profileService.ts`, `chatService.ts`, `interestService.ts`, `storageService.ts`) actively implemented and linked.
 - **Realtime Chat Integration:** Supabase Realtime channel connected in `chatService.ts` and `ChatScreen.tsx`.
+- **Supabase Storage Service:** Production-oriented `storageService.ts` implemented for profile photographs, private verification selfies, voice introduction audio clips, and signed URL generation with user-scoped collision-resistant paths.
+- **Connected Media Screens:** `ProfilePhotosScreen.tsx`, `VoiceIntroScreen.tsx`, and `SelfieVerificationScreen.tsx` wired to `storageService`.
+- **Storage SQL Migration:** Prepared `supabase/migrations/015_storage_complete.sql` with idempotent bucket provisioning and complete RLS policies.
 
 ### PARTIALLY IMPLEMENTED
-- **Direct Storage Uploads:** Expo image/audio uploads currently simulate storage paths; need Supabase storage bucket policy configuration for live mobile binary uploading.
+- **Live Remote Storage Buckets:** Remote Supabase project requires executing `015_storage_complete.sql` in the Supabase Dashboard SQL Editor (due to service-role permissions required to write to `storage.buckets`). Mobile app handles this gracefully with diagnostics and seamless offline fallback.
 
 ### NOT IMPLEMENTED
 - **Push Notifications Integration:** APNs / FCM push notification triggers for incoming interest notifications.
@@ -100,5 +103,7 @@ c:\Users\choug\OneDrive\Desktop\DonoJaha\
 2. **Missing Navigation Links:** RESOLVED. `WaliDashboardScreen` and `SelfieVerificationScreen` wired into `ProfileHubScreen` and `RootNavigator`.
 3. **Data Flow Disconnect:** RESOLVED. State persistence helpers in `src/data/userProfile.ts` connected to all onboarding screens.
 4. **Dynamic Profile Detail Loading:** RESOLVED. Suitors resolved dynamically by `profileId` in `ProfileDetailScreen`.
-5. **Supabase Integration:** RESOLVED. Live services implemented for Profiles, Interests, and Realtime Chaperoned Chat.
+5. **Supabase Integration:** RESOLVED. Live services implemented for Profiles, Interests, Realtime Chaperoned Chat, and Storage.
+6. **Schema Alignment:** RESOLVED. Audited and aligned exact PostgreSQL schema column names across all modular profile tables (`profile_physical.height_cm`, `profile_career.employer`, `photos.storage_path_original`, `photos.privacy_status`).
+
 

@@ -181,40 +181,13 @@ export async function getDiscoverableProfiles(options?: {
         id,
         gender,
         is_verified,
-        profile_basic (
-          full_name,
-          display_name,
-          date_of_birth,
-          marital_status,
-          mother_tongue,
-          sect,
-          school_of_thought,
-          bio
-        ),
-        profile_physical (
-          height_ft,
-          height_in,
-          height_cm
-        ),
-        profile_education (
-          highest_qualification,
-          field_of_study
-        ),
-        profile_career (
-          job_title,
-          company_name,
-          annual_income_range
-        ),
-        profile_location (
-          city,
-          state,
-          country
-        ),
-        photos (
-          storage_path,
-          is_primary,
-          privacy_level
-        )
+        profile_basic (*),
+        profile_physical (*),
+        profile_religion (*),
+        profile_education (*),
+        profile_career (*),
+        profile_location (*),
+        photos (*)
       `)
       .eq('is_discoverable', true)
       .limit(20);
@@ -232,10 +205,16 @@ export async function getDiscoverableProfiles(options?: {
     return data.map((row) => {
       const basic = Array.isArray(row.profile_basic) ? row.profile_basic[0] : row.profile_basic;
       const physical = Array.isArray(row.profile_physical) ? row.profile_physical[0] : row.profile_physical;
+      const rel = Array.isArray(row.profile_religion) ? row.profile_religion[0] : row.profile_religion;
       const edu = Array.isArray(row.profile_education) ? row.profile_education[0] : row.profile_education;
       const career = Array.isArray(row.profile_career) ? row.profile_career[0] : row.profile_career;
       const loc = Array.isArray(row.profile_location) ? row.profile_location[0] : row.profile_location;
-      const primaryPhoto = Array.isArray(row.photos) ? row.photos.find((p: any) => p.is_primary) || row.photos[0] : row.photos;
+      const photoList = Array.isArray(row.photos) ? row.photos : (row.photos ? [row.photos] : []);
+      const primaryPhoto = photoList.find((p: any) => p.is_primary) || photoList[0];
+
+      const heightCm = physical?.height_cm || 165;
+      const heightFt = Math.floor(heightCm / 30.48);
+      const heightIn = Math.round((heightCm % 30.48) / 2.54);
 
       return {
         id: row.id,
@@ -244,24 +223,24 @@ export async function getDiscoverableProfiles(options?: {
         gender: row.gender,
         age: basic?.date_of_birth ? calculateAge(basic.date_of_birth) : 26,
         dob: basic?.date_of_birth || '2000-01-01',
-        height: physical ? `${physical.height_ft || 5}' ${physical.height_in || 4}" (${physical.height_cm || 163} cm)` : `5' 4" (163 cm)`,
+        height: `${heightFt}' ${heightIn}" (${heightCm} cm)`,
         maritalStatus: basic?.marital_status || 'Never Married',
-        sect: basic?.sect || 'Sunni',
-        schoolOfThought: basic?.school_of_thought || 'Hanafi',
-        community: 'Sunni',
+        sect: rel?.sect || 'Sunni',
+        schoolOfThought: rel?.school_of_thought || 'Hanafi',
+        community: rel?.community || 'Sunni',
         motherTongue: basic?.mother_tongue || 'Urdu',
         location: loc ? `${loc.city}, ${loc.state}` : 'Mumbai, Maharashtra',
-        residency: 'Citizen (India)',
-        hometown: loc?.state || 'Origin State',
+        residency: loc?.residency_status || 'Citizen (India)',
+        hometown: loc?.hometown_state || 'Origin State',
         education: edu?.highest_qualification || 'Graduate',
         profession: career?.job_title || 'Professional',
-        employer: career?.company_name || 'Organization',
+        employer: career?.employer || 'Organization',
         income: career?.annual_income_range || '₹10 - ₹15 Lakhs',
-        prayer: 'Always (5 times daily)',
-        quran: 'Daily reflection',
-        fasting: 'Ramadan regularly',
-        halal: 'Strictly Halal',
-        attire: 'Modest attire',
+        prayer: rel?.prayer_frequency || 'Always (5 times daily)',
+        quran: rel?.quran_practice || 'Daily reflection',
+        fasting: rel?.fasting_practice || 'Ramadan regularly',
+        halal: rel?.halal_dietary_practice || 'Strictly Halal',
+        attire: rel?.attire_modesty || 'Modest attire',
         familyValues: 'Traditional & Deen-centered',
         familyType: 'Nuclear',
         economicStatus: 'Middle Class',
@@ -272,9 +251,9 @@ export async function getDiscoverableProfiles(options?: {
         livingArrangement: 'Open to discussion',
         careerAfterMarriage: 'Open to discussion',
         bio: basic?.bio || 'Seeking a practicing, family-oriented partner with pure intentions.',
-        avatar: primaryPhoto?.storage_path || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500',
-        photoPrivacy: (primaryPhoto?.privacy_level as any) || 'blurred',
-        isPhotoBlurred: primaryPhoto?.privacy_level === 'blurred' || !primaryPhoto,
+        avatar: primaryPhoto?.storage_path_original || primaryPhoto?.storage_path_blurred || 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500',
+        photoPrivacy: (primaryPhoto?.privacy_status as any) || 'blurred',
+        isPhotoBlurred: primaryPhoto?.privacy_status === 'blurred' || !primaryPhoto,
         hasVoiceIntro: false,
         voiceDuration: 0,
         isVerified: row.is_verified ?? false,

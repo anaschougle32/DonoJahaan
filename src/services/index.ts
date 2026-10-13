@@ -6,3 +6,4 @@
 export * from './profileService';
 export * from './chatService';
 export * from './interestService';
+export * from './storageService';

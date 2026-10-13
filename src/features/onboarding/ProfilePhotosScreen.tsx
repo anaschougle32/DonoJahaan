@@ -17,6 +17,7 @@ import { colors, radii, shadows, spacing, typography } from '../../theme/tokens'
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { uploadProfilePhoto } from '../../services/storageService';
 
 interface ProfilePhotosScreenProps {
   onBack?: () => void;
@@ -56,7 +57,22 @@ export const ProfilePhotosScreen: React.FC<ProfilePhotosScreenProps> = ({
       });
 
       if (!result.canceled && result.assets[0]?.uri) {
-        setPhotoUri(result.assets[0].uri);
+        const pickedAsset = result.assets[0];
+        setPhotoUri(pickedAsset.uri);
+
+        // Upload directly to Supabase Storage with collision-resistant user scoping
+        const uploadRes = await uploadProfilePhoto({
+          uri: pickedAsset.uri,
+          isHayaVeiled,
+          fileSizeBytes: pickedAsset.fileSize,
+          mimeType: pickedAsset.mimeType || 'image/jpeg',
+        });
+
+        if (uploadRes.success && uploadRes.url) {
+          setPhotoUri(uploadRes.url);
+        } else if (!uploadRes.success) {
+          console.warn('Supabase storage upload notice:', uploadRes.error);
+        }
       }
     } catch (err: any) {
       Alert.alert('Upload Error', 'Could not load image. Please try again.');

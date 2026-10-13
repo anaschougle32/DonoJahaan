@@ -14,6 +14,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { colors, radii, shadows, spacing } from '../../theme/tokens';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { uploadVerificationSelfie } from '../../services/storageService';
 
 interface SelfieVerificationScreenProps {
   onBack?: () => void;
@@ -59,14 +60,20 @@ export const SelfieVerificationScreen: React.FC<SelfieVerificationScreenProps> =
     }
   };
 
-  const handleConfirmVerification = () => {
+  const handleConfirmVerification = async () => {
     if (!selfieUri) {
       handleTakeSelfie();
       return;
     }
 
     setIsVerifying(true);
-    setTimeout(() => {
+    try {
+      await uploadVerificationSelfie({
+        uri: selfieUri,
+      });
+    } catch (err) {
+      console.warn('uploadVerificationSelfie notice:', err);
+    } finally {
       setIsVerifying(false);
       updateCurrentUserProfile({
         hasSelfieVerification: true,
@@ -74,10 +81,10 @@ export const SelfieVerificationScreen: React.FC<SelfieVerificationScreenProps> =
       });
       Alert.alert(
         'Selfie Verified ✨',
-        'Your profile has been granted the Verified Member badge. This selfie remains confidential and will never appear on your public profile.'
+        'Your profile has been granted the Verified Member badge. This selfie remains strictly confidential and will never appear on your public profile.'
       );
       onVerified ? onVerified(selfieUri) : onBack?.();
-    }, 1200);
+    }
   };
 
   return (

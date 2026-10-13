@@ -14,6 +14,7 @@ import { ModestyPhotoCurtain } from '../../components/common/ModestyPhotoCurtain
 import { BottomSheetModal } from '../../components/common/BottomSheetModal';
 import { MatrimonialProfile } from '../../types';
 import { mockActiveSuitor } from '../../mocks/matrimonialData';
+import { expressMatrimonialInterest } from '../../services/interestService';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -178,7 +179,13 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
           <PrimaryButton
             title="Express Matrimonial Interest"
             icon="favorite"
-            onPress={() => Alert.alert('Interest Sent', 'Sent to suitor and family for review.')}
+            onPress={async () => {
+              await expressMatrimonialInterest('user-me', suitor.id);
+              Alert.alert(
+                'Interest Sent ✨',
+                `Your sincere interest has been delivered to ${suitor.name} and family for respectful consideration.`
+              );
+            }}
           />
         )}
       </View>

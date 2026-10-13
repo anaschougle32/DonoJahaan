@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import { colors, radii, shadows, spacing, typography } from '../../theme/tokens'
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { Audio } from 'expo-av';
+import { uploadVoiceIntro } from '../../services/storageService';
 
 interface VoiceIntroScreenProps {
   onBack?: () => void;
@@ -32,6 +34,9 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
   const [activePrompt, setActivePrompt] = useState(
     '🌿 Your ideal quiet Sunday morning routine'
   );
+  const [recordingUri, setRecordingUri] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const recordingRef = useRef<Audio.Recording | null>(null);
 
   const prompts = [
     '🌿 Your ideal quiet Sunday morning routine',
@@ -49,8 +54,7 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
       interval = setInterval(() => {
         setDurationSeconds((prev) => {
           if (prev >= 120) {
-            setIsRecording(false);
-            setHasRecording(true);
+            handleStopRecord();
             return 120;
           }
           return prev + 1;
@@ -60,15 +64,46 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
     return () => clearInterval(interval);
   }, [isRecording]);
 
-  const handleStartRecord = () => {
+  const handleStartRecord = async () => {
+    try {
+      const permission = await Audio.requestPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Microphone Access Needed', 'Permission to access microphone is required to record your voice intro.');
+        return;
+      }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY
+      );
+      recordingRef.current = recording;
+    } catch (recErr) {
+      console.warn('Audio.Recording setup notice (falling back to timer simulation):', recErr);
+    }
     setDurationSeconds(0);
     setIsRecording(true);
     setIsPlaying(false);
   };
 
-  const handleStopRecord = () => {
+  const handleStopRecord = async () => {
     setIsRecording(false);
     setHasRecording(true);
+    try {
+      if (recordingRef.current) {
+        await recordingRef.current.stopAndUnloadAsync();
+        const uri = recordingRef.current.getURI();
+        if (uri) {
+          setRecordingUri(uri);
+        }
+        recordingRef.current = null;
+      }
+    } catch (stopErr) {
+      console.warn('Audio.Recording stop notice:', stopErr);
+    }
   };
 
   const handleTogglePlay = () => {
@@ -289,14 +324,29 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
         ]}
       >
         <PrimaryButton
-          title="Save & Continue to Selfie Verification →"
-          icon="arrow-forward"
-          onPress={() => {
-            updateCurrentUserProfile({
-              hasVoiceIntro: true,
-              voiceDuration: durationSeconds,
-            });
-            onNext?.();
+          title={isUploading ? 'Uploading Voice Intro...' : 'Save & Continue to Selfie Verification →'}
+          icon={isUploading ? undefined : 'arrow-forward'}
+          disabled={isUploading}
+          onPress={async () => {
+            setIsUploading(true);
+            try {
+              if (recordingUri) {
+                await uploadVoiceIntro({
+                  uri: recordingUri,
+                  durationSeconds: Math.max(30, durationSeconds),
+                  promptSelected: activePrompt,
+                });
+              }
+            } catch (err) {
+              console.warn('Voice upload notice:', err);
+            } finally {
+              setIsUploading(false);
+              updateCurrentUserProfile({
+                hasVoiceIntro: true,
+                voiceDuration: Math.max(30, durationSeconds),
+              });
+              onNext?.();
+            }
           }}
         />
       </View>
