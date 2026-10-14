@@ -122,9 +122,10 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
     setMessagesList((prev) => [...prev, optimistic]);
 
+    const myProfileId = currentUserProfile.id || 'user-me';
     const sent = await sendChatMessage({
       conversationId: activeConvId,
-      senderProfileId: 'user-me',
+      senderProfileId: myProfileId,
       senderName: currentUserProfile.name.split(' ')[0],
       content,
       type: 'text',
@@ -142,9 +143,10 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
       prev.map((m) => (m.id === msg.id ? { ...m, status: 'sending' } : m))
     );
 
+    const myProfileId = currentUserProfile.id || 'user-me';
     const sent = await sendChatMessage({
       conversationId: activeConvId,
-      senderProfileId: 'user-me',
+      senderProfileId: myProfileId,
       senderName: currentUserProfile.name.split(' ')[0],
       content: msg.content,
       type: msg.type,
@@ -159,7 +161,8 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   const handleConfirmEndConversation = async () => {
     setIsEndingChat(true);
     try {
-      await concludeActiveConversation(activeConvId, 'user-me', endReason);
+      const myProfileId = currentUserProfile.id || 'user-me';
+      await concludeActiveConversation(activeConvId, myProfileId, endReason);
       setEndChatModalVisible(false);
       Alert.alert(
         'Conversation Concluded',
@@ -176,9 +179,10 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   const handleShareContactConfirmed = async () => {
     setShareContactModalVisible(false);
     const content = `📞 Direct Contact Shared: Mobile +91 98230 12345 (${currentUserProfile.name})`;
+    const myProfileId = currentUserProfile.id || 'user-me';
     const sent = await sendChatMessage({
       conversationId: activeConvId,
-      senderProfileId: 'user-me',
+      senderProfileId: myProfileId,
       senderName: currentUserProfile.name.split(' ')[0],
       content,
       type: 'system',

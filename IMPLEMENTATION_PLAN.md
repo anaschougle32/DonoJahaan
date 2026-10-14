@@ -71,5 +71,12 @@
 - [x] Render modesty blur purely on the client using native `blurRadius` and `<BlurView>` directly on the single image source.
 - [x] Maintain strict confidentiality of verification selfies in `profile-private` under `verification/`.
 
-## Milestone P10: Storage Provisioning Instructions
-- [ ] User executes `supabase/migrations/015_storage_complete.sql` in Supabase Dashboard SQL Editor to initialize remote storage buckets with service-role permissions.
+## Milestone P10: Remote Storage & State Machine Verification
+- [x] Verify remote storage buckets (`profile-public`, `profile-private`, `voice-introductions`) enforcing MIME types and user-scoped RLS policies.
+- [x] Verify migration 016 state machine RPCs (`can_start_conversation`, `get_active_conversation_for_profile`, `accept_interest_and_create_conversation`, `end_active_conversation`) live on remote database.
+
+## Milestone P11: Automated Backend Suite & Production Build
+- [x] Implement automated backend test runner (`scripts/verify_backend.js`) passing 24/24 assertions across database, storage, state machine, and RLS security.
+- [x] Compile production web bundle with Metro (`npx expo export --platform web`) with 0 errors.
+- [x] Verify TypeScript strict mode passes with 0 errors (`tsc --noEmit`).
+

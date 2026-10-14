@@ -22,7 +22,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FCFCFA"
       },
-      "package": "com.donojaha.app"
+      "package": "com.donojaha.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "plugins": [
       [
@@ -32,6 +36,11 @@
         }
       ],
       "expo-web-browser"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a9bf2489-838c-4f80-b44a-dc7958cf7e0f"
+      }
+    }
   }
 }

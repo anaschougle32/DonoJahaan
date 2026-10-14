@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:backend": "node scripts/verify_backend.js"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.2.3",

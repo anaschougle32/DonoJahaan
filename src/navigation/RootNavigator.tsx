@@ -25,6 +25,7 @@ import { AdvancedFiltersScreen } from '../features/search/AdvancedFiltersScreen'
 import { SecondaryProfileWizardScreen } from '../features/onboarding/SecondaryProfileWizardScreen';
 import { WaliDashboardScreen } from '../features/wali/WaliDashboardScreen';
 import { mockCuratedMatches, mockActiveSuitor } from '../mocks/matrimonialData';
+import { signOutUser } from '../services/authService';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -253,7 +254,14 @@ export const RootNavigator: React.FC = () => {
         {({ navigation }) => (
           <AccountSettingsScreen
             onBack={() => navigation.goBack()}
-            onLogout={() => navigation.reset({ index: 0, routes: [{ name: 'PhoneAuth' }] })}
+            onLogout={async () => {
+              try {
+                await signOutUser();
+              } catch (err) {
+                console.warn('Sign out error:', err);
+              }
+              navigation.reset({ index: 0, routes: [{ name: 'PhoneAuth' }] });
+            }}
           />
         )}
       </Stack.Screen>
