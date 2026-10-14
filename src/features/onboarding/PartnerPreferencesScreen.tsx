@@ -18,6 +18,7 @@ import { MultiSelectModal } from '../../components/common/MultiSelectModal';
 import { SearchSelectModal, SearchItem } from '../../components/common/SearchSelectModal';
 import { INDIAN_STATES } from '../../data/lookupData';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncPartnerPreferencesToSupabase } from '../../services/profileService';
 
 interface PartnerPreferencesScreenProps {
   onBack?: () => void;
@@ -227,6 +228,18 @@ export const PartnerPreferencesScreen: React.FC<PartnerPreferencesScreenProps> =
               partnerMaxAge: maxAge,
               partnerSect: sectLabel,
             });
+
+            // Asynchronously sync to Supabase partner_preferences table
+            syncPartnerPreferencesToSupabase({
+              minAge,
+              maxAge,
+              maritalStatuses: selectedMaritalIds,
+              sects: [selectedSectId],
+              minEducation: eduLabel,
+              minIncomeRange: incomeLabel,
+              preferredCities: [selectedStateId],
+            }).catch((err) => console.warn('Supabase partner preferences sync notice:', err));
+
             onApply?.();
           }}
         />

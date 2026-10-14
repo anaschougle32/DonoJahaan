@@ -93,6 +93,7 @@ export interface ChatMessage {
   voiceStoragePath?: string;
   timestamp: string;
   isSentByMe: boolean;
+  status?: 'sending' | 'sent' | 'failed';
 }
 
 export interface MatrimonialInterest {

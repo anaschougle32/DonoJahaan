@@ -18,6 +18,8 @@ import {
   mockCuratedMatches,
 } from '../../mocks/matrimonialData';
 import { getReceivedInterests, getSentInterests, respondToInterest } from '../../services/interestService';
+import { acceptInterestAndStartConversation } from '../../services/conversationStateService';
+import { currentUserProfile } from '../../data/userProfile';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -90,6 +92,11 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
         {
           text: 'Accept & Start Chat',
           onPress: async () => {
+            const startRes = await acceptInterestAndStartConversation(item.id, currentUserProfile.id);
+            if (!startRes.success && startRes.error) {
+              Alert.alert('One Active Conversation Limit', startRes.error);
+              return;
+            }
             await respondToInterest(item.id, 'accepted');
             setReceivedList((prev) => prev.filter((i) => i.id !== item.id));
             if (onAcceptInterest) {

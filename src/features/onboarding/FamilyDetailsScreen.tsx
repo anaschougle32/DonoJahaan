@@ -22,6 +22,7 @@ import {
   PROFESSIONS_LOOKUP,
 } from '../../data/lookupData';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncFamilyDetailsToSupabase } from '../../services/profileService';
 
 interface FamilyDetailsScreenProps {
   onBack?: () => void;
@@ -219,11 +220,23 @@ export const FamilyDetailsScreen: React.FC<FamilyDetailsScreenProps> = ({
           title="Save & Continue to Partner Preferences →"
           icon="arrow-forward"
           onPress={() => {
+            const familyType = selectedStructureId === 'nuclear' ? 'Nuclear' : 'Joint Family';
             updateCurrentUserProfile({
               hasFamilyDetails: true,
-              familyType: selectedStructureId === 'nuclear' ? 'Nuclear' : 'Joint Family',
+              familyType,
               familyValues: 'Traditional & Deen-centered',
             });
+
+            // Asynchronously sync to Supabase profile_family table
+            syncFamilyDetailsToSupabase({
+              familyType,
+              familyValues: 'Traditional & Deen-centered',
+              economicStatus: financialLabel || 'Middle Class',
+              fatherOccupation: fatherProf,
+              motherOccupation: motherProf,
+              nativePlace: locationDisplay,
+            }).catch((err) => console.warn('Supabase family sync notice:', err));
+
             onSaved?.();
           }}
         />

@@ -2,6 +2,7 @@
   "expo": {
     "name": "Dono Jaha",
     "slug": "dono-jaha",
+    "scheme": "donojaha",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +30,8 @@
         {
           "microphonePermission": "Allow Dono Jaha to access your microphone for recording your authentic voice introduction and voice notes."
         }
-      ]
+      ],
+      "expo-web-browser"
     ]
   }
 }

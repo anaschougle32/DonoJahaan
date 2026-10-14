@@ -24,6 +24,8 @@ import {
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { colors } from './src/theme/tokens';
 import { navigationRef } from './src/navigation/navigationService';
+import { restoreSession } from './src/services/authService';
+import { getMyProfile } from './src/services/profileService';
 
 const AppTheme = {
   ...DefaultTheme,
@@ -94,6 +96,16 @@ export default function App() {
 
   useEffect(() => {
     const timer = setTimeout(() => setFontTimeout(true), 1500);
+
+    // Hydrate existing Supabase authentication session and matrimonial profile
+    restoreSession()
+      .then((res) => {
+        if (res.isAuthenticated) {
+          getMyProfile().catch((err) => console.warn('Startup profile hydration error:', err));
+        }
+      })
+      .catch((err) => console.warn('Startup session restoration error:', err));
+
     return () => clearTimeout(timer);
   }, []);
 

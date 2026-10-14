@@ -18,6 +18,7 @@ import {
 } from '../../components/common/SearchSelectModal';
 import { EDUCATION_LOOKUP } from '../../data/lookupData';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncEducationDetailsToSupabase } from '../../services/profileService';
 
 interface EducationScreenProps {
   onBack?: () => void;
@@ -111,6 +112,14 @@ export const EducationScreen: React.FC<EducationScreenProps> = ({
               degree: selectedEduName,
               hasEducationDetails: true,
             });
+
+            // Asynchronously sync to Supabase profile_education table
+            syncEducationDetailsToSupabase({
+              highestQualification: selectedEduName,
+              institution: institutionName,
+              fieldOfStudy: degreeSpecialization || selectedEduName,
+            }).catch((err) => console.warn('Supabase education sync notice:', err));
+
             onNext?.();
           }}
         />

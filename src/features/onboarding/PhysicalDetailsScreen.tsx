@@ -14,6 +14,7 @@ import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { SelectorRow } from '../../components/common/SelectorRow';
 import { SingleSelectModal, SelectOption } from '../../components/common/SingleSelectModal';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncPhysicalDetailsToSupabase } from '../../services/profileService';
 
 interface PhysicalDetailsScreenProps {
   onBack?: () => void;
@@ -147,10 +148,21 @@ export const PhysicalDetailsScreen: React.FC<PhysicalDetailsScreenProps> = ({
           title="Save & Continue to Education →"
           icon="arrow-forward"
           onPress={() => {
+            const cmMatch = heightLabel.match(/\((\d+)\s*cm\)/);
+            const heightCm = cmMatch ? parseInt(cmMatch[1], 10) : 163;
+
             updateCurrentUserProfile({
               height: heightLabel,
               hasPhysicalDetails: true,
             });
+
+            // Asynchronously sync to Supabase profile_physical table
+            syncPhysicalDetailsToSupabase({
+              heightCm,
+              bodyType: selectedBodyType,
+              physicalStatus: selectedPhysicalStatus,
+            }).catch((err) => console.warn('Supabase physical sync notice:', err));
+
             onNext?.();
           }}
         />

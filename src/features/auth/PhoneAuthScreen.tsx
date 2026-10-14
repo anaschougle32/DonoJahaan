@@ -16,6 +16,7 @@ import { TopBar } from '../../components/common/TopBar';
 import { InputField } from '../../components/common/InputField';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client';
+import { signInWithGoogle } from '../../services/authService';
 
 interface PhoneAuthScreenProps {
   onSendOtp: (phone: string) => void;
@@ -132,28 +133,22 @@ export const PhoneAuthScreen: React.FC<PhoneAuthScreenProps> = ({
   const handleGoogleAuth = async () => {
     setGoogleLoading(true);
     try {
-      if (Platform.OS === 'web') {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-          options: {
-            redirectTo: window.location.origin,
-          },
-        });
-        if (error) {
-          Alert.alert('Google Sign-In', error.message);
+      const res = await signInWithGoogle();
+      if (!res.success) {
+        if (res.error && !res.error.includes('cancelled')) {
+          Alert.alert('Google Sign-In', res.error);
         }
+        return;
+      }
+
+      if (res.hasCompletedOnboarding) {
+        (onLoginSuccess || (() => onSendOtp('9823012345')))();
       } else {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-        });
-        if (error) {
-          Alert.alert('Google Sign-In', error.message);
-        } else {
-          (onLoginSuccess || (() => onSendOtp('9823012345')))();
-        }
+        // Direct new or incomplete profile into Questionnaire
+        onSendOtp('google-verified');
       }
     } catch (err: any) {
-      Alert.alert('Google Sign-In Error', err?.message || 'Could not connect to Google.');
+      Alert.alert('Google Sign-In Notice', err?.message || 'Could not complete Google authentication.');
     } finally {
       setGoogleLoading(false);
     }

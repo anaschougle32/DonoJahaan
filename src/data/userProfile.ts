@@ -47,6 +47,8 @@ export interface UserProfileState {
   partnerSect?: string;
   hasSelfieVerification: boolean;
   bio: string;
+  email?: string;
+  phone?: string;
 }
 
 export const currentUserProfile: UserProfileState = {

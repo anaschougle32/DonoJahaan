@@ -35,3 +35,41 @@
 - [x] Run full TypeScript compilation check (`npm.cmd run lint` passed with 0 errors).
 - [x] Verify fallback safety for offline/demo scenarios with seamless live data switching.
 - [x] Verify live Supabase database connectivity across all 23 PostgreSQL tables.
+
+## Milestone P5: Google Authentication (Cross-Platform OAuth)
+- [x] Install and configure `expo-auth-session` and `expo-web-browser` compatible with Expo SDK 57.
+- [x] Configure custom deep-link scheme `"scheme": "donojaha"` in `app.json`.
+- [x] Implement `src/services/authService.ts` with `signInWithGoogle()`, `handlePostAuthProfile()`, `restoreSession()`, and `signOutUser()`.
+- [x] Add "Continue with Google" button to `PhoneAuthScreen.tsx` with error handling and loading indicators.
+- [x] Hydrate authenticated session and matrimonial profile in `App.tsx` on application startup.
+- [x] Route existing users directly to `MainTabs` and new users to `Questionnaire`.
+
+## Milestone P6: Messaging Lock/Unlock State Machine (1-Active Conversation Rule)
+- [x] Author migration `016_conversation_state_machine.sql` with atomic RPCs (`can_start_conversation`, `get_active_conversation_for_profile`, `accept_interest_and_create_conversation`, `end_active_conversation`).
+- [x] Add PostgreSQL trigger `check_message_active_conversation()` rejecting message inserts on closed conversations.
+- [x] Implement `src/services/conversationStateService.ts` state machine client layer.
+- [x] Wire `acceptInterestAndStartConversation()` into `InterestsScreen.tsx` with row-locked atomic verification.
+- [x] Update `ChatScreen.tsx` to dynamically query active conversation and support respectful conclusion modal.
+
+## Milestone P7: Fast & Reliable Realtime Messaging
+- [x] Enhance `src/services/chatService.ts` with pagination (`limit`, `offset`, `beforeTimestamp`).
+- [x] Add message delivery statuses (`'sending' | 'sent' | 'failed'`) and failed message retry capability.
+- [x] Add `markConversationAsRead()`.
+- [x] Deduplicate Realtime incoming events against local optimistic messages.
+- [x] Implement clean unsubscribe teardown on conversation exit.
+
+## Milestone P8: Profile Creation & Sub-Table Persistence
+- [x] Implement modular persistence functions in `src/services/profileService.ts` (`syncPhysicalDetailsToSupabase`, `syncEducationDetailsToSupabase`, `syncCareerDetailsToSupabase`, `syncFamilyDetailsToSupabase`, `syncPartnerPreferencesToSupabase`).
+- [x] Connect `PhysicalDetailsScreen.tsx`, `EducationScreen.tsx`, `ProfessionScreen.tsx`, `FamilyDetailsScreen.tsx`, and `PartnerPreferencesScreen.tsx` to Supabase sub-tables.
+- [x] Update `getMyProfile()` to query and hydrate all profile sub-tables, `partner_preferences`, and `photos`.
+- [x] Dynamically calculate profile completion metrics from real saved database records.
+
+## Milestone P9: Single-Image Modesty Veil (Zero Duplicate Uploads)
+- [x] Refactor `src/services/storageService.ts` to upload strictly ONE original photograph to `profile-public` (or `profile-private`).
+- [x] Eliminate redundant `profile-blurred` upload targets and duplicate files.
+- [x] Store single record in `photos` with `storage_path_original` and `storage_path_blurred: null`.
+- [x] Render modesty blur purely on the client using native `blurRadius` and `<BlurView>` directly on the single image source.
+- [x] Maintain strict confidentiality of verification selfies in `profile-private` under `verification/`.
+
+## Milestone P10: Storage Provisioning Instructions
+- [ ] User executes `supabase/migrations/015_storage_complete.sql` in Supabase Dashboard SQL Editor to initialize remote storage buckets with service-role permissions.

@@ -86,10 +86,15 @@ c:\Users\choug\OneDrive\Desktop\DonoJaha\
 - **Realtime Chat Integration:** Supabase Realtime channel connected in `chatService.ts` and `ChatScreen.tsx`.
 - **Supabase Storage Service:** Production-oriented `storageService.ts` implemented for profile photographs, private verification selfies, voice introduction audio clips, and signed URL generation with user-scoped collision-resistant paths.
 - **Connected Media Screens:** `ProfilePhotosScreen.tsx`, `VoiceIntroScreen.tsx`, and `SelfieVerificationScreen.tsx` wired to `storageService`.
-- **Storage SQL Migration:** Prepared `supabase/migrations/015_storage_complete.sql` with idempotent bucket provisioning and complete RLS policies.
+- **Google Authentication:** Cross-platform OAuth flow built in `src/services/authService.ts` utilizing `expo-auth-session`, `expo-web-browser`, and `donojaha://` deep-linking. Wired to `PhoneAuthScreen.tsx`. Automatic post-auth profile resolution provisions user accounts and checks onboarding status.
+- **Messaging Lock/Unlock State Machine:** Strict database-level enforcement of Dono Jaha's 1-Active-Conversation rule in `supabase/migrations/016_conversation_state_machine.sql` with transactional RPCs `can_start_conversation`, `accept_interest_and_create_conversation`, and `end_active_conversation`. Supported by `src/services/conversationStateService.ts`.
+- **Fast & Reliable Realtime Messaging:** Realtime chat with message delivery states (`'sending' | 'sent' | 'failed'`), failed message retry, pagination support, deduplication, and graceful channel cleanup in `src/services/chatService.ts` and `src/features/chat/ChatScreen.tsx`.
+- **Profile Creation & Sub-Table Persistence:** Modular sub-table sync in `src/services/profileService.ts` (`syncPhysicalDetailsToSupabase`, `syncEducationDetailsToSupabase`, `syncCareerDetailsToSupabase`, `syncFamilyDetailsToSupabase`, `syncPartnerPreferencesToSupabase`). Wired into all onboarding screens. `getMyProfile` enhanced to hydrate complete profile data upon app start.
+- **Single-Image Modesty Blur Requirement:** Strictly ONE original photo uploaded to `profile-public` (or private if locked); no redundant blurred copies uploaded or maintained in storage. Client renders visual blur directly on the single image source using native `blurRadius` and `<BlurView>`.
+- **Startup Session Hydration:** `App.tsx` calls `restoreSession()` and `getMyProfile()` to automatically restore authenticated state across app restarts.
 
 ### PARTIALLY IMPLEMENTED
-- **Live Remote Storage Buckets:** Remote Supabase project requires executing `015_storage_complete.sql` in the Supabase Dashboard SQL Editor (due to service-role permissions required to write to `storage.buckets`). Mobile app handles this gracefully with diagnostics and seamless offline fallback.
+- **Remote Storage Bucket Provisioning:** Storage buckets (`profile-public`, `profile-private`, `voice-introductions`) must be initialized via executing `supabase/migrations/015_storage_complete.sql` in the Supabase Dashboard SQL Editor (due to service-role permissions required to write to `storage.buckets`). Mobile app handles unprovisioned remote buckets gracefully with non-blocking diagnostic notices and seamless local preview.
 
 ### NOT IMPLEMENTED
 - **Push Notifications Integration:** APNs / FCM push notification triggers for incoming interest notifications.
@@ -105,5 +110,8 @@ c:\Users\choug\OneDrive\Desktop\DonoJaha\
 4. **Dynamic Profile Detail Loading:** RESOLVED. Suitors resolved dynamically by `profileId` in `ProfileDetailScreen`.
 5. **Supabase Integration:** RESOLVED. Live services implemented for Profiles, Interests, Realtime Chaperoned Chat, and Storage.
 6. **Schema Alignment:** RESOLVED. Audited and aligned exact PostgreSQL schema column names across all modular profile tables (`profile_physical.height_cm`, `profile_career.employer`, `photos.storage_path_original`, `photos.privacy_status`).
+7. **Messaging State Machine:** RESOLVED. Enforced at the database level via RPC functions, row locking (`FOR UPDATE`), and message insertion triggers.
+8. **Single-Image Modesty Veil:** RESOLVED. Eliminated redundant blurred image uploads, utilizing native client-side blur layers directly on the single photo source.
+9. **Google Auth:** RESOLVED. Integrated cross-platform OAuth flow with Supabase and deep-link handling.
 
 

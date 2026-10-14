@@ -15,6 +15,7 @@ import { BottomSheetModal } from '../../components/common/BottomSheetModal';
 import { MatrimonialProfile } from '../../types';
 import { mockActiveSuitor } from '../../mocks/matrimonialData';
 import { expressMatrimonialInterest } from '../../services/interestService';
+import { currentUserProfile } from '../../data/userProfile';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -180,7 +181,7 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
             title="Express Matrimonial Interest"
             icon="favorite"
             onPress={async () => {
-              await expressMatrimonialInterest('user-me', suitor.id);
+              await expressMatrimonialInterest(currentUserProfile.id || 'user-me', suitor.id);
               Alert.alert(
                 'Interest Sent ✨',
                 `Your sincere interest has been delivered to ${suitor.name} and family for respectful consideration.`

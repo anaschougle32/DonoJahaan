@@ -24,6 +24,7 @@ import {
   INCOME_RANGES,
 } from '../../data/lookupData';
 import { updateCurrentUserProfile } from '../../data/userProfile';
+import { syncCareerDetailsToSupabase } from '../../services/profileService';
 
 interface ProfessionScreenProps {
   onBack?: () => void;
@@ -160,6 +161,16 @@ export const ProfessionScreen: React.FC<ProfessionScreenProps> = ({
               employer: employerName,
               hasProfessionDetails: true,
             });
+
+            // Asynchronously sync to Supabase profile_career table
+            syncCareerDetailsToSupabase({
+              jobTitle: selectedProfName,
+              employer: employerName,
+              annualIncomeRange: incomeLabel,
+              employmentSector: sectorLabel,
+              workCity: workCity,
+            }).catch((err) => console.warn('Supabase career sync notice:', err));
+
             onNext?.();
           }}
         />

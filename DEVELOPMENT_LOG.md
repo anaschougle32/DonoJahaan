@@ -95,5 +95,74 @@
    - Verified Git diff: 73 insertions, 24 deletions.
    - Ran `npm.cmd run lint` (`tsc --noEmit`), zero errors.
 
+## Session 5: Main Functional Build Phase (Google Auth, Messaging State Machine, Profile Persistence & Single-Image Modesty)
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
+
+### Actions Completed:
+1. **Google OAuth Cross-Platform Integration:**
+   - Installed and configured `expo-auth-session` and `expo-web-browser` compatible with Expo SDK 57.
+   - Configured custom deep-link scheme `"scheme": "donojaha"` in `app.json`.
+   - Built `src/services/authService.ts`:
+     - Implements `signInWithGoogle()`: initiates native `WebBrowser.openAuthSessionAsync` with Supabase OAuth endpoint (`/auth/v1/authorize?provider=google`), captures deep-link redirect, exchanges tokens with `supabase.auth.setSession()`.
+     - Implements `handlePostAuthProfile()`: provisions `user_accounts` and `profiles` records upon successful authentication. Checks if the user has completed onboarding, routing existing users to `MainTabs` and new users to `Questionnaire`.
+     - Implements `restoreSession()`: inspects active Supabase session on startup and restores user state.
+     - Implements `signOutUser()`: cleanly terminates Supabase session and resets user profile.
+   - Integrated "Continue with Google" button in `PhoneAuthScreen.tsx` with error handling and loading indicators while preserving phone OTP and email/password flows.
+   - Added startup session hydration in `App.tsx` via `restoreSession()` and `getMyProfile()`.
+
+2. **Messaging Lock/Unlock State Machine & One-Active-Conversation Rule:**
+   - Authored PostgreSQL migration `supabase/migrations/016_conversation_state_machine.sql` and updated master `supabase/supabase_schema.sql` (Sections 9 & 10):
+     - `can_start_conversation(p_profile_1_id, p_profile_2_id)`: Atomic evaluation of eligibility, accepted interest requirement, and active conversation constraint.
+     - `get_active_conversation_for_profile(p_profile_id)`: Resolves a profile's currently active conversation ID and counterparty.
+     - `accept_interest_and_create_conversation(p_interest_id, p_receiver_profile_id)`: Transactional RPC enforcing the 1-Active-Conversation limit with `FOR UPDATE` row lock, preventing race conditions.
+     - `end_active_conversation(p_conversation_id, p_ending_profile_id, p_reason)`: Respectfully archives conversation, logs conclusion reason, and releases both suitors.
+     - `check_message_active_conversation()` trigger: Blocks message insertion into non-active conversations directly at the database level.
+   - Built service layer `src/services/conversationStateService.ts`:
+     - `checkCanMessage()`
+     - `getActiveConversation()`
+     - `acceptInterestAndStartConversation()`
+     - `concludeActiveConversation()`
+   - Wired into `InterestsScreen.tsx`: Accepting an interest executes `acceptInterestAndStartConversation()` and handles database-enforced rejection gracefully.
+   - Updated `ChatScreen.tsx`: Dynamically resolves active conversation via `getActiveConversation()`, added respectful "Conclude Matrimonial Conversation" modal calling `concludeActiveConversation()`.
+
+3. **Fast & Reliable Realtime Messaging:**
+   - Enhanced `src/services/chatService.ts`:
+     - Added pagination support (`limit`, `offset`, `beforeTimestamp`).
+     - Added optimistic delivery states (`status: 'sending' | 'sent' | 'failed'`) and `retryFailedMessage()`.
+     - Added `markConversationAsRead()`.
+     - Enhanced Supabase Realtime channel subscription with deduplication against optimistic messages and automatic channel cleanup on unmount.
+   - Updated `ChatScreen.tsx` UI with delivery status icons (`access-time`, `done-all`, `refresh`), dynamic loading states, and failed message retry.
+
+4. **Profile Creation & Sub-Table Database Persistence:**
+   - Enhanced `src/services/profileService.ts` with sub-table persistence functions:
+     - `syncPhysicalDetailsToSupabase()`: Upserts into `profile_physical` (`height_cm`, `body_type`, `accessibility_disclosure`).
+     - `syncEducationDetailsToSupabase()`: Upserts into `profile_education` (`highest_qualification`, `institution`, `field_of_study`).
+     - `syncCareerDetailsToSupabase()`: Upserts into `profile_career` and `profile_location` (`job_title`, `employer`, `annual_income_range`, `employment_sector`, `workCity`).
+     - `syncFamilyDetailsToSupabase()`: Upserts into `profile_family` (`family_values`, `family_type`, `economic_status`, `father_occupation`, `mother_occupation`, `native_place`).
+     - `syncPartnerPreferencesToSupabase()`: Upserts into `partner_preferences` (`min_age`, `max_age`, `marital_statuses`, `sects`, `min_education`, `min_income_range`, `preferred_cities`).
+   - Wired persistence into onboarding screens:
+     - `PhysicalDetailsScreen.tsx`
+     - `EducationScreen.tsx`
+     - `ProfessionScreen.tsx`
+     - `FamilyDetailsScreen.tsx`
+     - `PartnerPreferencesScreen.tsx`
+   - Enhanced `getMyProfile()` to query and hydrate all profile sub-tables, `partner_preferences`, and `photos` upon login or reload.
+   - Verified profile completion metrics in `src/data/userProfile.ts` accurately compute progress based on real saved fields.
+
+5. **Single-Image Modesty Blur Requirement (Zero Redundant Blurred Files):**
+   - Refactored `src/services/storageService.ts`:
+     - Removed redundant separate `profile-blurred` upload targets and storage paths.
+     - Uploads strictly ONE original image to `profile-public` (or `profile-private` for private suitor requests).
+     - Persists single photo row in `photos` table with `storage_path_original: storagePath`, `storage_path_blurred: null`, and `privacy_status: isHayaVeiled ? 'blurred' : 'visible'`.
+     - Verification selfies strictly isolated to `profile-private` under `verification/` and inaccessible to suitors.
+   - Preserved client-side native blur treatment in `ModestyPhotoCurtain.tsx` and `MatchProfileCard.tsx` using `blurRadius` and native `<BlurView>` directly on the single image source.
+   - When photo access is unlocked, the exact same image renders sharply without requesting a second file or network transfer.
+
+6. **Quality Assurance & Remote Database Verification:**
+   - Executed probe against live Supabase project (`fcqyukdvfifpdcckhkep.supabase.co`): Verified all 16 core tables return HTTP 200 OK.
+   - Probed Supabase Storage: Confirmed storage buckets are ready to be initialized via `015_storage_complete.sql`.
+   - Executed `tsc --noEmit`, passing with 0 compilation errors across the entire codebase.
+
 
 

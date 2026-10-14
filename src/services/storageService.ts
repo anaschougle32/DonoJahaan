@@ -150,9 +150,10 @@ export async function uploadProfilePhoto(params: PhotoUploadParams): Promise<Upl
 
     const userId = authData.user.id;
     const ext = resolveExtension(uri, mimeType);
-    const targetBucket = isHayaVeiled
-      ? STORAGE_BUCKETS.PROFILE_BLURRED
-      : STORAGE_BUCKETS.PROFILE_PUBLIC;
+    // Single-Image Mandate: Upload ONE original photo to profile-public.
+    // Modesty blur is strictly applied client-side on this single image via BlurView/blurRadius.
+    // No duplicate blurred files are uploaded or stored.
+    const targetBucket = STORAGE_BUCKETS.PROFILE_PUBLIC;
     const storagePath = generateScopedPath(userId, 'photos', ext);
 
     const { data: binaryData, contentType } = await uriToBinaryBody(uri, mimeType);
@@ -195,7 +196,7 @@ export async function uploadProfilePhoto(params: PhotoUploadParams): Promise<Upl
       await supabase.from('photos').insert({
         profile_id: profileRow.id,
         storage_path_original: storagePath,
-        storage_path_blurred: isHayaVeiled ? storagePath : null,
+        storage_path_blurred: null, // Single image: no duplicate blurred storage object
         privacy_status: isHayaVeiled ? 'blurred' : 'visible',
         is_primary: isPrimary,
       });

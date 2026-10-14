@@ -6,7 +6,7 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase/client';
 import { MatrimonialProfile } from '../types';
 import { mockActiveSuitor, mockCuratedMatches } from '../mocks/matrimonialData';
-import { currentUserProfile, UserProfileState } from '../data/userProfile';
+import { currentUserProfile, UserProfileState, updateCurrentUserProfile } from '../data/userProfile';
 
 export interface SaveProfileResult {
   success: boolean;
@@ -41,7 +41,9 @@ export async function getMyProfile(): Promise<UserProfileState> {
         profile_education (*),
         profile_career (*),
         profile_location (*),
-        profile_family (*)
+        profile_family (*),
+        partner_preferences (*),
+        photos (*)
       `)
       .eq('account_id', authData.user.id)
       .single();
@@ -50,13 +52,37 @@ export async function getMyProfile(): Promise<UserProfileState> {
       return currentUserProfile;
     }
 
-    const basic = profileRow.profile_basic?.[0] || profileRow.profile_basic;
-    const physical = profileRow.profile_physical?.[0] || profileRow.profile_physical;
-    const edu = profileRow.profile_education?.[0] || profileRow.profile_education;
-    const career = profileRow.profile_career?.[0] || profileRow.profile_career;
-    const loc = profileRow.profile_location?.[0] || profileRow.profile_location;
+    const basic = Array.isArray(profileRow.profile_basic) ? profileRow.profile_basic[0] : profileRow.profile_basic;
+    const physical = Array.isArray(profileRow.profile_physical) ? profileRow.profile_physical[0] : profileRow.profile_physical;
+    const edu = Array.isArray(profileRow.profile_education) ? profileRow.profile_education[0] : profileRow.profile_education;
+    const career = Array.isArray(profileRow.profile_career) ? profileRow.profile_career[0] : profileRow.profile_career;
+    const loc = Array.isArray(profileRow.profile_location) ? profileRow.profile_location[0] : profileRow.profile_location;
+    const family = Array.isArray(profileRow.profile_family) ? profileRow.profile_family[0] : profileRow.profile_family;
+    const prefs = Array.isArray(profileRow.partner_preferences) ? profileRow.partner_preferences[0] : profileRow.partner_preferences;
+    const photoList = Array.isArray(profileRow.photos) ? profileRow.photos : (profileRow.photos ? [profileRow.photos] : []);
+    const primaryPhoto = photoList.find((p: any) => p.is_primary) || photoList[0];
 
-    return {
+    let formattedHeight = currentUserProfile.height;
+    if (physical?.height_cm) {
+      const cm = physical.height_cm;
+      const ft = Math.floor(cm / 30.48);
+      const inch = Math.round((cm % 30.48) / 2.54);
+      formattedHeight = `${ft}' ${inch}" (${cm} cm)`;
+    }
+
+    let resolvedAvatar = currentUserProfile.avatar;
+    if (primaryPhoto?.storage_path_original) {
+      if (primaryPhoto.storage_path_original.startsWith('http')) {
+        resolvedAvatar = primaryPhoto.storage_path_original;
+      } else {
+        const { data: pUrl } = supabase.storage
+          .from('profile-public')
+          .getPublicUrl(primaryPhoto.storage_path_original);
+        if (pUrl?.publicUrl) resolvedAvatar = pUrl.publicUrl;
+      }
+    }
+
+    const profileState: UserProfileState = {
       id: profileRow.id,
       name: basic?.full_name || currentUserProfile.name,
       displayName: basic?.display_name || currentUserProfile.displayName,
@@ -68,26 +94,39 @@ export async function getMyProfile(): Promise<UserProfileState> {
       state: loc?.state || currentUserProfile.state,
       country: loc?.country || currentUserProfile.country,
       profession: career?.job_title || currentUserProfile.profession,
-      employer: career?.company_name || currentUserProfile.employer,
+      employer: career?.employer || career?.company_name || currentUserProfile.employer,
       education: edu?.highest_qualification || currentUserProfile.education,
       degree: edu?.field_of_study || currentUserProfile.degree,
-      height: physical ? `${physical.height_ft || 5}' ${physical.height_in || 11}" (${physical.height_cm || 180} cm)` : currentUserProfile.height,
+      height: formattedHeight,
       maritalStatus: basic?.marital_status || currentUserProfile.maritalStatus,
       motherTongue: basic?.mother_tongue || currentUserProfile.motherTongue,
       sect: basic?.sect || currentUserProfile.sect,
       schoolOfThought: basic?.school_of_thought || currentUserProfile.schoolOfThought,
-      avatar: currentUserProfile.avatar,
+      avatar: resolvedAvatar,
       isVerified: profileRow.is_verified ?? currentUserProfile.isVerified,
-      hasPhoto: currentUserProfile.hasPhoto,
+      hasPhoto: Boolean(primaryPhoto || currentUserProfile.hasPhoto),
       hasPhysicalDetails: Boolean(physical),
       hasEducationDetails: Boolean(edu),
       hasProfessionDetails: Boolean(career),
       hasVoiceIntro: currentUserProfile.hasVoiceIntro,
-      hasFamilyDetails: Boolean(profileRow.profile_family),
-      hasPartnerPreferences: currentUserProfile.hasPartnerPreferences,
+      hasFamilyDetails: Boolean(family),
+      familyType: family?.family_type,
+      familyValues: family?.family_values,
+      fatherOccupation: family?.father_occupation,
+      motherOccupation: family?.mother_occupation,
+      hasPartnerPreferences: Boolean(prefs),
+      partnerMinAge: prefs?.min_age,
+      partnerMaxAge: prefs?.max_age,
+      partnerEducation: prefs?.min_education,
+      partnerSect: Array.isArray(prefs?.sects) ? prefs.sects[0] : prefs?.sects,
       hasSelfieVerification: currentUserProfile.hasSelfieVerification,
       bio: basic?.bio || currentUserProfile.bio,
+      email: authData.user.email,
+      phone: authData.user.phone,
     };
+
+    updateCurrentUserProfile(profileState);
+    return profileState;
   } catch (err) {
     console.warn('getMyProfile exception, falling back to local state:', err);
     return currentUserProfile;
@@ -159,6 +198,236 @@ export async function syncBasicProfileToSupabase(profile: Partial<UserProfileSta
   } catch (err: any) {
     console.warn('syncBasicProfileToSupabase exception:', err);
     return { success: false, error: err?.message || 'Network exception' };
+  }
+}
+
+/**
+ * Resolves the authenticated user's active matrimonial profile ID.
+ */
+async function getActiveProfileId(): Promise<string | null> {
+  if (!isSupabaseConfigured) return null;
+  const { data: authData } = await supabase.auth.getUser();
+  if (!authData?.user) return null;
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('account_id', authData.user.id)
+    .single();
+
+  if (profile?.id) return profile.id;
+
+  // Auto-provision profile row if not yet created
+  const { data: newProfile } = await supabase
+    .from('profiles')
+    .insert({
+      account_id: authData.user.id,
+      gender: 'male',
+      is_discoverable: true,
+    })
+    .select('id')
+    .single();
+
+  return newProfile?.id || null;
+}
+
+/**
+ * Persists physical attributes (height, body build, accessibility status) to profile_physical.
+ */
+export async function syncPhysicalDetailsToSupabase(details: {
+  heightCm: number;
+  bodyType?: string;
+  physicalStatus?: string;
+}): Promise<SaveProfileResult> {
+  if (!isSupabaseConfigured) return { success: true };
+
+  try {
+    const profileId = await getActiveProfileId();
+    if (!profileId) return { success: true };
+
+    const { error } = await supabase.from('profile_physical').upsert({
+      profile_id: profileId,
+      height_cm: details.heightCm,
+      body_type: details.bodyType || 'average',
+      accessibility_disclosure: details.physicalStatus || 'normal',
+    });
+
+    if (error) {
+      console.warn('syncPhysicalDetailsToSupabase error:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, profileId };
+  } catch (err: any) {
+    console.warn('syncPhysicalDetailsToSupabase exception:', err);
+    return { success: false, error: err?.message };
+  }
+}
+
+/**
+ * Persists academic background (highest qualification, degree/field of study, institution) to profile_education.
+ */
+export async function syncEducationDetailsToSupabase(details: {
+  highestQualification: string;
+  institution?: string;
+  fieldOfStudy: string;
+}): Promise<SaveProfileResult> {
+  if (!isSupabaseConfigured) return { success: true };
+
+  try {
+    const profileId = await getActiveProfileId();
+    if (!profileId) return { success: true };
+
+    const { error } = await supabase.from('profile_education').upsert({
+      profile_id: profileId,
+      highest_qualification: details.highestQualification,
+      institution: details.institution || '',
+      field_of_study: details.fieldOfStudy || details.highestQualification,
+    });
+
+    if (error) {
+      console.warn('syncEducationDetailsToSupabase error:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, profileId };
+  } catch (err: any) {
+    console.warn('syncEducationDetailsToSupabase exception:', err);
+    return { success: false, error: err?.message };
+  }
+}
+
+/**
+ * Persists professional background (job title, employer, income bracket, employment sector) to profile_career.
+ */
+export async function syncCareerDetailsToSupabase(details: {
+  jobTitle: string;
+  employer?: string;
+  annualIncomeRange?: string;
+  employmentSector?: string;
+  workCity?: string;
+}): Promise<SaveProfileResult> {
+  if (!isSupabaseConfigured) return { success: true };
+
+  try {
+    const profileId = await getActiveProfileId();
+    if (!profileId) return { success: true };
+
+    const { error: careerErr } = await supabase.from('profile_career').upsert({
+      profile_id: profileId,
+      employment_sector: details.employmentSector || 'Private Sector',
+      job_title: details.jobTitle,
+      employer: details.employer || '',
+      annual_income_range: details.annualIncomeRange || '',
+      currency: 'INR',
+    });
+
+    if (careerErr) {
+      console.warn('syncCareerDetailsToSupabase error:', careerErr.message);
+      return { success: false, error: careerErr.message };
+    }
+
+    if (details.workCity) {
+      await supabase.from('profile_location').upsert({
+        profile_id: profileId,
+        city: details.workCity,
+        state: 'Maharashtra',
+        country: 'India',
+        residency_status: 'Citizen',
+      });
+    }
+
+    return { success: true, profileId };
+  } catch (err: any) {
+    console.warn('syncCareerDetailsToSupabase exception:', err);
+    return { success: false, error: err?.message };
+  }
+}
+
+/**
+ * Persists family values, structure, parents' status/occupations, and native place to profile_family.
+ */
+export async function syncFamilyDetailsToSupabase(details: {
+  familyValues?: string;
+  familyType: string;
+  economicStatus?: string;
+  fatherOccupation?: string;
+  motherOccupation?: string;
+  nativePlace?: string;
+}): Promise<SaveProfileResult> {
+  if (!isSupabaseConfigured) return { success: true };
+
+  try {
+    const profileId = await getActiveProfileId();
+    if (!profileId) return { success: true };
+
+    const { error } = await supabase.from('profile_family').upsert({
+      profile_id: profileId,
+      family_values: details.familyValues || 'Traditional & Deen-centered',
+      family_type: details.familyType || 'Nuclear',
+      economic_status: details.economicStatus || 'Middle Class',
+      father_alive: true,
+      father_occupation: details.fatherOccupation || '',
+      mother_alive: true,
+      mother_occupation: details.motherOccupation || '',
+      native_place: details.nativePlace || '',
+    });
+
+    if (error) {
+      console.warn('syncFamilyDetailsToSupabase error:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, profileId };
+  } catch (err: any) {
+    console.warn('syncFamilyDetailsToSupabase exception:', err);
+    return { success: false, error: err?.message };
+  }
+}
+
+/**
+ * Persists matrimonial partner expectations (age range, marital statuses, religious traditions) to partner_preferences.
+ */
+export async function syncPartnerPreferencesToSupabase(prefs: {
+  minAge: number;
+  maxAge: number;
+  maritalStatuses?: string[];
+  sects?: string[];
+  minEducation?: string;
+  minIncomeRange?: string;
+  preferredCities?: string[];
+}): Promise<SaveProfileResult> {
+  if (!isSupabaseConfigured) return { success: true };
+
+  try {
+    const profileId = await getActiveProfileId();
+    if (!profileId) return { success: true };
+
+    const { error } = await supabase.from('partner_preferences').upsert({
+      profile_id: profileId,
+      min_age: prefs.minAge,
+      max_age: prefs.maxAge,
+      marital_statuses:
+        prefs.maritalStatuses && prefs.maritalStatuses.length > 0
+          ? prefs.maritalStatuses
+          : ['never_married'],
+      religions: ['Islam'],
+      sects: prefs.sects && prefs.sects.length > 0 ? prefs.sects : ['Sunni'],
+      min_education: prefs.minEducation || null,
+      min_income_range: prefs.minIncomeRange || null,
+      preferred_cities: prefs.preferredCities || [],
+      preferred_countries: ['India'],
+    });
+
+    if (error) {
+      console.warn('syncPartnerPreferencesToSupabase error:', error.message);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true, profileId };
+  } catch (err: any) {
+    console.warn('syncPartnerPreferencesToSupabase exception:', err);
+    return { success: false, error: err?.message };
   }
 }
 

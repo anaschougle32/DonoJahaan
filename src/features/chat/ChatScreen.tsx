@@ -18,13 +18,22 @@ import { BottomSheetModal } from '../../components/common/BottomSheetModal';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { ChatMessage, MatrimonialProfile } from '../../types';
 import { mockActiveSuitor, mockMessages } from '../../mocks/matrimonialData';
-import { sendChatMessage, subscribeToConversationMessages } from '../../services/chatService';
+import {
+  sendChatMessage,
+  subscribeToConversationMessages,
+  getConversationMessages,
+} from '../../services/chatService';
+import {
+  getActiveConversation,
+  concludeActiveConversation,
+} from '../../services/conversationStateService';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { currentUserProfile } from '../../data/userProfile';
 
 interface ChatScreenProps {
   suitor?: MatrimonialProfile;
+  conversationId?: string;
   messages?: ChatMessage[];
   onSendMessage?: (content: string) => void;
   onBack?: () => void;
@@ -34,6 +43,7 @@ interface ChatScreenProps {
 
 export const ChatScreen: React.FC<ChatScreenProps> = ({
   suitor = mockActiveSuitor,
+  conversationId: initialConvId,
   messages: initialMessages = mockMessages,
   onSendMessage,
   onBack,
@@ -41,43 +51,133 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
   onEndConversation,
 }) => {
   const insets = useSafeAreaInsets();
+  const [activeConvId, setActiveConvId] = useState<string>(initialConvId || 'conv-active');
   const [messagesList, setMessagesList] = useState<ChatMessage[]>(initialMessages);
   const [inputText, setInputText] = useState('');
   const [shareContactModalVisible, setShareContactModalVisible] = useState(false);
+  const [endChatModalVisible, setEndChatModalVisible] = useState(false);
+  const [endReason, setEndReason] = useState('Matrimonial alignment concluded respectfully');
+  const [isEndingChat, setIsEndingChat] = useState(false);
   const [isPlayingVoice, setIsPlayingVoice] = useState(false);
 
-  // Listen to incoming Realtime messages on active conversation channel
+  // 1. Dynamically resolve ongoing active conversation ID
   useEffect(() => {
-    const unsubscribe = subscribeToConversationMessages('conv-active', (incoming) => {
+    let isMounted = true;
+    async function resolveActive() {
+      try {
+        const active = await getActiveConversation('user-me');
+        if (isMounted && active?.conversationId) {
+          setActiveConvId(active.conversationId);
+          const history = await getConversationMessages(active.conversationId, 'user-me');
+          if (isMounted && history.length > 0) {
+            setMessagesList(history);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not resolve active conversation:', err);
+      }
+    }
+    resolveActive();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // 2. Listen to incoming Realtime messages on active conversation channel
+  useEffect(() => {
+    const unsubscribe = subscribeToConversationMessages(activeConvId, (incoming) => {
       setMessagesList((prev) => {
-        if (prev.some((m) => m.id === incoming.id)) return prev;
+        // If message is already present (e.g. optimistic match), update it
+        const existingIndex = prev.findIndex(
+          (m) => m.id === incoming.id || (m.isSentByMe && m.content === incoming.content && m.status === 'sending')
+        );
+        if (existingIndex >= 0) {
+          const updated = [...prev];
+          updated[existingIndex] = { ...incoming, status: 'sent' };
+          return updated;
+        }
         return [...prev, incoming];
       });
     });
     return unsubscribe;
-  }, []);
+  }, [activeConvId]);
 
+  // 3. Send message with optimistic update and failure retry
   const handleSend = async () => {
     if (!inputText.trim()) return;
     const content = inputText.trim();
     setInputText('');
 
+    const optimistic: ChatMessage = {
+      id: `temp-${Date.now()}`,
+      conversationId: activeConvId,
+      senderId: 'user-me',
+      senderName: currentUserProfile.name.split(' ')[0],
+      content,
+      type: 'text',
+      timestamp: 'Just now',
+      isSentByMe: true,
+      status: 'sending',
+    };
+
+    setMessagesList((prev) => [...prev, optimistic]);
+
     const sent = await sendChatMessage({
-      conversationId: 'conv-active',
+      conversationId: activeConvId,
       senderProfileId: 'user-me',
       senderName: currentUserProfile.name.split(' ')[0],
       content,
       type: 'text',
     });
-    setMessagesList((prev) => [...prev, sent]);
+
+    setMessagesList((prev) =>
+      prev.map((m) => (m.id === optimistic.id ? sent : m))
+    );
     onSendMessage?.(content);
+  };
+
+  // 4. Retry failed message
+  const handleRetryMessage = async (msg: ChatMessage) => {
+    setMessagesList((prev) =>
+      prev.map((m) => (m.id === msg.id ? { ...m, status: 'sending' } : m))
+    );
+
+    const sent = await sendChatMessage({
+      conversationId: activeConvId,
+      senderProfileId: 'user-me',
+      senderName: currentUserProfile.name.split(' ')[0],
+      content: msg.content,
+      type: msg.type,
+    });
+
+    setMessagesList((prev) =>
+      prev.map((m) => (m.id === msg.id ? sent : m))
+    );
+  };
+
+  // 5. Conclude Conversation respectfully (Dono Jaha 1-Active Rule)
+  const handleConfirmEndConversation = async () => {
+    setIsEndingChat(true);
+    try {
+      await concludeActiveConversation(activeConvId, 'user-me', endReason);
+      setEndChatModalVisible(false);
+      Alert.alert(
+        'Conversation Concluded',
+        'Your conversation has been concluded respectfully. You are now free to connect with other suitors.',
+        [{ text: 'OK', onPress: () => onEndConversation?.() }]
+      );
+    } catch (err: any) {
+      Alert.alert('Notice', 'Could not end conversation: ' + (err?.message || 'Please try again.'));
+    } finally {
+      setIsEndingChat(false);
+    }
   };
 
   const handleShareContactConfirmed = async () => {
     setShareContactModalVisible(false);
     const content = `📞 Direct Contact Shared: Mobile +91 98230 12345 (${currentUserProfile.name})`;
     const sent = await sendChatMessage({
-      conversationId: 'conv-active',
+      conversationId: activeConvId,
       senderProfileId: 'user-me',
       senderName: currentUserProfile.name.split(' ')[0],
       content,
@@ -96,7 +196,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         title={suitor.displayName}
         onBack={onBack}
         rightAction={
-          <Pressable onPress={onEndConversation} hitSlop={8}>
+          <Pressable onPress={() => setEndChatModalVisible(true)} hitSlop={8}>
             <MaterialIcons name="more-vert" size={24} color={colors.textPrimary} />
           </Pressable>
         }
@@ -221,7 +321,22 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             <View style={styles.msgMetaRow}>
               <Text style={styles.timestampText}>{msg.timestamp}</Text>
               {msg.isSentByMe && (
-                <MaterialIcons name="done-all" size={14} color={colors.primary} />
+                <>
+                  {msg.status === 'sending' ? (
+                    <MaterialIcons name="access-time" size={13} color={colors.textHint} />
+                  ) : msg.status === 'failed' ? (
+                    <Pressable
+                      style={styles.retryBadge}
+                      onPress={() => handleRetryMessage(msg)}
+                      hitSlop={6}
+                    >
+                      <MaterialIcons name="error-outline" size={13} color={colors.error} />
+                      <Text style={styles.retryText}>Retry</Text>
+                    </Pressable>
+                  ) : (
+                    <MaterialIcons name="done-all" size={14} color={colors.primary} />
+                  )}
+                </>
               )}
             </View>
           </View>
@@ -259,7 +374,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         </Pressable>
       </View>
 
-      {/*  Share Contact Modal Bottom Sheet  */}
+      {/* Share Contact Modal Bottom Sheet */}
       <BottomSheetModal
         visible={shareContactModalVisible}
         onClose={() => setShareContactModalVisible(false)}
@@ -280,9 +395,66 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
         </View>
 
         <PrimaryButton
-          title="Share With Ayesha & Chaperone"
+          title="Share With Prospect & Chaperone"
           icon="check-circle"
           onPress={handleShareContactConfirmed}
+        />
+      </BottomSheetModal>
+
+      {/* Conclude Matrimonial Conversation Modal (Dono Jaha 1-Active Rule) */}
+      <BottomSheetModal
+        visible={endChatModalVisible}
+        onClose={() => setEndChatModalVisible(false)}
+        title="Conclude Conversation"
+      >
+        <View style={styles.contactModalHero}>
+          <View style={[styles.contactIconCircle, { backgroundColor: colors.surfaceContainer }]}>
+            <MaterialIcons name="favorite-border" size={28} color={colors.primary} />
+          </View>
+          <Text style={styles.contactModalSubtitle}>
+            Ending this conversation respectfully closes your active slot under the Dono Jaha 1-active rule, releasing both of you to connect with other suitors.
+          </Text>
+        </View>
+
+        <Text style={styles.reasonSelectLabel}>SELECT AN HONORABLE REASON:</Text>
+
+        {[
+          'Matrimonial alignment concluded respectfully',
+          'Different future plans or life visions',
+          'Relocation preference not compatible',
+          'Mutual decision to part ways with dignity',
+        ].map((reasonItem) => (
+          <Pressable
+            key={reasonItem}
+            style={[
+              styles.reasonPill,
+              endReason === reasonItem && styles.reasonPillActive,
+            ]}
+            onPress={() => setEndReason(reasonItem)}
+          >
+            <MaterialIcons
+              name={endReason === reasonItem ? 'radio-button-checked' : 'radio-button-unchecked'}
+              size={18}
+              color={endReason === reasonItem ? colors.primary : colors.textMuted}
+            />
+            <Text
+              style={[
+                styles.reasonPillText,
+                endReason === reasonItem && styles.reasonPillTextActive,
+              ]}
+            >
+              {reasonItem}
+            </Text>
+          </Pressable>
+        ))}
+
+        <PrimaryButton
+          title={isEndingChat ? 'Concluding...' : 'Conclude Conversation Respectfully'}
+          variant="danger"
+          icon="lock"
+          disabled={isEndingChat}
+          onPress={handleConfirmEndConversation}
+          style={{ marginTop: spacing.md }}
         />
       </BottomSheetModal>
     </KeyboardAvoidingView>
@@ -554,5 +726,51 @@ const styles = StyleSheet.create({
   contactLine: {
     ...typography.bodyMd,
     color: colors.textPrimary,
+  },
+  retryBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: 'rgba(217, 83, 79, 0.12)',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: radii.pill,
+  },
+  retryText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: colors.error,
+  },
+  reasonSelectLabel: {
+    ...typography.caption,
+    color: colors.textMuted,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    marginBottom: spacing.xs,
+  },
+  reasonPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingVertical: 12,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.button,
+    backgroundColor: colors.surfaceSubtle,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 8,
+  },
+  reasonPillActive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.surfaceContainerLow,
+  },
+  reasonPillText: {
+    ...typography.bodySm,
+    color: colors.textPrimary,
+    flex: 1,
+  },
+  reasonPillTextActive: {
+    fontWeight: '700',
+    color: colors.primary,
   },
 });
