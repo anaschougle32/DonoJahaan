@@ -80,4 +80,20 @@
    - Executed live database probe: All 7 key tables verified accessible and queryable.
    - Executed `npm.cmd run lint` (`tsc --noEmit`), passed with 0 errors.
 
+## Session 4: Supabase Schema Policy Idempotency Hardening
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
+
+### Actions Completed:
+1. **Resolved PostgreSQL Error 42710 (Policy Already Exists):**
+   - Encountered `ERROR: 42710: policy "Users can only read their own verification selfie" for table "verification_selfies" already exists` during Supabase SQL Editor execution.
+   - Diagnosed root cause: `CREATE POLICY` in PostgreSQL fails when re-run without dropping existing policies first.
+2. **Hardened `supabase/supabase_schema.sql`:**
+   - Added `DROP POLICY IF EXISTS` before every `CREATE POLICY` across Section 14 (`verification_selfies`), Section 15 (`profile_views`), Section 16 (all 23 master table RLS policies), and Section 17 (all storage object policies).
+   - Ensured entire 1,200+ line master schema can be safely and idempotently re-executed in the Supabase Dashboard SQL Editor at any time.
+3. **Verification:**
+   - Verified Git diff: 73 insertions, 24 deletions.
+   - Ran `npm.cmd run lint` (`tsc --noEmit`), zero errors.
+
+
 

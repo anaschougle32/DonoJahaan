@@ -585,10 +585,12 @@ CREATE INDEX IF NOT EXISTS idx_verification_selfies_profile ON verification_self
 -- RLS: Verification selfies must NEVER be publicly readable
 ALTER TABLE verification_selfies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can only read their own verification selfie" ON verification_selfies;
 CREATE POLICY "Users can only read their own verification selfie"
 ON verification_selfies FOR SELECT
 USING (profile_id IN (SELECT id FROM profiles WHERE account_id = auth.uid()));
 
+DROP POLICY IF EXISTS "Users can only insert their own verification selfie" ON verification_selfies;
 CREATE POLICY "Users can only insert their own verification selfie"
 ON verification_selfies FOR INSERT
 WITH CHECK (profile_id IN (SELECT id FROM profiles WHERE account_id = auth.uid()));
@@ -615,6 +617,7 @@ CREATE INDEX IF NOT EXISTS idx_profile_views_viewer ON profile_views(viewer_id, 
 ALTER TABLE profile_views ENABLE ROW LEVEL SECURITY;
 
 -- Profile owners can view who visited their profile (excluding blocked/hidden users)
+DROP POLICY IF EXISTS "Owners can see views to their profile" ON profile_views;
 CREATE POLICY "Owners can see views to their profile"
 ON profile_views FOR SELECT
 USING (
@@ -622,6 +625,7 @@ USING (
 );
 
 -- Authenticated users can log a view (as viewer)
+DROP POLICY IF EXISTS "Users can insert views as viewer" ON profile_views;
 CREATE POLICY "Users can insert views as viewer"
 ON profile_views FOR INSERT
 WITH CHECK (
@@ -678,19 +682,23 @@ RETURNS BOOLEAN AS $$
 $$ LANGUAGE sql STABLE SECURITY DEFINER;
 
 -- User Accounts Policies
+DROP POLICY IF EXISTS rls_user_accounts_select ON user_accounts;
 CREATE POLICY rls_user_accounts_select ON user_accounts
     FOR SELECT TO authenticated
     USING (id = auth.uid());
 
+DROP POLICY IF EXISTS rls_user_accounts_insert ON user_accounts;
 CREATE POLICY rls_user_accounts_insert ON user_accounts
     FOR INSERT TO authenticated
     WITH CHECK (id = auth.uid());
 
+DROP POLICY IF EXISTS rls_user_accounts_update ON user_accounts;
 CREATE POLICY rls_user_accounts_update ON user_accounts
     FOR UPDATE TO authenticated
     USING (id = auth.uid());
 
 -- Profiles Policies
+DROP POLICY IF EXISTS rls_profiles_select ON profiles;
 CREATE POLICY rls_profiles_select ON profiles
     FOR SELECT TO authenticated
     USING (
@@ -699,15 +707,18 @@ CREATE POLICY rls_profiles_select ON profiles
         OR is_discoverable = TRUE
     );
 
+DROP POLICY IF EXISTS rls_profiles_insert ON profiles;
 CREATE POLICY rls_profiles_insert ON profiles
     FOR INSERT TO authenticated
     WITH CHECK (account_id = auth.uid());
 
+DROP POLICY IF EXISTS rls_profiles_update ON profiles;
 CREATE POLICY rls_profiles_update ON profiles
     FOR UPDATE TO authenticated
     USING (account_id = auth.uid());
 
 -- Profile Detail Modules (Read for discoverable suitors, write for owner)
+DROP POLICY IF EXISTS rls_profile_basic_select ON profile_basic;
 CREATE POLICY rls_profile_basic_select ON profile_basic
     FOR SELECT TO authenticated
     USING (
@@ -715,11 +726,13 @@ CREATE POLICY rls_profile_basic_select ON profile_basic
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_basic.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_basic_modify ON profile_basic;
 CREATE POLICY rls_profile_basic_modify ON profile_basic
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_physical_select ON profile_physical;
 CREATE POLICY rls_profile_physical_select ON profile_physical
     FOR SELECT TO authenticated
     USING (
@@ -727,11 +740,13 @@ CREATE POLICY rls_profile_physical_select ON profile_physical
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_physical.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_physical_modify ON profile_physical;
 CREATE POLICY rls_profile_physical_modify ON profile_physical
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_religion_select ON profile_religion;
 CREATE POLICY rls_profile_religion_select ON profile_religion
     FOR SELECT TO authenticated
     USING (
@@ -739,11 +754,13 @@ CREATE POLICY rls_profile_religion_select ON profile_religion
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_religion.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_religion_modify ON profile_religion;
 CREATE POLICY rls_profile_religion_modify ON profile_religion
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_education_select ON profile_education;
 CREATE POLICY rls_profile_education_select ON profile_education
     FOR SELECT TO authenticated
     USING (
@@ -751,11 +768,13 @@ CREATE POLICY rls_profile_education_select ON profile_education
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_education.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_education_modify ON profile_education;
 CREATE POLICY rls_profile_education_modify ON profile_education
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_career_select ON profile_career;
 CREATE POLICY rls_profile_career_select ON profile_career
     FOR SELECT TO authenticated
     USING (
@@ -763,11 +782,13 @@ CREATE POLICY rls_profile_career_select ON profile_career
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_career.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_career_modify ON profile_career;
 CREATE POLICY rls_profile_career_modify ON profile_career
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_location_select ON profile_location;
 CREATE POLICY rls_profile_location_select ON profile_location
     FOR SELECT TO authenticated
     USING (
@@ -775,11 +796,13 @@ CREATE POLICY rls_profile_location_select ON profile_location
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_location.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_location_modify ON profile_location;
 CREATE POLICY rls_profile_location_modify ON profile_location
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_family_select ON profile_family;
 CREATE POLICY rls_profile_family_select ON profile_family
     FOR SELECT TO authenticated
     USING (
@@ -787,11 +810,13 @@ CREATE POLICY rls_profile_family_select ON profile_family
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_family.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_family_modify ON profile_family;
 CREATE POLICY rls_profile_family_modify ON profile_family
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_family_members_select ON family_members;
 CREATE POLICY rls_family_members_select ON family_members
     FOR SELECT TO authenticated
     USING (
@@ -799,11 +824,13 @@ CREATE POLICY rls_family_members_select ON family_members
         OR EXISTS (SELECT 1 FROM profiles WHERE id = family_members.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_family_members_modify ON family_members;
 CREATE POLICY rls_family_members_modify ON family_members
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_profile_marriage_expectations_select ON profile_marriage_expectations;
 CREATE POLICY rls_profile_marriage_expectations_select ON profile_marriage_expectations
     FOR SELECT TO authenticated
     USING (
@@ -811,12 +838,14 @@ CREATE POLICY rls_profile_marriage_expectations_select ON profile_marriage_expec
         OR EXISTS (SELECT 1 FROM profiles WHERE id = profile_marriage_expectations.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_profile_marriage_expectations_modify ON profile_marriage_expectations;
 CREATE POLICY rls_profile_marriage_expectations_modify ON profile_marriage_expectations
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
 -- Photos & Photo Access Requests
+DROP POLICY IF EXISTS rls_photos_select ON photos;
 CREATE POLICY rls_photos_select ON photos
     FOR SELECT TO authenticated
     USING (
@@ -833,11 +862,13 @@ CREATE POLICY rls_photos_select ON photos
         )
     );
 
+DROP POLICY IF EXISTS rls_photos_modify ON photos;
 CREATE POLICY rls_photos_modify ON photos
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_photo_req_select ON photo_access_requests;
 CREATE POLICY rls_photo_req_select ON photo_access_requests
     FOR SELECT TO authenticated
     USING (
@@ -845,15 +876,18 @@ CREATE POLICY rls_photo_req_select ON photo_access_requests
         OR requester_profile_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_photo_req_insert ON photo_access_requests;
 CREATE POLICY rls_photo_req_insert ON photo_access_requests
     FOR INSERT TO authenticated
     WITH CHECK (requester_profile_id IN (SELECT auth_user_profile_ids()));
 
+DROP POLICY IF EXISTS rls_photo_req_update ON photo_access_requests;
 CREATE POLICY rls_photo_req_update ON photo_access_requests
     FOR UPDATE TO authenticated
     USING (is_profile_owner(owner_profile_id));
 
 -- Voice Introductions
+DROP POLICY IF EXISTS rls_voice_select ON voice_introductions;
 CREATE POLICY rls_voice_select ON voice_introductions
     FOR SELECT TO authenticated
     USING (
@@ -872,12 +906,14 @@ CREATE POLICY rls_voice_select ON voice_introductions
         )
     );
 
+DROP POLICY IF EXISTS rls_voice_modify ON voice_introductions;
 CREATE POLICY rls_voice_modify ON voice_introductions
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
 -- Partner Preferences
+DROP POLICY IF EXISTS rls_partner_preferences_select ON partner_preferences;
 CREATE POLICY rls_partner_preferences_select ON partner_preferences
     FOR SELECT TO authenticated
     USING (
@@ -885,17 +921,20 @@ CREATE POLICY rls_partner_preferences_select ON partner_preferences
         OR EXISTS (SELECT 1 FROM profiles WHERE id = partner_preferences.profile_id AND is_discoverable = TRUE)
     );
 
+DROP POLICY IF EXISTS rls_partner_preferences_modify ON partner_preferences;
 CREATE POLICY rls_partner_preferences_modify ON partner_preferences
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
+DROP POLICY IF EXISTS rls_partner_preference_weights_all ON partner_preference_weights;
 CREATE POLICY rls_partner_preference_weights_all ON partner_preference_weights
     FOR ALL TO authenticated
     USING (is_profile_owner(profile_id))
     WITH CHECK (is_profile_owner(profile_id));
 
 -- Interests & Shortlists
+DROP POLICY IF EXISTS rls_interests_select ON interests;
 CREATE POLICY rls_interests_select ON interests
     FOR SELECT TO authenticated
     USING (
@@ -903,10 +942,12 @@ CREATE POLICY rls_interests_select ON interests
         OR receiver_profile_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_interests_insert ON interests;
 CREATE POLICY rls_interests_insert ON interests
     FOR INSERT TO authenticated
     WITH CHECK (sender_profile_id IN (SELECT auth_user_profile_ids()));
 
+DROP POLICY IF EXISTS rls_interests_update ON interests;
 CREATE POLICY rls_interests_update ON interests
     FOR UPDATE TO authenticated
     USING (
@@ -914,12 +955,14 @@ CREATE POLICY rls_interests_update ON interests
         OR receiver_profile_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_shortlists_all ON shortlists;
 CREATE POLICY rls_shortlists_all ON shortlists
     FOR ALL TO authenticated
     USING (profile_id IN (SELECT auth_user_profile_ids()))
     WITH CHECK (profile_id IN (SELECT auth_user_profile_ids()));
 
 -- Conversations & Messages (Chaperoned Active Conversations)
+DROP POLICY IF EXISTS rls_conversations_select ON conversations;
 CREATE POLICY rls_conversations_select ON conversations
     FOR SELECT TO authenticated
     USING (
@@ -927,6 +970,7 @@ CREATE POLICY rls_conversations_select ON conversations
         OR profile_2_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_conversations_insert ON conversations;
 CREATE POLICY rls_conversations_insert ON conversations
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -934,6 +978,7 @@ CREATE POLICY rls_conversations_insert ON conversations
         OR profile_2_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_conversations_update ON conversations;
 CREATE POLICY rls_conversations_update ON conversations
     FOR UPDATE TO authenticated
     USING (
@@ -941,10 +986,12 @@ CREATE POLICY rls_conversations_update ON conversations
         OR profile_2_id IN (SELECT auth_user_profile_ids())
     );
 
+DROP POLICY IF EXISTS rls_conversation_members_select ON conversation_members;
 CREATE POLICY rls_conversation_members_select ON conversation_members
     FOR SELECT TO authenticated
     USING (profile_id IN (SELECT auth_user_profile_ids()));
 
+DROP POLICY IF EXISTS rls_messages_select ON messages;
 CREATE POLICY rls_messages_select ON messages
     FOR SELECT TO authenticated
     USING (
@@ -958,6 +1005,7 @@ CREATE POLICY rls_messages_select ON messages
         )
     );
 
+DROP POLICY IF EXISTS rls_messages_insert ON messages;
 CREATE POLICY rls_messages_insert ON messages
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -974,6 +1022,7 @@ CREATE POLICY rls_messages_insert ON messages
     );
 
 -- Wali Relationships
+DROP POLICY IF EXISTS rls_wali_select ON wali_relationships;
 CREATE POLICY rls_wali_select ON wali_relationships
     FOR SELECT TO authenticated
     USING (
@@ -981,16 +1030,19 @@ CREATE POLICY rls_wali_select ON wali_relationships
         OR wali_account_id = auth.uid()
     );
 
+DROP POLICY IF EXISTS rls_wali_modify ON wali_relationships;
 CREATE POLICY rls_wali_modify ON wali_relationships
     FOR ALL TO authenticated
     USING (is_profile_owner(ward_profile_id))
     WITH CHECK (is_profile_owner(ward_profile_id));
 
 -- Notifications
+DROP POLICY IF EXISTS rls_notifications_select ON notifications;
 CREATE POLICY rls_notifications_select ON notifications
     FOR SELECT TO authenticated
     USING (profile_id IN (SELECT auth_user_profile_ids()));
 
+DROP POLICY IF EXISTS rls_notifications_update ON notifications;
 CREATE POLICY rls_notifications_update ON notifications
     FOR UPDATE TO authenticated
     USING (profile_id IN (SELECT auth_user_profile_ids()));
@@ -1035,32 +1087,15 @@ ON CONFLICT (id) DO UPDATE SET
     file_size_limit = EXCLUDED.file_size_limit,
     allowed_mime_types = EXCLUDED.allowed_mime_types;
 
--- 2. Drop existing conflicting storage policies if re-running
+-- 2. Storage Policies (idempotent with DROP POLICY IF EXISTS)
+
+-- Bucket: profile-public (Publicly visible profile photos)
 DROP POLICY IF EXISTS "Public profile photos readable" ON storage.objects;
-DROP POLICY IF EXISTS "Users can upload public photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can update own public photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can delete own public photos" ON storage.objects;
-
-DROP POLICY IF EXISTS "Blurred profile photos readable" ON storage.objects;
-DROP POLICY IF EXISTS "Users can upload blurred photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can update own blurred photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can delete own blurred photos" ON storage.objects;
-
-DROP POLICY IF EXISTS "Users can upload private photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can read own private photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can update own private photos" ON storage.objects;
-DROP POLICY IF EXISTS "Users can delete own private photos" ON storage.objects;
-
-DROP POLICY IF EXISTS "Users can upload voice intro" ON storage.objects;
-DROP POLICY IF EXISTS "Users can read own voice intro" ON storage.objects;
-DROP POLICY IF EXISTS "Users can update own voice intro" ON storage.objects;
-DROP POLICY IF EXISTS "Users can delete own voice intro" ON storage.objects;
-
--- 3. Bucket: profile-public (Publicly visible profile photos)
 CREATE POLICY "Public profile photos readable" ON storage.objects
     FOR SELECT TO public
     USING (bucket_id = 'profile-public');
 
+DROP POLICY IF EXISTS "Users can upload public photos" ON storage.objects;
 CREATE POLICY "Users can upload public photos" ON storage.objects
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -1068,6 +1103,7 @@ CREATE POLICY "Users can upload public photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can update own public photos" ON storage.objects;
 CREATE POLICY "Users can update own public photos" ON storage.objects
     FOR UPDATE TO authenticated
     USING (
@@ -1075,6 +1111,7 @@ CREATE POLICY "Users can update own public photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can delete own public photos" ON storage.objects;
 CREATE POLICY "Users can delete own public photos" ON storage.objects
     FOR DELETE TO authenticated
     USING (
@@ -1082,11 +1119,13 @@ CREATE POLICY "Users can delete own public photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
--- 4. Bucket: profile-blurred (Haya veil / blurred previews)
+-- Bucket: profile-blurred (Haya veil / blurred previews)
+DROP POLICY IF EXISTS "Blurred profile photos readable" ON storage.objects;
 CREATE POLICY "Blurred profile photos readable" ON storage.objects
     FOR SELECT TO public
     USING (bucket_id = 'profile-blurred');
 
+DROP POLICY IF EXISTS "Users can upload blurred photos" ON storage.objects;
 CREATE POLICY "Users can upload blurred photos" ON storage.objects
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -1094,6 +1133,7 @@ CREATE POLICY "Users can upload blurred photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can update own blurred photos" ON storage.objects;
 CREATE POLICY "Users can update own blurred photos" ON storage.objects
     FOR UPDATE TO authenticated
     USING (
@@ -1101,6 +1141,7 @@ CREATE POLICY "Users can update own blurred photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can delete own blurred photos" ON storage.objects;
 CREATE POLICY "Users can delete own blurred photos" ON storage.objects
     FOR DELETE TO authenticated
     USING (
@@ -1108,7 +1149,8 @@ CREATE POLICY "Users can delete own blurred photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
--- 5. Bucket: profile-private (Private photos, request-only photos, and confidential verification selfies)
+-- Bucket: profile-private (Private photos, request-only photos, and confidential verification selfies)
+DROP POLICY IF EXISTS "Users can upload private photos" ON storage.objects;
 CREATE POLICY "Users can upload private photos" ON storage.objects
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -1116,6 +1158,7 @@ CREATE POLICY "Users can upload private photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can read own private photos" ON storage.objects;
 CREATE POLICY "Users can read own private photos" ON storage.objects
     FOR SELECT TO authenticated
     USING (
@@ -1123,6 +1166,7 @@ CREATE POLICY "Users can read own private photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can update own private photos" ON storage.objects;
 CREATE POLICY "Users can update own private photos" ON storage.objects
     FOR UPDATE TO authenticated
     USING (
@@ -1130,6 +1174,7 @@ CREATE POLICY "Users can update own private photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can delete own private photos" ON storage.objects;
 CREATE POLICY "Users can delete own private photos" ON storage.objects
     FOR DELETE TO authenticated
     USING (
@@ -1137,7 +1182,8 @@ CREATE POLICY "Users can delete own private photos" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
--- 6. Bucket: voice-introductions (Private audio recordings)
+-- Bucket: voice-introductions (Private audio recordings)
+DROP POLICY IF EXISTS "Users can upload voice intro" ON storage.objects;
 CREATE POLICY "Users can upload voice intro" ON storage.objects
     FOR INSERT TO authenticated
     WITH CHECK (
@@ -1145,6 +1191,7 @@ CREATE POLICY "Users can upload voice intro" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can read own voice intro" ON storage.objects;
 CREATE POLICY "Users can read own voice intro" ON storage.objects
     FOR SELECT TO authenticated
     USING (
@@ -1152,6 +1199,7 @@ CREATE POLICY "Users can read own voice intro" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can update own voice intro" ON storage.objects;
 CREATE POLICY "Users can update own voice intro" ON storage.objects
     FOR UPDATE TO authenticated
     USING (
@@ -1159,6 +1207,7 @@ CREATE POLICY "Users can update own voice intro" ON storage.objects
         AND (storage.foldername(name))[1] = auth.uid()::text
     );
 
+DROP POLICY IF EXISTS "Users can delete own voice intro" ON storage.objects;
 CREATE POLICY "Users can delete own voice intro" ON storage.objects
     FOR DELETE TO authenticated
     USING (
