@@ -230,7 +230,7 @@ export const ProfileViewsScreen: React.FC<ProfileViewsScreenProps> = ({
         )}
 
         <Text style={styles.privacyNote}>
-          🔒 Dono Jaha protects suitor privacy: Profile views are recorded only when genuine prospective matches review your profile card.
+          🔒 Dono Jahaan protects suitor privacy: Profile views are recorded only when genuine prospective matches review your profile card.
         </Text>
       </ScrollView>
     </View>

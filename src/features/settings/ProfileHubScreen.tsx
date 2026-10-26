@@ -309,7 +309,7 @@ export const ProfileHubScreen: React.FC<ProfileHubScreenProps> = ({
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
           <Text style={styles.versionText}>
-            Dono Jaha • Version 1.0.0 (Native Build)
+            Dono Jahaan • Version 1.0.0 (Native Build)
           </Text>
         </View>
       </ScrollView>

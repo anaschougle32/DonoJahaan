@@ -13,7 +13,7 @@ import { colors, radii, shadows, spacing, typography } from '../../theme/tokens'
 import { TopBar } from '../../components/common/TopBar';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { updateCurrentUserProfile } from '../../data/userProfile';
-import { Audio } from 'expo-av';
+import { SafeAudio, isNativeAudioAvailable } from '../../services/audioService';
 import { uploadVoiceIntro } from '../../services/storageService';
 
 interface VoiceIntroScreenProps {
@@ -27,16 +27,16 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
 
-  const [hasRecording, setHasRecording] = useState(true);
+  const [hasRecording, setHasRecording] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [durationSeconds, setDurationSeconds] = useState(42);
+  const [durationSeconds, setDurationSeconds] = useState(0);
   const [activePrompt, setActivePrompt] = useState(
     '🌿 Your ideal quiet Sunday morning routine'
   );
   const [recordingUri, setRecordingUri] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const recordingRef = useRef<Audio.Recording | null>(null);
+  const recordingRef = useRef<any>(null);
 
   const prompts = [
     '🌿 Your ideal quiet Sunday morning routine',
@@ -65,24 +65,26 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
   }, [isRecording]);
 
   const handleStartRecord = async () => {
-    try {
-      const permission = await Audio.requestPermissionsAsync();
-      if (!permission.granted) {
-        Alert.alert('Microphone Access Needed', 'Permission to access microphone is required to record your voice intro.');
-        return;
+    if (isNativeAudioAvailable && SafeAudio) {
+      try {
+        const permission = await SafeAudio.requestPermissionsAsync();
+        if (!permission.granted) {
+          Alert.alert('Microphone Access Needed', 'Permission to access microphone is required to record your voice intro.');
+          return;
+        }
+
+        await SafeAudio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        });
+
+        const { recording } = await SafeAudio.Recording.createAsync(
+          SafeAudio.RecordingOptionsPresets.HIGH_QUALITY
+        );
+        recordingRef.current = recording;
+      } catch (recErr) {
+        console.warn('Audio.Recording setup notice (falling back to timer simulation):', recErr);
       }
-
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
-      recordingRef.current = recording;
-    } catch (recErr) {
-      console.warn('Audio.Recording setup notice (falling back to timer simulation):', recErr);
     }
     setDurationSeconds(0);
     setIsRecording(true);
@@ -92,17 +94,17 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
   const handleStopRecord = async () => {
     setIsRecording(false);
     setHasRecording(true);
-    try {
-      if (recordingRef.current) {
+    if (isNativeAudioAvailable && recordingRef.current) {
+      try {
         await recordingRef.current.stopAndUnloadAsync();
         const uri = recordingRef.current.getURI();
         if (uri) {
           setRecordingUri(uri);
         }
         recordingRef.current = null;
+      } catch (stopErr) {
+        console.warn('Audio.Recording stop notice:', stopErr);
       }
-    } catch (stopErr) {
-      console.warn('Audio.Recording stop notice:', stopErr);
     }
   };
 
@@ -197,6 +199,19 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
           </View>
         </View>
 
+        {/* Development Fallback Banner when running in standard Expo Go */}
+        {!isNativeAudioAvailable && (
+          <View style={styles.devFallbackCard}>
+            <MaterialIcons name="info-outline" size={18} color="#D97706" />
+            <View style={{ flex: 1, marginLeft: 10 }}>
+              <Text style={styles.devFallbackTitle}>Development Mode (Expo Go Fallback)</Text>
+              <Text style={styles.devFallbackText}>
+                Expo Go lacks native audio recording modules. Audio operates in timer simulation mode. Real microphone recording requires an EAS Development Build.
+              </Text>
+            </View>
+          </View>
+        )}
+
         {/* ========================================================
             RECORDING STUDIO CONTAINER (Stitch Audio UI)
         ======================================================== */}
@@ -225,7 +240,9 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
               {isRecording
                 ? 'Recording your voice...'
                 : hasRecording
-                ? 'Voice introduction recorded'
+                ? isNativeAudioAvailable
+                  ? 'Voice introduction recorded'
+                  : 'Simulated voice intro (Dev Fallback)'
                 : 'Tap microphone below to record'}
             </Text>
           </View>
@@ -330,21 +347,28 @@ export const VoiceIntroScreen: React.FC<VoiceIntroScreenProps> = ({
           onPress={async () => {
             setIsUploading(true);
             try {
-              if (recordingUri) {
+              if (recordingUri && isNativeAudioAvailable) {
                 await uploadVoiceIntro({
                   uri: recordingUri,
                   durationSeconds: Math.max(30, durationSeconds),
                   promptSelected: activePrompt,
+                });
+                updateCurrentUserProfile({
+                  hasVoiceIntro: true,
+                  voiceDuration: Math.max(30, durationSeconds),
+                });
+              } else if (hasRecording && !isNativeAudioAvailable) {
+                // Clearly flagged as dev simulation fallback without submitting fake media
+                console.log('[Dono Jahaan Audio] Progressing with simulated voice intro in dev mode.');
+                updateCurrentUserProfile({
+                  hasVoiceIntro: false,
+                  voiceDuration: 0,
                 });
               }
             } catch (err) {
               console.warn('Voice upload notice:', err);
             } finally {
               setIsUploading(false);
-              updateCurrentUserProfile({
-                hasVoiceIntro: true,
-                voiceDuration: Math.max(30, durationSeconds),
-              });
               onNext?.();
             }
           }}
@@ -605,5 +629,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderTopWidth: 1,
     borderTopColor: colors.primarySoft,
+  },
+  devFallbackCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#FFFBEB',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    borderRadius: radii.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+  },
+  devFallbackTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#92400E',
+    marginBottom: 2,
+  },
+  devFallbackText: {
+    fontSize: 12,
+    color: '#B45309',
+    lineHeight: 16,
   },
 });

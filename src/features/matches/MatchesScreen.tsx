@@ -19,6 +19,7 @@ import { InputField } from '../../components/common/InputField';
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { getDiscoverableProfiles } from '../../services/profileService';
 import { expressMatrimonialInterest } from '../../services/interestService';
+import { currentUserProfile } from '../../data/userProfile';
 
 interface MatchesScreenProps {
   onNavigate?: (screen: string) => void;
@@ -82,7 +83,7 @@ export const MatchesScreen: React.FC<MatchesScreenProps> = ({
       return;
     }
 
-    expressMatrimonialInterest('user-me', suitor.id).catch((err) => {
+    expressMatrimonialInterest(currentUserProfile.id || 'user-me', suitor.id).catch((err) => {
       console.warn('expressMatrimonialInterest background sync notice:', err);
     });
 
@@ -273,7 +274,7 @@ export const MatchesScreen: React.FC<MatchesScreenProps> = ({
 
             <Text style={styles.ruleModalHeading}>One Active Conversation Rule</Text>
             <Text style={styles.ruleModalBody}>
-              In Dono Jaha, members focus sincerely on one suitor at a time to honor marriage intentions and avoid casual dating.
+              In Dono Jahaan, members focus sincerely on one suitor at a time to honor marriage intentions and avoid casual dating.
             </Text>
 
             <View style={styles.currentChatNotice}>

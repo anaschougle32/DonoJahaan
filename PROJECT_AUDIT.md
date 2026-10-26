@@ -1,8 +1,8 @@
-# Dono Jaha — Project Implementation Audit
+# Dono Jahaan — Project Implementation Audit
 
 **Date:** October 2026  
 **Auditor:** Senior Full-Stack Engineer & Project Recovery Agent  
-**Product:** Dono Jaha (`D O N O   J A H A`)  
+**Product:** Dono Jahaan (`D O N O   J A H A A N`)  
 **Status:** Recovered, Audited & Actively Progressing  
 
 ---
@@ -118,5 +118,7 @@ c:\Users\choug\OneDrive\Desktop\DonoJaha\
 9. **Google Auth:** RESOLVED IN CODE. Integrated cross-platform OAuth flow with Supabase and deep-link handling.
 10. **Automated Testing:** RESOLVED. Automated test runner `npm run test:backend` passing 24/24 tests.
 11. **Production Build:** RESOLVED. Web production export built with 0 errors.
+12. **Brand Rename to Dono Jahaan:** RESOLVED. Official app name updated across `app.json`, all UI screens, alerts, modals, and metadata while strictly preserving technical identifiers (`com.donojaha.app`, `dono-jaha`, `donojaha://`).
+13. **Google OAuth & EAS Audit:** RESOLVED. Traced browser-based OAuth flow, audited EAS project `@anaschougle/dono-jaha`, confirmed Web OAuth Client requirements, created `eas.json` build profiles, and produced comprehensive `GOOGLE_OAUTH_SETUP.md`.
 
 

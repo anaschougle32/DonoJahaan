@@ -3,6 +3,7 @@
 // Supabase Client Initializer with Secure Session Handling
 // ====================================================================
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 
 const SUPABASE_URL =
@@ -24,6 +25,7 @@ export const isSupabaseConfigured = Boolean(
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
+    storage: AsyncStorage,
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: false,

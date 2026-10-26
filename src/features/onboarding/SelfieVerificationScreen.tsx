@@ -37,7 +37,7 @@ export const SelfieVerificationScreen: React.FC<SelfieVerificationScreenProps> =
       if (!permission.granted) {
         Alert.alert(
           'Camera Permission Needed',
-          'Dono Jaha needs access to your camera to take a secure verification selfie.'
+          'Dono Jahaan needs access to your camera to take a secure verification selfie.'
         );
         return;
       }

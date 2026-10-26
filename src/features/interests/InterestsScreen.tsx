@@ -54,9 +54,10 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
     let isMounted = true;
     const fetchInterests = async () => {
       try {
+        const myProfileId = currentUserProfile.id || 'user-me';
         const [rx, sx] = await Promise.all([
-          getReceivedInterests(),
-          getSentInterests(),
+          getReceivedInterests(myProfileId),
+          getSentInterests(myProfileId),
         ]);
         if (isMounted) {
           if (rx && rx.length > 0) setReceivedList(rx);
@@ -79,7 +80,7 @@ export const InterestsScreen: React.FC<InterestsScreenProps> = ({
     if (hasActiveConversation) {
       Alert.alert(
         'One Active Conversation Rule',
-        `You currently have an active conversation with ${activeConversationSuitorName}.\n\nIn Dono Jaha, you can only engage in ONE active matrimonial conversation at a time. To accept this proposal and begin chatting, you must first respectfully conclude your ongoing connection.`
+        `You currently have an active conversation with ${activeConversationSuitorName}.\n\nIn Dono Jahaan, you can only engage in ONE active matrimonial conversation at a time. To accept this proposal and begin chatting, you must first respectfully conclude your ongoing connection.`
       );
       return;
     }

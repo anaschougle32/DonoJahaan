@@ -20,12 +20,22 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  LogBox,
 } from 'react-native';
+import * as Linking from 'expo-linking';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { colors } from './src/theme/tokens';
-import { navigationRef } from './src/navigation/navigationService';
-import { restoreSession } from './src/services/authService';
+import { navigationRef, navigateToScreen } from './src/navigation/navigationService';
+import { restoreSession, handleAuthRedirectUrl, handlePostAuthProfile } from './src/services/authService';
 import { getMyProfile } from './src/services/profileService';
+import { supabase } from './src/lib/supabase/client';
+
+// Suppress transient dev environment warnings in Expo Go
+LogBox.ignoreLogs([
+  'Cannot connect to Expo CLI',
+  'Native ExponentAV module not found in current runtime',
+  '[Dono Jahaan Audio]',
+]);
 
 const AppTheme = {
   ...DefaultTheme,
@@ -63,7 +73,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     if (this.state.hasError) {
       return (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorTitle}>D O N O   J A H A</Text>
+          <Text style={styles.errorTitle}>D O N O   J A H A A N</Text>
           <Text style={styles.errorSubtitle}>An issue occurred during screen render:</Text>
           <View style={styles.errorBox}>
             <Text style={styles.errorMessage}>{this.state.error?.message || 'Unknown error'}</Text>
@@ -97,16 +107,77 @@ export default function App() {
   useEffect(() => {
     const timer = setTimeout(() => setFontTimeout(true), 1500);
 
+    // Listen for Supabase authentication state changes (OAuth, OTP, email login)
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('[App Auth] State changed:', event, Boolean(session?.user));
+      if (event === 'SIGNED_IN' && session?.user) {
+        try {
+          const res = await handlePostAuthProfile();
+          if (res.success) {
+            if (res.hasCompletedOnboarding) {
+              navigateToScreen('MatchesTab');
+            } else {
+              navigateToScreen('Questionnaire');
+            }
+          }
+        } catch (err) {
+          console.warn('[App Auth] onAuthStateChange profile sync error:', err);
+        }
+      }
+    });
+
+    // Deep-link callback listener for OAuth redirects (cold start & foreground/background)
+    const handleDeepLink = async (event: { url: string }) => {
+      const url = event.url;
+      if (!url) return;
+      if (
+        url.includes('auth/callback') ||
+        url.includes('access_token=') ||
+        url.includes('refresh_token=') ||
+        url.includes('code=')
+      ) {
+        console.log('[App DeepLink] Captured OAuth redirect URL');
+        try {
+          const res = await handleAuthRedirectUrl(url);
+          if (res.success) {
+            if (res.hasCompletedOnboarding) {
+              navigateToScreen('MatchesTab');
+            } else {
+              navigateToScreen('Questionnaire');
+            }
+          }
+        } catch (err) {
+          console.warn('[App DeepLink] Error processing callback:', err);
+        }
+      }
+    };
+
+    const linkSub = Linking.addEventListener('url', handleDeepLink);
+    Linking.getInitialURL().then((initialUrl) => {
+      if (initialUrl) {
+        handleDeepLink({ url: initialUrl });
+      }
+    });
+
     // Hydrate existing Supabase authentication session and matrimonial profile
     restoreSession()
       .then((res) => {
         if (res.isAuthenticated) {
           getMyProfile().catch((err) => console.warn('Startup profile hydration error:', err));
+          if (res.hasCompletedOnboarding) {
+            navigateToScreen('MatchesTab');
+          } else {
+            navigateToScreen('Questionnaire');
+          }
         }
       })
       .catch((err) => console.warn('Startup session restoration error:', err));
 
-    return () => clearTimeout(timer);
+    return () => {
+      authListener.subscription.unsubscribe();
+      linkSub.remove();
+      clearTimeout(timer);
+    };
   }, []);
 
   // On web, render immediately with system fallback fonts so there is zero initial delay

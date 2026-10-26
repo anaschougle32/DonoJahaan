@@ -208,7 +208,7 @@ export const ProfileDetailScreen: React.FC<ProfileDetailScreenProps> = ({
             <Text style={{ fontWeight: '700', color: colors.textPrimary }}>
               Why this matters:
             </Text>{' '}
-            Dono Jaha allows one active conversation at a time. Concluding this connection frees up your profile to engage with another matrimonial prospect.
+            Dono Jahaan allows one active conversation at a time. Concluding this connection frees up your profile to engage with another matrimonial prospect.
           </Text>
         </View>
 

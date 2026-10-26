@@ -68,7 +68,7 @@ export const FloatingDevMenu: React.FC<FloatingDevMenuProps> = ({
               <View>
                 <View style={styles.titleRow}>
                   <Ionicons name="sparkles" size={18} color="#D4AF37" />
-                  <Text style={styles.modalTitle}>Dono Jaha Screen Switcher</Text>
+                  <Text style={styles.modalTitle}>Dono Jahaan Screen Switcher</Text>
                 </View>
                 <Text style={styles.modalSubtitle}>
                   Select any screen to preview immediately

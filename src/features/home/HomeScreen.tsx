@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { colors, spacing, typography, radii, shadows } from '../../theme/tokens'
 import { PrimaryButton } from '../../components/common/PrimaryButton';
 import { MatrimonialProfile } from '../../types';
 import { mockActiveSuitor, mockCuratedMatches } from '../../mocks/matrimonialData';
+import { getDiscoverableProfiles } from '../../services/profileService';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useUserProfile } from '../../data/userProfile';
@@ -37,6 +38,26 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { profile, metrics } = useUserProfile();
+  const [liveCurated, setLiveCurated] = useState<MatrimonialProfile[]>(curatedMatches);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadCurated() {
+      try {
+        const live = await getDiscoverableProfiles();
+        if (isMounted && live && live.length > 0) {
+          setLiveCurated(live);
+        }
+      } catch (err) {
+        console.warn('HomeScreen curated matches notice:', err);
+      }
+    }
+    loadCurated();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const handleOpenChat = onOpenChat || (() => onNavigate?.('Chat'));
   const handleViewProfile = onViewProfile || (() => onNavigate?.('ProfileDetail'));
   const handleExploreMatches = onExploreMatches || (() => onNavigate?.('Matches'));
@@ -52,7 +73,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         <View>
           <View style={styles.intentBadge}>
             <View style={styles.pulsingDot} />
-            <Text style={styles.intentText}>DONO JAHA MATRIMONIAL</Text>
+            <Text style={styles.intentText}>DONO JAHAAN MATRIMONIAL</Text>
           </View>
           <Text style={styles.greetingTitle}>Good morning, {profile.name.split(' ')[0]}</Text>
         </View>
@@ -190,7 +211,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.horizontalScroll}
       >
-        {curatedMatches.map((suitor) => (
+        {liveCurated.map((suitor) => (
           <Pressable
             key={suitor.id}
             style={styles.miniCard}

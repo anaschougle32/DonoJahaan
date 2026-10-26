@@ -105,7 +105,7 @@ export const AccountSettingsScreen: React.FC<AccountSettingsScreenProps> = ({
           <TouchableOpacity
             style={[styles.deleteButton, { backgroundColor: colors.surfaceContainerLow, borderColor: colors.border }]}
             onPress={() => {
-              Alert.alert('Log Out', 'Are you sure you want to log out of Dono Jaha?', [
+              Alert.alert('Log Out', 'Are you sure you want to log out of Dono Jahaan?', [
                 { text: 'Cancel', style: 'cancel' },
                 { text: 'Log Out', style: 'destructive', onPress: () => onLogout?.() },
               ]);
@@ -113,7 +113,7 @@ export const AccountSettingsScreen: React.FC<AccountSettingsScreenProps> = ({
             activeOpacity={0.85}
           >
             <Ionicons name="log-out-outline" size={18} color={colors.primary} />
-            <Text style={[styles.deleteButtonText, { color: colors.primary }]}>Log Out of Dono Jaha</Text>
+            <Text style={[styles.deleteButtonText, { color: colors.primary }]}>Log Out of Dono Jahaan</Text>
           </TouchableOpacity>
         </View>
 
@@ -151,7 +151,7 @@ export const AccountSettingsScreen: React.FC<AccountSettingsScreenProps> = ({
             </Text>
           )}
           <Text style={styles.complianceDisclaimer}>
-            Dono Jaha strictly complies with privacy, Islamic ethics, and personal data protection principles.
+            Dono Jahaan strictly complies with privacy, Islamic ethics, and personal data protection principles.
           </Text>
         </View>
       </ScrollView>
@@ -172,7 +172,7 @@ export const AccountSettingsScreen: React.FC<AccountSettingsScreenProps> = ({
             <Text style={styles.modalTitle}>Are you completely sure?</Text>
             <Text style={styles.modalDescription}>
               Your profile connections, family preferences, and conversation history
-              will be permanently wiped from the Dono Jaha database.
+              will be permanently wiped from the Dono Jahaan database.
             </Text>
 
             <TouchableOpacity

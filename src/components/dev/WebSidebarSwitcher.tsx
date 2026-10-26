@@ -39,7 +39,7 @@ export const WebSidebarSwitcher: React.FC<WebSidebarSwitcherProps> = ({
             <Ionicons name="moon" size={18} color="#D4AF37" />
           </View>
           <View>
-            <Text style={styles.brandTitle}>DONO JAHA</Text>
+            <Text style={styles.brandTitle}>DONO JAHAAN</Text>
             <Text style={styles.brandTagline}>Islamic Matrimonial Suite</Text>
           </View>
         </View>

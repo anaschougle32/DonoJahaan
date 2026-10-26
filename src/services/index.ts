@@ -9,3 +9,4 @@ export * from './interestService';
 export * from './storageService';
 export * from './conversationStateService';
 export * from './authService';
+export * from './audioService';

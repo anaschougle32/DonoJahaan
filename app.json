@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Dono Jaha",
+    "name": "Dono Jahaan",
     "slug": "dono-jaha",
     "scheme": "donojaha",
     "version": "1.0.0",
@@ -32,7 +32,7 @@
       [
         "expo-av",
         {
-          "microphonePermission": "Allow Dono Jaha to access your microphone for recording your authentic voice introduction and voice notes."
+          "microphonePermission": "Allow Dono Jahaan to access your microphone for recording your authentic voice introduction and voice notes."
         }
       ],
       "expo-web-browser"

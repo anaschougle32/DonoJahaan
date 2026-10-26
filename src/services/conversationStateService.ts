@@ -58,7 +58,7 @@ export async function checkCanMessage(
     return {
       canMessage: false,
       code: 'LOCKED_SELF_HAS_ACTIVE',
-      reason: 'Under Dono Jaha rules, you have an ongoing active conversation with Ayesha M. Conclude it before messaging another suitor.',
+      reason: 'Under Dono Jahaan rules, you have an ongoing active conversation with Ayesha M. Conclude it before messaging another suitor.',
     };
   }
 

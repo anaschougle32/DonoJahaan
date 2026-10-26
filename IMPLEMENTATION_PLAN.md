@@ -1,6 +1,6 @@
-# Dono Jaha — Master Implementation Plan
+# Dono Jahaan — Master Implementation Plan
 
-**Product:** Dono Jaha (`D O N O   J A H A`)  
+**Product:** Dono Jahaan (`D O N O   J A H A A N`)  
 **Architecture:** React Native + Expo + TypeScript + Supabase  
 
 ---
@@ -79,4 +79,13 @@
 - [x] Implement automated backend test runner (`scripts/verify_backend.js`) passing 24/24 assertions across database, storage, state machine, and RLS security.
 - [x] Compile production web bundle with Metro (`npx expo export --platform web`) with 0 errors.
 - [x] Verify TypeScript strict mode passes with 0 errors (`tsc --noEmit`).
+
+## Milestone P12: Official Brand Rename to Dono Jahaan & Google OAuth Setup
+- [x] Rename user-facing branding to **Dono Jahaan** across `app.json`, authentication screens, home screen, active conversation modals, profile hubs, and settings.
+- [x] Strictly preserve internal technical identifiers (`com.donojaha.app`, `dono-jaha`, `donojaha://`).
+- [x] Audit Google OAuth architecture: Confirmed Supabase browser-based OAuth (`WebBrowser.openAuthSessionAsync` -> `donojaha://auth/callback`).
+- [x] Audit EAS configuration: Project `@anaschougle/dono-jaha` (`a9bf2489-838c-4f80-b44a-dc7958cf7e0f`) with empty cloud keystore array (`androidAppCredentials: []`).
+- [x] Configure EAS build profiles in `eas.json` for development, preview (APK), and production (AAB).
+- [x] Create comprehensive setup manual `GOOGLE_OAUTH_SETUP.md` with exact values for Google Cloud Console and Supabase Dashboard.
+
 

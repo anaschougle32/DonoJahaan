@@ -65,10 +65,11 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     let isMounted = true;
     async function resolveActive() {
       try {
-        const active = await getActiveConversation('user-me');
+        const myProfileId = currentUserProfile.id || 'user-me';
+        const active = await getActiveConversation(myProfileId);
         if (isMounted && active?.conversationId) {
           setActiveConvId(active.conversationId);
-          const history = await getConversationMessages(active.conversationId, 'user-me');
+          const history = await getConversationMessages(active.conversationId, myProfileId);
           if (isMounted && history.length > 0) {
             setMessagesList(history);
           }
@@ -85,20 +86,25 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
   // 2. Listen to incoming Realtime messages on active conversation channel
   useEffect(() => {
-    const unsubscribe = subscribeToConversationMessages(activeConvId, (incoming) => {
-      setMessagesList((prev) => {
-        // If message is already present (e.g. optimistic match), update it
-        const existingIndex = prev.findIndex(
-          (m) => m.id === incoming.id || (m.isSentByMe && m.content === incoming.content && m.status === 'sending')
-        );
-        if (existingIndex >= 0) {
-          const updated = [...prev];
-          updated[existingIndex] = { ...incoming, status: 'sent' };
-          return updated;
-        }
-        return [...prev, incoming];
-      });
-    });
+    const myProfileId = currentUserProfile.id || 'user-me';
+    const unsubscribe = subscribeToConversationMessages(
+      activeConvId,
+      (incoming) => {
+        setMessagesList((prev) => {
+          // If message is already present (e.g. optimistic match), update it
+          const existingIndex = prev.findIndex(
+            (m) => m.id === incoming.id || (m.isSentByMe && m.content === incoming.content && m.status === 'sending')
+          );
+          if (existingIndex >= 0) {
+            const updated = [...prev];
+            updated[existingIndex] = { ...incoming, status: 'sent' };
+            return updated;
+          }
+          return [...prev, incoming];
+        });
+      },
+      myProfileId
+    );
     return unsubscribe;
   }, [activeConvId]);
 
@@ -108,10 +114,12 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
     const content = inputText.trim();
     setInputText('');
 
+    const myProfileId = currentUserProfile.id || 'user-me';
+
     const optimistic: ChatMessage = {
       id: `temp-${Date.now()}`,
       conversationId: activeConvId,
-      senderId: 'user-me',
+      senderId: myProfileId,
       senderName: currentUserProfile.name.split(' ')[0],
       content,
       type: 'text',
@@ -122,7 +130,6 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
 
     setMessagesList((prev) => [...prev, optimistic]);
 
-    const myProfileId = currentUserProfile.id || 'user-me';
     const sent = await sendChatMessage({
       conversationId: activeConvId,
       senderProfileId: myProfileId,
@@ -416,7 +423,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({
             <MaterialIcons name="favorite-border" size={28} color={colors.primary} />
           </View>
           <Text style={styles.contactModalSubtitle}>
-            Ending this conversation respectfully closes your active slot under the Dono Jaha 1-active rule, releasing both of you to connect with other suitors.
+            Ending this conversation respectfully closes your active slot under the Dono Jahaan 1-active rule, releasing both of you to connect with other suitors.
           </Text>
         </View>
 

@@ -429,7 +429,7 @@ export const FrontendShowcaseScreen: React.FC<FrontendShowcaseScreenProps> = ({
             <Ionicons name="moon" size={16} color="#D4AF37" />
           </View>
           <View>
-            <Text style={styles.headerTitle}>DONO JAHA — UI AUDIT & SHOWCASE</Text>
+            <Text style={styles.headerTitle}>DONO JAHAAN — UI AUDIT & SHOWCASE</Text>
             <Text style={styles.headerSubtitle}>
               Interactive Frontend Review • {screensList.length} Implemented Screens
             </Text>

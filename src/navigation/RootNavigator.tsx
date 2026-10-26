@@ -63,6 +63,8 @@ export const RootNavigator: React.FC = () => {
         {({ navigation }) => (
           <PhoneAuthScreen
             onSendOtp={(phone) => navigation.navigate('OtpVerification', { phone })}
+            onLoginSuccess={() => navigation.replace('MainTabs', { screen: 'MatchesTab' })}
+            onOnboardingRequired={() => navigation.replace('Questionnaire')}
             onBack={() => navigation.goBack()}
           />
         )}

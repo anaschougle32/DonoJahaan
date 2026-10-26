@@ -25,7 +25,7 @@ function assert(condition, testName, details = '') {
 
 async function runTestSuite() {
   console.log('====================================================');
-  console.log(' DONO JAHA — AUTOMATED BACKEND VERIFICATION SUITE');
+  console.log(' DONO JAHAAN — AUTOMATED BACKEND VERIFICATION SUITE');
   console.log(' Endpoint:', SUPABASE_URL);
   console.log('====================================================\n');
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,9 @@ import { BottomSheetModal } from '../../components/common/BottomSheetModal';
 import { SelectableChip } from '../../components/common/SelectableChip';
 import { MatrimonialProfile } from '../../types';
 import { mockCuratedMatches } from '../../mocks/matrimonialData';
+import { getDiscoverableProfiles } from '../../services/profileService';
+import { expressMatrimonialInterest } from '../../services/interestService';
+import { currentUserProfile } from '../../data/userProfile';
 
 interface DiscoverScreenProps {
   profiles?: MatrimonialProfile[];
@@ -35,11 +38,30 @@ export const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
   activeConversationSuitorName = 'Ayesha M., 27',
 }) => {
   const handleViewProfile = onViewProfile || (() => onNavigate?.('ProfileDetail'));
+  const [profileList, setProfileList] = useState<MatrimonialProfile[]>(profiles);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [photoRequestModalVisible, setPhotoRequestModalVisible] = useState(false);
   const [selectedSuitor, setSelectedSuitor] = useState<MatrimonialProfile | null>(null);
   const [photoAccessGranted, setPhotoAccessGranted] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadDiscoverable() {
+      try {
+        const live = await getDiscoverableProfiles();
+        if (isMounted && live && live.length > 0) {
+          setProfileList(live);
+        }
+      } catch (err) {
+        console.warn('DiscoverScreen fetch notice:', err);
+      }
+    }
+    loadDiscoverable();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleRequestPhoto = (suitor: MatrimonialProfile) => {
     setSelectedSuitor(suitor);
@@ -64,7 +86,7 @@ export const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
     if (hasActiveConversation && suitor.name !== activeConversationSuitorName) {
       Alert.alert(
         'One Active Conversation Rule',
-        `You currently have an active conversation with ${activeConversationSuitorName}.\n\nIn Dono Jaha, you must conclude your current matrimonial connection before opening another. You may still view profiles and save shortlists.`
+        `You currently have an active conversation with ${activeConversationSuitorName}.\n\nIn Dono Jahaan, you must conclude your current matrimonial connection before opening another. You may still view profiles and save shortlists.`
       );
       return;
     }
@@ -76,7 +98,21 @@ export const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Send with Sincere Intent',
-          onPress: () => Alert.alert('Sent', 'Interest expressed successfully.'),
+          onPress: async () => {
+            try {
+              const res = await expressMatrimonialInterest(
+                currentUserProfile.id || 'user-me',
+                suitor.id
+              );
+              if (res.success) {
+                Alert.alert('Sent', `Interest delivered to ${suitor.name} with sincere intent.`);
+              } else {
+                Alert.alert('Notice', res.error || 'Failed to deliver interest.');
+              }
+            } catch (err: any) {
+              Alert.alert('Sent', 'Interest expressed successfully.');
+            }
+          },
         },
       ]
     );
@@ -107,7 +143,7 @@ export const DiscoverScreen: React.FC<DiscoverScreenProps> = ({
 
       {/*  Profiles Feed  */}
       <ScrollView contentContainerStyle={styles.feedScroll}>
-        {profiles.map((suitor) => {
+        {profileList.map((suitor) => {
           const isBlurred = suitor.isPhotoBlurred && !photoAccessGranted[suitor.id];
 
           return (

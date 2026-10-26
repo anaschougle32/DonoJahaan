@@ -190,5 +190,70 @@
    - Successfully bundled all 808 modules into production web bundle (`dist/_expo/static/js/web/index-0559679f9e00fb86c70a435dc7ceed93.js`, 2.1MB) with 0 errors.
    - Ran `npx.cmd tsc --noEmit`, passing with 0 compilation errors.
 
+## Session 7: Official Brand Rename to Dono Jahaan & Google OAuth Setup Audit
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
 
+### Actions Completed:
+1. **Official Brand Rename to Dono Jahaan:**
+   - Updated `app.json`:
+     - Display name updated to `"name": "Dono Jahaan"`.
+     - Microphone permission string updated to `"Allow Dono Jahaan to access your microphone..."`.
+     - Strictly preserved technical identifiers: `slug: "dono-jaha"`, `scheme: "donojaha"`, `bundleIdentifier: "com.donojaha.app"`, `package: "com.donojaha.app"`, and `projectId: "a9bf2489-838c-4f80-b44a-dc7958cf7e0f"`.
+   - Updated all user-facing UI screens and components:
+     - `PhoneAuthScreen.tsx`: Welcome title, account creation alerts, and legal agreement footer.
+     - `App.tsx`: ErrorBoundary header (`D O N O   J A H A A N`).
+     - `HomeScreen.tsx`: Intent badge (`DONO JAHAAN MATRIMONIAL`).
+     - `InterestsScreen.tsx`: One-Active-Conversation rule alert.
+     - `DiscoverScreen.tsx`: One-Active-Conversation rule alert.
+     - `MatchesScreen.tsx`: One-Active-Conversation modal body.
+     - `ChatScreen.tsx`: Conclude conversation modal subtitle.
+     - `SelfieVerificationScreen.tsx`: Camera permission dialog.
+     - `ProfileDetailScreen.tsx`: Conclude conversation explanation.
+     - `ProfileViewsScreen.tsx`: Suitor privacy note.
+     - `AccountSettingsScreen.tsx`: Log out alerts, button label, compliance disclaimer, and delete confirmation warning.
+     - `ProfileHubScreen.tsx`: Version info footer (`Dono Jahaan • Version 1.0.0 (Native Build)`).
+     - Dev components (`FloatingDevMenu.tsx`, `WebSidebarSwitcher.tsx`, `FrontendShowcaseScreen.tsx`).
+     - Web showcase (`index.html`, `js/app.js`).
+     - Environment example (`.env.example` -> `EXPO_PUBLIC_APP_NAME="Dono Jahaan"`).
+2. **Google OAuth Architecture & Configuration Audit:**
+   - Traced the active authentication flow: Confirmed **Supabase Browser-Based OAuth** using `expo-web-browser` and `expo-auth-session` (`WebBrowser.openAuthSessionAsync` redirecting to `donojaha://auth/callback`).
+   - Confirmed client requirements: Requires a **Web application** OAuth 2.0 client in Google Cloud Console with authorized redirect URI `https://fcqyukdvfifpdcckhkep.supabase.co/auth/v1/callback` and authorized JavaScript origin `https://fcqyukdvfifpdcckhkep.supabase.co`.
+   - Audited EAS project identity: `@anaschougle/dono-jaha` (`a9bf2489-838c-4f80-b44a-dc7958cf7e0f`).
+   - Audited Android signing certificates: Queried Expo GraphQL API and confirmed that no Android keystores have been generated yet (`androidAppCredentials: []`). Explained how EAS internal, preview, production, and Google Play App Signing fingerprints operate.
+   - Clarified that because the current flow is browser-based via Supabase GoTrue, Android SHA-1 fingerprinting in Google Cloud Console is not required for the Web OAuth Client.
+3. **EAS Build Configuration (`eas.json`):**
+   - Created clean, production-grade `eas.json` configuring `development`, `preview` (standalone APK for direct device testing), and `production` (AAB for Google Play Store).
+4. **Master Setup Documentation Created (`GOOGLE_OAUTH_SETUP.md`):**
+   - Documented project identifiers, package name, EAS project details, signing certificate audit, step-by-step Google Cloud Console setup, step-by-step Supabase Dashboard setup, deep-link allow list, test commands, and common troubleshooting solutions.
+5. **Verification & Checks:**
+   - Validated Expo configuration: `npx.cmd expo config --type public` passed with correct `Dono Jahaan` metadata and preserved technical identifiers.
+   - Validated TypeScript: `npx.cmd tsc --noEmit` passed with 0 errors.
+   - Validated backend verification suite: `npm.cmd run test:backend` passed 24/24 tests.
 
+## Session 8: Google OAuth Infinite Loading Resolution & Deep Link Architecture
+**Date:** October 2026  
+**Engineer:** Senior Full-Stack Engineer & Project Recovery Agent  
+
+### Symptom & Investigation:
+- **Issue Reported:** Google account selection and consent screens opened successfully. After tapping "Continue", the app remained stuck in an infinite loading state. Supabase backend already contained the authenticated user, but the mobile app UI failed to return or transition.
+- **Root Cause Diagnosis:**
+  1. **Redirect URI Mismatch in Dev Builds:** In `getOAuthRedirectUrl()`, checking `Constants.executionEnvironment === ExecutionEnvironment.StoreClient` caused EAS Development Builds (`expo-dev-client`) to return an internal `exp://<ip>:8081/--/auth/callback` URI rather than the native custom scheme `donojaha://auth/callback`. Because `exp://` was not whitelisted in Supabase Dashboard, Supabase defaulted back to the site URL, causing `WebBrowser.openAuthSessionAsync` to wait indefinitely for a callback that never arrived.
+  2. **Android Chrome Custom Tabs Redirection & AppState Dismissal:** On Android, Chrome Custom Tabs does not natively close on custom scheme redirection (`_authSessionIsNativelySupported` is false). When Android resumed the app, `_openBrowserAndWaitAndroidAsync` resolved with `{ type: 'dismiss' }` before `openAuthSessionAsync` received tokens. The auth service treated this as an unauthenticated cancellation even though the backend session had succeeded.
+  3. **Lack of Global Auth State Change Listener:** The application lacked an active `supabase.auth.onAuthStateChange` subscriber in `App.tsx` and `PhoneAuthScreen.tsx`. If deep-link URLs were intercepted by the operating system before the browser promise resolved, the UI was not notified, leaving the button loading spinner spinning forever.
+
+### Changes Applied:
+1. **Isolated Expo Go Detection in `src/services/authService.ts`:**
+   - Updated `getOAuthRedirectUrl()`: Now checks `Constants.appOwnership === 'expo'` strictly for Expo Go (`exp://<ip>:8081/--/auth/callback`). All EAS Development Builds, standalone APKs, and production builds strictly return `donojaha://auth/callback`.
+2. **Active Deep-Link Intent Interceptor & 60s Safety Timeout:**
+   - In `signInWithGoogle()`, registered an active `Linking.addEventListener('url')` listener before launching `WebBrowser.openAuthSessionAsync`. When Android delivers the callback intent, the URL is captured instantly and `WebBrowser.dismissAuthSession()` is invoked.
+   - Added a 60-second safety timeout via `Promise.race` to prevent infinite hanging under any circumstance.
+3. **Post-Browser Session Fallback & Tolerance:**
+   - Added an immediate `supabase.auth.getSession()` check following browser dismissal. If the session exists, profile synchronization proceeds immediately without displaying false cancellation errors.
+   - Updated `handleAuthRedirectUrl()` to gracefully handle existing user sessions without throwing duplicate code exchange errors.
+4. **Global `onAuthStateChange` Subscribers (`App.tsx` & `PhoneAuthScreen.tsx`):**
+   - Added `supabase.auth.onAuthStateChange` in `App.tsx`: Automatically triggers profile sync upon any `SIGNED_IN` event and routes the user to `MatchesTab` or `Questionnaire`.
+   - Added `supabase.auth.onAuthStateChange` in `PhoneAuthScreen.tsx`: Resets all button loading states immediately upon sign-in.
+5. **Verification & Checks:**
+   - TypeScript verification passed with 0 errors (`cmd /c npm run lint`).
+   - Backend verification suite passed 25/25 tests (`cmd /c npm run test:backend`).

@@ -217,7 +217,7 @@
             <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #FFF;">
               <span class="material-symbols-outlined" style="font-size: 20px;">mosque</span>
             </div>
-            <span style="font-family: var(--font-headline); font-weight: 700; font-size: 18px; color: var(--primary); letter-spacing: 0.05em;">DONO JAHA</span>
+            <span style="font-family: var(--font-headline); font-weight: 700; font-size: 18px; color: var(--primary); letter-spacing: 0.05em;">DONO JAHAAN</span>
           </div>
           <button onclick="window.skipSplash()" style="background: none; border: none; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer;">Skip</button>
         </div>
@@ -314,7 +314,7 @@
         </button>
 
         <p style="text-align: center; color: var(--text-muted); font-size: 11px; margin-top: 24px; line-height: 1.5;">
-          By continuing, you agree to Dono Jaha's <span style="color: var(--primary); text-decoration: underline;">Terms of Service</span> and <span style="color: var(--primary); text-decoration: underline;">Privacy Policy</span>.
+          By continuing, you agree to Dono Jahaan's <span style="color: var(--primary); text-decoration: underline;">Terms of Service</span> and <span style="color: var(--primary); text-decoration: underline;">Privacy Policy</span>.
         </p>
       </div>
     `;
@@ -368,7 +368,7 @@
     {
       id: "created_by",
       title: "Who are you creating this profile for?",
-      subtitle: "Profiles in Dono Jaha are built with family awareness.",
+      subtitle: "Profiles in Dono Jahaan are built with family awareness.",
       options: [
         { label: "Myself", desc: "I am looking for my own marriage partner", icon: "person", val: "myself" },
         { label: "My Son or Daughter", desc: "Parent or guardian seeking proposal", icon: "family_restroom", val: "parent" },
@@ -641,7 +641,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
           <div style="display: flex; align-items: center; gap: 6px;">
             <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></span>
-            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Dono Jaha Matrimonial</span>
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Dono Jahaan Matrimonial</span>
           </div>
           <button style="border: none; background: var(--surface-container); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="navigateTo('notifications')">
             <span class="material-symbols-outlined" style="font-size: 18px; color: var(--text-primary);">notifications</span>
@@ -842,7 +842,7 @@
     
     // Check if the user already has an active conversation with another suitor
     if (State.hasActiveConversation && State.activeConversationSuitor.id !== suitorId) {
-      alert(`Notice: You already have an active conversation with ${State.activeConversationSuitor.name}.\n\nDono Jaha strictly enforces the ONE ACTIVE CONVERSATION rule. You may express interest, but an active chat can only begin once your current connection is concluded.`);
+      alert(`Notice: You already have an active conversation with ${State.activeConversationSuitor.name}.\n\nDono Jahaan strictly enforces the ONE ACTIVE CONVERSATION rule. You may express interest, but an active chat can only begin once your current connection is concluded.`);
     }
 
     alert(`Matrimonial interest sent with sincere intentions to ${suitor.name}. You will be notified when their family reviews your profile.`);
@@ -1110,7 +1110,7 @@
 
   window.acceptInterest = function (suitorId) {
     if (State.hasActiveConversation) {
-      alert(`CRITICAL ONE ACTIVE CONVERSATION RULE:\n\nYou already have an ongoing active conversation with ${State.activeConversationSuitor.name}.\n\nDono Jaha requires you to respectfully conclude your current conversation before accepting another.`);
+      alert(`CRITICAL ONE ACTIVE CONVERSATION RULE:\n\nYou already have an ongoing active conversation with ${State.activeConversationSuitor.name}.\n\nDono Jahaan requires you to respectfully conclude your current conversation before accepting another.`);
     } else {
       State.hasActiveConversation = true;
       State.activeConversationSuitor = window.DonoJahaData.profiles.find(p => p.id === suitorId);
@@ -1187,7 +1187,7 @@
   }
 
   window.confirmAccountPause = function () {
-    if (confirm("Would you like to pause or delete your Dono Jaha profile?\n\nPausing will temporarily hide your profile from all matrimonial searches without deleting your answers.")) {
+    if (confirm("Would you like to pause or delete your Dono Jahaan profile?\n\nPausing will temporarily hide your profile from all matrimonial searches without deleting your answers.")) {
       alert("Profile visibility successfully paused.");
     }
   };
@@ -1239,7 +1239,7 @@
         <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
           Ending this conversation will politely archive your chat with <strong>${State.activeConversationSuitor.name}</strong>.
           <br/><br/>
-          <strong>Why this matters:</strong> In Dono Jaha, ending your conversation will free up your profile so you can focus on your next matrimonial connection.
+          <strong>Why this matters:</strong> In Dono Jahaan, ending your conversation will free up your profile so you can focus on your next matrimonial connection.
         </p>
       </div>
 
